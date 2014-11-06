@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="gbk" standalone="no"?>
+<users>
+<client>
+<id>user</id>
+<password>user1234</password>
+<groupID>group_U</groupID>
+<isPassed>true</isPassed>
+</client>
+<client>
+<id>admin</id>
+<password>admin1234</password>
+<groupID>group_U</groupID>
+<isPassed>true</isPassed>
+</client>
+</users>

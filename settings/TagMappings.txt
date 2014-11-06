@@ -1,0 +1,25 @@
+private String readBulletinDir(){
+		return 	XMLTools.getArgValue(this.doc, "bulletinDir");
+	}
+	private String readUsersDir(){
+		return XMLTools.getArgValue(this.doc, "usersDir");
+	}
+	private String readGroupsDir(){
+		return XMLTools.getArgValue(this.doc, "groupsDir");
+	}
+	private String readLogsDir(){
+		return XMLTools.getArgValue(this.doc, "logsDir");
+	}
+	//-------------args config ----------------//
+	private boolean isPlainText(){
+		return (Boolean.valueOf(XMLTools.getArgValue(this.doc, "isPlaintText")));
+	}
+	private BigInteger readGQ( String gq, int bit){
+		return new BigInteger(XMLTools.getArgValue(this.doc, "bit"+bit,gq));
+	}
+	private int readBulletinPort(){
+		return Integer.valueOf(XMLTools.getArgValue(this.doc, ("bulletinPort")));
+	}
+	private String readSid(){
+		return XMLTools.getArgValue(this.doc, "sid");
+	}

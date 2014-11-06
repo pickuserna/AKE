@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<users>
+<client>
+<id>user</id>
+<password>user</password>
+<groupID>group_U</groupID>
+</client>
+<client>
+<id>admin</id>
+<password>admin</password>
+<groupID>group_U</groupID>
+</client>
+<client>
+<id>John</id>
+<password>123456</password>
+<groupID>america</groupID>
+<isPassed>true</isPassed>
+</client>
+</users>
