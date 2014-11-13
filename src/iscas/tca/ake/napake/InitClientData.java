@@ -1,6 +1,8 @@
 package iscas.tca.ake.napake;
 
 import iscas.tca.ake.IfcInitData;
+import iscas.tca.ake.test.swing.module.bulletin.Bulletin_NAP;
+import iscas.tca.ake.test.swing.module.bulletin.IfcBulletinNAP;
 
 import java.math.BigInteger;
 
@@ -16,6 +18,7 @@ public class InitClientData implements IfcInitData{
 	String m_ID;//自己的ID
 	BigInteger m_q;//q群
 	BigInteger m_g; //g底数
+	public IfcBulletinNAP m_bn;
 	
 	/**
 	 * @param m_pw
@@ -25,13 +28,14 @@ public class InitClientData implements IfcInitData{
 	 * @param m_g
 	 */
 	public InitClientData(String m_pw, String[] m_IDs, String m_ID,
-			BigInteger m_q, BigInteger m_g) {
+			BigInteger m_q, BigInteger m_g, IfcBulletinNAP bn) {
 		super();
 		this.m_pw = m_pw;
 		this.m_IDs = m_IDs;
 		this.m_ID = m_ID;
 		this.m_q = m_q;
 		this.m_g = m_g;
+		this.m_bn = bn;
 	}
 	public String getM_pw() {
 		return m_pw;

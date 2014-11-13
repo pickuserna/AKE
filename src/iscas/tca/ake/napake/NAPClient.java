@@ -8,6 +8,7 @@ import iscas.tca.ake.message.nap.NAPMessage;
 import iscas.tca.ake.message.nap.NAPMessage.IDsData;
 import iscas.tca.ake.napake.calculate.FactoryCalculate;
 import iscas.tca.ake.napake.calculate.IfcNapCalculate;
+import iscas.tca.ake.test.swing.module.bulletin.IfcBulletinNAP;
 import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.connectStrings.ConnectStrsTask;
 import iscas.tca.ake.util.exceptions.CannotGenerateNewMsgException;
@@ -18,7 +19,6 @@ import iscas.tca.ake.util.rand.Rand;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Stack;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * 描述：<Nap协议的client>
@@ -51,7 +51,6 @@ public class NAPClient implements IfcAkeProtocol{
 	byte[] m_sk;
 	
 	IfcNapCalculate m_NapCalculate;
-	//调试
 	public boolean m_isInited;
 	public boolean m_isVerified;
 	String m_Trans; 
@@ -60,7 +59,8 @@ public class NAPClient implements IfcAkeProtocol{
 	ConnectStrsTask m_cstIDs;//多线程连接IDs，启动和获取不在一个位置
 	
 	Stack<EnumNAPMsgType> m_stack;
-	
+	//bulletin 
+	private IfcBulletinNAP m_bulletinNap;
 	public NAPClient()
 	{
 		this.m_isInited = false;
@@ -81,6 +81,8 @@ public class NAPClient implements IfcAkeProtocol{
 			this.m_q = initClt.getM_q();
 			this.m_ID = initClt.getM_ID();
 			this.m_IDs = initClt.getM_IDs();
+			//record the bulletinNAP
+			this.m_bulletinNap = initClt.m_bn;
 			//参数合法性检查
 			if(this.m_q.isProbablePrime(NAPConstants.ProbablePrimeCertainty) &&
 					this.m_g.compareTo(BigInteger.ZERO)>0 &&
@@ -114,7 +116,6 @@ public class NAPClient implements IfcAkeProtocol{
 		// TODO Auto-generated method stub
 		return this.m_stack.isEmpty();
 	}
-
 	
 	//初始化协议栈:协议栈设置接收消息的顺序
 	public void initProtocolStack(EnumNAPMsgType[] order)
@@ -156,7 +157,6 @@ public class NAPClient implements IfcAkeProtocol{
 		}).start();
 		return createIDsMsg();
 	}
-	
 	@Override
 	public IfcMessage processMessage(IfcMessage m) throws IllegalMsgException, CannotGenerateNewMsgException, InitializationException, InterruptedException{
 		// TODO Auto-generated method stub	
@@ -199,7 +199,6 @@ public class NAPClient implements IfcAkeProtocol{
 		}
 	}
 	
-	
 	private boolean drawInfo(IfcMessage m)
 	{
 		if(m.isMsgLegle() &&
@@ -214,7 +213,8 @@ public class NAPClient implements IfcAkeProtocol{
 				this.m_As = data.getM_As();
 				this.m_SID = data.getM_SID();
 				this.m_IDs = data.getM_IDs();
-				this.m_A = this.m_NapCalculate.getAself(m_IDs, m_As, m_ID);
+				this.m_A = this.m_NapCalculate.getAself(m_ID, m_As, m_bulletinNap);
+				//this.m_A = this.m_NapCalculate.getAself(m_IDs, m_As, m_ID);
 				//如果能够找到m_A，true，否则，返回false
 				if(this.m_A!=null)
 					break;
@@ -245,16 +245,14 @@ public class NAPClient implements IfcAkeProtocol{
 	}
 	private IfcMessage createXstarBMsg()throws InterruptedException
 	{
-		//synchronize speed up
+		//Asynchronous speed up
 		synchronized(this){
 			if(!this.isOfflineDone){
 				System.out.println("waiting for the speed up");
 				this.wait();
 			}
 		}
-		//offlineSpeedUp();
 		System.out.println("MainThread: createXstartBMsg() randx hashcode :"+this.m_randx.hashCode());
-		//calculate the args
 		
 		this.m_Z = Assist.modPow(this.m_A, this.m_rc, this.m_q);
 		this.m_Xstar = Assist.modMutiply(this.m_Z, this.m_X, this.m_q);

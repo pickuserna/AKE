@@ -6,7 +6,7 @@ import iscas.tca.ake.ProtocolStack;
 import iscas.tca.ake.message.IfcMessage;
 import iscas.tca.ake.message.veap.EnumVEAPMsgType;
 import iscas.tca.ake.message.veap.VEAPMessage;
-import iscas.tca.ake.test.swing.module.bulletin.S2CBulletinData;
+import iscas.tca.ake.test.swing.module.bulletin.Bulletin_Veap;
 import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.rand.IfcRand;
 import iscas.tca.ake.util.rand.Rand;

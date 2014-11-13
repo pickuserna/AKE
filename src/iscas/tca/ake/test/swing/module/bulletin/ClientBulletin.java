@@ -13,12 +13,22 @@ import java.net.SocketAddress;
  * @author zn
  * @CreateTime 2014-10-13ÏÂÎç3:07:02
  */
-public class ClientBulletin extends IfcBulletinClient implements Runnable{
+public class ClientBulletin extends IfcBulletinClient implements Runnable, IfcBulletinNAP{
 	private boolean isDone = false;
 	private IfcBulletinClient bulletinClient;
 	private SocketAddress addr;
 	String groupID;
+	String proType;
+	private IfcBulletinNAP bulletinNAP;
 	
+	//get index of the id
+	public int index(String id){
+		return bulletinNAP.index(id);
+	}
+	public void setProType(String proType){
+		this.proType = proType ;
+	}
+	//set BulletinNAP
 	public ClientBulletin(String groupID, SocketAddress addr){
 		this.addr = addr;
 		isDone = false;
@@ -34,17 +44,31 @@ public class ClientBulletin extends IfcBulletinClient implements Runnable{
 			//send groupID
 			System.out.println("bulletin 1 :"+"send groupID");
 			SendAndRecv.sendMsg(groupID, socket);
-			this.bulletinClient = (IfcBulletinClient)SendAndRecv.recvMsg(socket);
-			System.out.println("bulletinCLient receive 2"+this.bulletinClient);
-		synchronized(this){
-			isDone = true;
-			this.notifyAll();
-		}
+			
+			//++++++++++++nap+++++++++++++++++
+			if(this.proType.equals("NAP")){
+				this.bulletinNAP = (IfcBulletinNAP)SendAndRecv.recvMsg(socket);
+				System.out.println("NAP Bulletin done!!");
+				System.out.println("admin's index is "+ bulletinNAP.index("admin"));
+			}
+			//------------nap-----------------
+			//++++++++++++veap++++++++++++++++
+			if(this.proType.equals("VEAP")){
+				this.bulletinClient = (IfcBulletinClient)SendAndRecv.recvMsg(socket);
+				System.out.println("bulletinCLient receive 2"+this.bulletinClient);
+				
+				synchronized(this){
+					isDone = true;
+					this.notifyAll();
+				//-------------veap----------------
+				}
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		System.out.println("existing the bulletin");
+		System.out.println("existing the bulletin client");
 	}
+	
 	//a Future task
 	@Override
 	public IfcBulletinClient fetchData(String groupID) throws Exception {

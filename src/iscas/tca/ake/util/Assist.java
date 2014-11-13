@@ -23,7 +23,7 @@ public class Assist{
 	 * @param sn 要连接的字符串数组
 	 * @return 连接了的字符串
 	 */
-	public static StringBuilder connectStrings(BigInteger[] bs){
+	public static StringBuilder connectStrings(BigInteger... bs){
 		if(bs==null){
 			return null;
 		}
@@ -35,7 +35,7 @@ public class Assist{
 		}
 		return sb;
 	}
-	public static StringBuilder connectStrings(String[] ss) {
+	public static StringBuilder connectStrings(String... ss) {
 		// TODO Auto-generated method stub
 		if(ss==null)
 			return null;

@@ -1,9 +1,9 @@
 package iscas.tca.ake.napake.calculate;
 
+import iscas.tca.ake.test.swing.module.bulletin.IfcBulletinNAP;
 import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.connectStrings.ConnectStrsTask;
 import iscas.tca.ake.util.hashs.H0;
-import iscas.tca.ake.util.hashs.H1;
 import iscas.tca.ake.util.hashs.H256;
 import iscas.tca.ake.util.hashs.IfcHash;
 
@@ -16,6 +16,14 @@ import java.math.BigInteger;
  * @CreateTime 2014-8-16下午2:58:05
  */
 public class NAPCalculate implements IfcNapCalculate{
+
+	
+	@Override
+	public BigInteger getAself(String id, BigInteger[] as, IfcBulletinNAP bn) {
+		// TODO Auto-generated method stub
+		int index = bn.index(id);
+		return as[index];
+	}
 
 	//计算PW
 	public  BigInteger getPW(String id, String pw, BigInteger q)
@@ -63,7 +71,7 @@ public class NAPCalculate implements IfcNapCalculate{
 		return h.process(sJoin);
 	}
 	//客户端获取自己的A
-	public  BigInteger getAself(String[] ids,BigInteger[] as, String id)
+	public  BigInteger getAself(String id, String[] ids,BigInteger[] as)
 	{
 		int order = getOrder(ids, id);
 		if(order!=-1)//-1表示没有找到对相应的ID

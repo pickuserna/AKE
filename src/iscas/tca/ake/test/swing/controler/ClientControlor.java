@@ -60,7 +60,6 @@ public class ClientControlor {
 			try{
 				if(this.socket!=null){
 					this.socket.close();
-				
 				}
 				this.executorService.shutdownNow();
 			}catch(Exception e){
@@ -68,24 +67,24 @@ public class ClientControlor {
 				e.printStackTrace();
 			}
 		}
-		
 	}
+	
 	private void preProtocol()throws Exception{
 		myclient = new MyClient();
-		String host = (String)frameArgs.get("host");
-		int port = (Integer)frameArgs.get("port");
 		frameArgs.put("result", this.response);
-		System.out.println("bulletin service()");
-		//bulletin service 
-		this.clientBulletin = new ClientBulletin((String)this.frameArgs.get("groupID"), new InetSocketAddress(host, 7070));
+		// start the connection c
+		this.socket = new Socket((String)frameArgs.get("host"), (Integer)frameArgs.get("port"));
+		System.out.println("connect is ok...");
+		
+		this.clientBulletin = new ClientBulletin((String)this.frameArgs.get("groupID"), new InetSocketAddress((String)frameArgs.get("host"), 7070));
+		myclient.prepareClient(socket,  this.clientBulletin ,Collections.unmodifiableMap(frameArgs),this.response);
+		// bulletin service 
+		System.out.println("client booting");
+		//set bulletin proType
+		this.clientBulletin.setProType(this.response.getProType());
 		executorService = Executors.newCachedThreadPool();
 		executorService.execute(this.clientBulletin);
 		
-		System.out.println("client booting");
-		// start the connection c
-		this.socket = new Socket(host, port);
-		System.out.println("connect is ok...");
-		myclient.prepareClient(socket,  this.clientBulletin ,Collections.unmodifiableMap(frameArgs),this.response);
 		this.response.setStatus("preProtocol is ok....");
 	}
 }

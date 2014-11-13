@@ -6,10 +6,11 @@ import iscas.tca.ake.message.IfcMessage;
 import iscas.tca.ake.napake.InitClientData;
 import iscas.tca.ake.napake.NAPClient;
 import iscas.tca.ake.test.swing.controler.ConfigInitData;
+import iscas.tca.ake.test.swing.module.bulletin.Bulletin_NAP;
+import iscas.tca.ake.test.swing.module.bulletin.ClientBulletin;
 import iscas.tca.ake.test.swing.module.tools.SendAndRecv;
 import iscas.tca.ake.test.swing.module.tools.TimeRecord;
 import iscas.tca.ake.util.Assist;
-import iscas.tca.ake.util.exceptions.IllegalMsgException;
 import iscas.tca.ake.util.exceptions.InitializationException;
 import iscas.tca.ake.veap.InitVEAPClientData;
 import iscas.tca.ake.veap.VEAPClient;
@@ -38,7 +39,8 @@ public class MyClient {
 	ConfigInitData cfgInitArgs;
 	private TimeRecord timeRecord = new TimeRecord();
 	private Response response;
-	IfcBulletinClient bulletinClient = null;
+
+	ClientBulletin bulletinClient = null;
 	boolean isGetBulletin = false;
 	/**
 	 * TODO:<>
@@ -52,9 +54,15 @@ public class MyClient {
 	public void bulletinService(){
 		
 	}
+	// set NAP bulletin 
+	
+	//set BulletinClient
+	public void setBulletinClient(ClientBulletin bc){
+		this.bulletinClient = bc;
+	}
 	
 	public boolean prepareClient(Socket socket,
-			IfcBulletinClient bulletinClient, 
+			ClientBulletin bulletinClient, 
 			Map<String, Object> proArgs,
 		  Response response) throws Exception {
 		this.name = (String) proArgs.get("name");
@@ -91,7 +99,7 @@ public class MyClient {
 			if (type.equals("NAP")) {
 				this.akeClient = new NAPClient();
 				init = new InitClientData(password, cfgInitArgs.groupUserIDs, this.name,
-						cfgInitArgs.q, cfgInitArgs.g);
+						cfgInitArgs.q, cfgInitArgs.g, this.bulletinClient);
 			} else if (type.equals("VEAP")) {
 				this.akeClient = new VEAPClient();
 
