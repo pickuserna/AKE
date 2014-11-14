@@ -6,7 +6,6 @@ import iscas.tca.ake.message.IfcMessage;
 import iscas.tca.ake.napake.InitClientData;
 import iscas.tca.ake.napake.NAPClient;
 import iscas.tca.ake.test.swing.controler.ConfigInitData;
-import iscas.tca.ake.test.swing.module.bulletin.Bulletin_NAP;
 import iscas.tca.ake.test.swing.module.bulletin.ClientBulletin;
 import iscas.tca.ake.test.swing.module.tools.SendAndRecv;
 import iscas.tca.ake.test.swing.module.tools.TimeRecord;
@@ -15,7 +14,6 @@ import iscas.tca.ake.util.exceptions.InitializationException;
 import iscas.tca.ake.veap.InitVEAPClientData;
 import iscas.tca.ake.veap.VEAPClient;
 import iscas.tca.ake.veap.VEAPConstants;
-import iscas.tca.ake.veap.bulletin.IfcBulletinClient;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -183,13 +181,11 @@ public class MyClient {
 		this.response.putParameter("isVerified", this.akeClient.isVerified()+"");
 		this.response.putParameter("sk", Assist.bytesToHexString(this.akeClient.getsk()));
 	}
-
 	/**
 	 * TODO:<显示运行结果>
 	 * 
 	 * @param napClient
 	 */
-
 	public void showResult(NAPClient napClient) {
 		String s = null;
 		System.out.println("q  :" + napClient.getM_q());
@@ -209,12 +205,7 @@ public class MyClient {
 					+ Assist.bytesToHexString(napClient.getM_Auths()));
 			s = "did not passed \r\n";
 		}
-
-//		RecordInFile.writeInto(Constants.FileName, "q  :" + napClient.getM_q()
-//				+ "\r\n" + "g  :" + napClient.getM_g() + "\r\n" + "IDs :"
-//				+ napClient.getM_IDs().length + "\r\n" + s + "\r\n\r\n");
 	}
-
 	public static void showIsVerified(IfcAkeProtocol cs, String type) {
 		System.out.println(type + "verify result：" + cs.isVerified() + "\n  SK:"
 				+ Assist.bytesToHexString(cs.getsk()));

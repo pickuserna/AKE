@@ -38,7 +38,7 @@ public class ServerBulletin implements Runnable, IfcBulletinServer {
 	private String proType;
 	// private String bulletinFilePath;
 	private Response response;
-	Long timeOut = 100000000l;
+	Long timeOut = 10000000000l;
 	private Map<String, GroupData> groupDatas = new HashMap<String, GroupData>();
 	private Map<String, Object> napBulletinData = new HashMap<String, Object>();
 	

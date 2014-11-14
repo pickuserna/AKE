@@ -35,6 +35,14 @@ public class Assist{
 		}
 		return sb;
 	}
+	//connect bytes
+	public static StringBuilder Connectbytes(byte[][] bs){
+		StringBuilder sb = new StringBuilder();
+		for(int i=0; i<bs.length; i++){
+			sb.append(bytesToHexString(bs[i]));
+		}
+		return sb;
+	}
 	public static StringBuilder connectStrings(String... ss) {
 		// TODO Auto-generated method stub
 		if(ss==null)

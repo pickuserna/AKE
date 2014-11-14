@@ -7,4 +7,5 @@ package iscas.tca.ake.test.swing.module.bulletin;
  */
 public interface IfcBulletinNAP {
 	int index(String id);
+	String getConnectedPseus();
 }

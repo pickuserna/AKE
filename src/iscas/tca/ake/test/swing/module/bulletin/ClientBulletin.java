@@ -1,6 +1,7 @@
 package iscas.tca.ake.test.swing.module.bulletin;
 
 import iscas.tca.ake.test.swing.module.tools.SendAndRecv;
+import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.veap.bulletin.IfcBulletinClient;
 import iscas.tca.ake.veap.calculate.U_C;
 
@@ -24,6 +25,10 @@ public class ClientBulletin extends IfcBulletinClient implements Runnable, IfcBu
 	//get index of the id
 	public int index(String id){
 		return bulletinNAP.index(id);
+	}
+	//get connected String
+	public String getConnectedPseus(){
+		return bulletinNAP.getConnectedPseus();
 	}
 	public void setProType(String proType){
 		this.proType = proType ;

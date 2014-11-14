@@ -22,6 +22,12 @@ public class Bulletin_NAP implements Serializable, IfcBulletinNAP {
 		return new H256().process(s);
 	}
 	
+	
+	@Override
+	public String getConnectedPseus() {
+		// TODO Auto-generated method stub
+		return Assist.Connectbytes(this.pseudonym).toString();
+	}
 	// find the index of id
 	public int index(String id){
 		for(int i=0; i<pseudonym.length; i++){
