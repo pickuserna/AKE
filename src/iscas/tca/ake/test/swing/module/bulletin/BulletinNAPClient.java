@@ -11,11 +11,11 @@ import java.util.Arrays;
  * @author zn
  * @CreateTime 2014-11-13ÉÏÎç10:07:58
  */
-public class Bulletin_NAP implements Serializable, IfcBulletinNAP {
+public class BulletinNAPClient implements Serializable, IfcBulletinNAPClient {
 	public String addin;
 	public byte[][] pseudonym;
 	
-	private Bulletin_NAP(){}
+	private BulletinNAPClient(){}
 	//calculate the pseudonym with the addin of the given id
 	private static byte[] getPseudonym( String id, String addin){
 		String s = Assist.connectStrings(id, addin).toString();
@@ -29,6 +29,7 @@ public class Bulletin_NAP implements Serializable, IfcBulletinNAP {
 		return Assist.Connectbytes(this.pseudonym).toString();
 	}
 	// find the index of id
+	@Override
 	public int index(String id){
 		for(int i=0; i<pseudonym.length; i++){
 			byte[] temp = getPseudonym(id, addin);
@@ -38,8 +39,8 @@ public class Bulletin_NAP implements Serializable, IfcBulletinNAP {
 		}
 		return -1;
 	}
-	public static Bulletin_NAP newInstance(String[] ids, String addin){
-		Bulletin_NAP bn = new Bulletin_NAP();
+	public static BulletinNAPClient newInstance(String[] ids, String addin){
+		BulletinNAPClient bn = new BulletinNAPClient();
 		// create pseudonym
 		bn.pseudonym = new byte[ids.length][];
 		bn.addin = addin;

@@ -7,13 +7,15 @@ import iscas.tca.ake.message.nap.EnumNAPMsgType;
 import iscas.tca.ake.message.nap.NAPMessage;
 import iscas.tca.ake.napake.calculate.FactoryCalculate;
 import iscas.tca.ake.napake.calculate.IfcNapCalculate;
+import iscas.tca.ake.test.swing.module.bulletin.IfcBulletinNAPServer;
 import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.connectStrings.ConnectStrsTask;
-import iscas.tca.ake.util.exceptions.CannotFindSuchIDException;
 import iscas.tca.ake.util.exceptions.CannotGenerateNewMsgException;
 import iscas.tca.ake.util.exceptions.IllegalMsgException;
 import iscas.tca.ake.util.exceptions.InitializationException;
 import iscas.tca.ake.util.rand.Rand;
+import iscas.tca.ake.veap.IfcGetUsers;
+import iscas.tca.ake.veap.User;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -43,9 +45,12 @@ public class NAPServer implements IfcAkeProtocol {
 	
 	//BigInteger m_K;//可以不记录
 	
-	String[] m_pws;
 	String m_SID;
-	String[] m_IDs;
+
+//	String[] m_IDs;
+//	String[] m_pws;
+	User[] m_users;
+	
 	byte[] m_Auths;
 	byte[] m_sk;
 	byte[] m_Authc;
@@ -54,7 +59,7 @@ public class NAPServer implements IfcAkeProtocol {
 	Stack<EnumNAPMsgType> m_stackProtocol;//协议栈，规定协议的执行顺序
 	
 	IfcNapCalculate m_NapCalculate;
-	IfcNAPServerUser m_NapServerUser;
+	IfcGetUsers m_getUsers;
 	boolean m_isInited;
 	//调试
 	String m_Trans;
@@ -62,10 +67,16 @@ public class NAPServer implements IfcAkeProtocol {
 	
 	//多线程连接字符串，在发送XStarB时进行处理
 	ConnectStrsTask m_cstAs;//多线程连接As
-	ConnectStrsTask m_cstIDs;//多线程连接IDs，启动和获取不在一个位置
+//	ConnectStrsTask m_cstIDs;//多线程连接IDs，启动和获取不在一个位置
 	/**
 	 * 
 	 */
+	
+	//add groupID
+	String m_groupID;
+	IfcBulletinNAPServer m_bulletinNapServer;//nap bulletin
+	String m_connnectedIDs;//connected IDs 
+	
 	public NAPServer() {
 		// TODO Auto-generated constructor stub
 		this.m_isInited = false;
@@ -96,17 +107,18 @@ public class NAPServer implements IfcAkeProtocol {
 		if(init instanceof InitServerData){
 			
 			InitServerData init2 = (InitServerData)init;
-			this.m_NapServerUser = init2.getM_NapServerUser();
+			this.m_getUsers = init2.getM_getUsers();
 			this.m_q = (init2).getM_q();
 			this.m_g = ( init2).getM_g();
 			this.m_SID = (init2).getM_S();
+			this.m_bulletinNapServer = (init2).m_bulletinNAPServer;
 			//检查数据合法性，SID不为空,q为素数, g>0,m_NapServerUser 不为空
 			if(this.m_SID!=null && 
 					this.m_q.isProbablePrime(NAPConstants.ProbablePrimeCertainty) &&
 					this.m_g.compareTo(BigInteger.ZERO)>0 &&
-					null != this.m_NapServerUser)
+					null != this.m_getUsers)
 			{
-				EnumNAPMsgType[] order = {EnumNAPMsgType.IDs,EnumNAPMsgType.XstarB,EnumNAPMsgType.Authc};
+				EnumNAPMsgType[] order = {EnumNAPMsgType.GroupID,EnumNAPMsgType.XstarB,EnumNAPMsgType.Authc};
 				initStack(order);
 				//初始化成功的唯一条件
 				this.m_isInited = true;
@@ -144,7 +156,7 @@ public class NAPServer implements IfcAkeProtocol {
 		
 	}
 	@Override
-	public IfcMessage processMessage(IfcMessage m) throws InitializationException, IllegalMsgException, CannotGenerateNewMsgException{
+	public IfcMessage processMessage(IfcMessage m) throws InitializationException, IllegalMsgException, CannotGenerateNewMsgException, Exception{
 		// TODO Auto-generated method stub
 		if(!this.m_isInited)
 		{
@@ -159,9 +171,10 @@ public class NAPServer implements IfcAkeProtocol {
 				IfcMessage newMsg= null;	
 				switch (mNap.getM_msgType())
 				{
-				case IDs:
+				case GroupID:
 					newMsg =  createSAsMsg();
-					this.m_cstIDs = this.m_NapCalculate.exeStrsCntTask(m_IDs);
+					
+//					this.m_cstIDs = this.m_NapCalculate.exeStrsCntTask(m_IDs);
 					this.m_cstAs = this.m_NapCalculate.exeStrsCntTask(this.m_As);
 					this.m_stackProtocol.pop();
 					break;
@@ -209,19 +222,10 @@ public class NAPServer implements IfcAkeProtocol {
 				//记录到NAPServer中
 				switch(mNap.getM_msgType())
 				{
-				case IDs:
+				case GroupID:
+					this.m_groupID = ((NAPMessage.GroupIDData)mNap.getM_data()).getM_groupID();
+					this.m_users = this.m_getUsers.getUsers(m_groupID);
 					
-					this.m_IDs = ((NAPMessage.IDsData)mNap.getM_data()).getM_IDs();//记录m_IDs;	
-					try{
-						this.m_pws = this.m_NapServerUser.getPasswords(this.m_IDs);
-					}
-					catch(CannotFindSuchIDException notfind){
-						System.out.println("Can not find such ids at the server");
-						return false;
-					}
-					catch(Exception e){
-						return false;
-					}
 					break;
 				case XstarB:				
 					NAPMessage.XstarBData data = (NAPMessage.XstarBData)mNap.getM_data();
@@ -255,14 +259,14 @@ public class NAPServer implements IfcAkeProtocol {
 		this.m_rS = rd.randOfMax(this.m_q);
 		BigInteger hPW;
 		//计算As
-		this.m_As = new BigInteger[this.m_IDs.length];
+		this.m_As = new BigInteger[this.m_users.length];
 
-		for(int i=0; i<this.m_pws.length; i++)
+		for(int i=0; i<this.m_users.length; i++)
 		{
-			hPW = this.m_NapCalculate.getPW(this.m_IDs[i], this.m_pws[i], this.m_q);
+			hPW = this.m_NapCalculate.getPW(this.m_users[i].user_id, this.m_users[i].user_pw, this.m_q);
 			this.m_As[i] = Assist.modPow(hPW, this.m_rS, this.m_q);
 		}
-		NAPMessage.SAsData data = NAPMessage.SAsData.getSAsData(this.m_SID,this.m_IDs , this.m_As);
+		NAPMessage.SAsData data = NAPMessage.SAsData.getSAsData(this.m_SID, this.m_As);
 		return NAPMessage.getNAPMessage(data, EnumNAPMsgType.SAs);
 	}
 	
@@ -270,7 +274,7 @@ public class NAPServer implements IfcAkeProtocol {
 	 * TODO:<生成YAuths消息>
 	 * @return 
 	 */
-	private IfcMessage createYAuthsMsg() 
+	private IfcMessage createYAuthsMsg() throws Exception
 	{
 		//计算
 		Rand rd = new Rand();
@@ -281,12 +285,12 @@ public class NAPServer implements IfcAkeProtocol {
 		this.m_randy = rd.randOfMax(this.m_q);
 		this.m_Y = Assist.modPow(this.m_g, this.m_randy, this.m_q);
  	    this.m_Kp = Assist.modPow(this.m_Xp, this.m_randy, this.m_q);
-		if(null==m_cstAs || null==m_cstIDs)
+		if(null==m_cstAs)
 		{
 			System.out.println("连接的字符串cstAs 和 cstIDs不正确");
 			return null;
 		}
-		String trans = this.m_NapCalculate.getTrans(this.m_cstIDs.get().toString(),
+		String trans = this.m_NapCalculate.getTrans(this.m_bulletinNapServer.getConnectedPseudonyms(m_groupID),
 				this.m_SID, 
 				this.m_cstAs.get().toString(),
 				this.m_Xstar, 
@@ -363,16 +367,8 @@ public class NAPServer implements IfcAkeProtocol {
 		return m_As;
 	}
 
-	public String[] getM_pws() {
-		return m_pws;
-	}
-
 	public String getM_SID() {
 		return m_SID;
-	}
-
-	public String[] getM_IDs() {
-		return m_IDs;
 	}
 
 	public byte[] getM_Auths() {

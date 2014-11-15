@@ -5,10 +5,10 @@ import iscas.tca.ake.IfcInitData;
 import iscas.tca.ake.message.IfcMessage;
 import iscas.tca.ake.message.nap.EnumNAPMsgType;
 import iscas.tca.ake.message.nap.NAPMessage;
-import iscas.tca.ake.message.nap.NAPMessage.IDsData;
+import iscas.tca.ake.message.nap.NAPMessage.GroupIDData;
 import iscas.tca.ake.napake.calculate.FactoryCalculate;
 import iscas.tca.ake.napake.calculate.IfcNapCalculate;
-import iscas.tca.ake.test.swing.module.bulletin.IfcBulletinNAP;
+import iscas.tca.ake.test.swing.module.bulletin.IfcBulletinNAPClient;
 import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.connectStrings.ConnectStrsTask;
 import iscas.tca.ake.util.exceptions.CannotGenerateNewMsgException;
@@ -44,7 +44,7 @@ public class NAPClient implements IfcAkeProtocol{
 	
 	String m_pw;
 	String m_SID;
-	String[] m_IDs;
+//	String[] m_pseudonyms;
 	String m_ID;
 	byte[] m_Auths; 
 	byte[] m_myAuths;
@@ -56,11 +56,13 @@ public class NAPClient implements IfcAkeProtocol{
 	String m_Trans; 
 	//多线程连接字符串，在发送XStarB时进行处理
 	ConnectStrsTask m_cstAs;//多线程连接As
-	ConnectStrsTask m_cstIDs;//多线程连接IDs，启动和获取不在一个位置
+//	ConnectStrsTask m_cstIDs;//多线程连接IDs，启动和获取不在一个位置
 	
 	Stack<EnumNAPMsgType> m_stack;
 	//bulletin 
-	private IfcBulletinNAP m_bulletinNap;
+	private IfcBulletinNAPClient m_bulletinNapClient;
+	private String m_groupID;
+	
 	public NAPClient()
 	{
 		this.m_isInited = false;
@@ -80,9 +82,9 @@ public class NAPClient implements IfcAkeProtocol{
 			this.m_g = initClt.getM_g();
 			this.m_q = initClt.getM_q();
 			this.m_ID = initClt.getM_ID();
-			this.m_IDs = initClt.getM_IDs();
+			this.m_groupID = initClt.getM_groupID();
 			//record the bulletinNAP
-			this.m_bulletinNap = initClt.m_bn;
+			this.m_bulletinNapClient = initClt.m_bn;
 			//参数合法性检查
 			if(this.m_q.isProbablePrime(NAPConstants.ProbablePrimeCertainty) &&
 					this.m_g.compareTo(BigInteger.ZERO)>0 &&
@@ -155,7 +157,7 @@ public class NAPClient implements IfcAkeProtocol{
 				System.out.println("finished offline speed up!");
 			}
 		}).start();
-		return createIDsMsg();
+		return createGroupIDMsg();
 	}
 	@Override
 	public IfcMessage processMessage(IfcMessage m) throws IllegalMsgException, CannotGenerateNewMsgException, InitializationException, InterruptedException{
@@ -176,7 +178,7 @@ public class NAPClient implements IfcAkeProtocol{
 				case SAs:
 					newMsg = createXstarBMsg();
 					//connect the string
-					this.m_cstIDs = this.m_NapCalculate.exeStrsCntTask(this.m_IDs);
+//					this.m_cstIDs = this.m_NapCalculate.exeStrsCntTask(this.m_pseudonyms);
 					this.m_cstAs = this.m_NapCalculate.exeStrsCntTask(this.m_As);
 					m_stack.pop();
 					break;
@@ -212,9 +214,7 @@ public class NAPClient implements IfcAkeProtocol{
 				NAPMessage.SAsData data = (NAPMessage.SAsData)mNap.getM_data();
 				this.m_As = data.getM_As();
 				this.m_SID = data.getM_SID();
-				this.m_IDs = data.getM_IDs();
-				this.m_A = this.m_NapCalculate.getAself(m_ID, m_As, m_bulletinNap);
-				//this.m_A = this.m_NapCalculate.getAself(m_IDs, m_As, m_ID);
+				this.m_A = this.m_NapCalculate.getAself(m_ID, m_As, m_bulletinNapClient);
 				//如果能够找到m_A，true，否则，返回false
 				if(this.m_A!=null)
 					break;
@@ -235,12 +235,12 @@ public class NAPClient implements IfcAkeProtocol{
 		}
 		return false;
 	}
-	private IfcMessage createIDsMsg()
+	private IfcMessage createGroupIDMsg()
 	{
 		//NAPMessage resultMsg = new NAPMessage();
 	
-		IDsData idsdata = IDsData.getIDsData(this.m_IDs);
-		return NAPMessage.getNAPMessage(idsdata, EnumNAPMsgType.IDs);
+		GroupIDData groupIDData = GroupIDData.getGroupIDData(this.m_groupID);
+		return NAPMessage.getNAPMessage(groupIDData, EnumNAPMsgType.GroupID);
 		
 	}
 	private IfcMessage createXstarBMsg()throws InterruptedException
@@ -271,11 +271,11 @@ public class NAPClient implements IfcAkeProtocol{
 
 		this.m_K = Assist.modPow(this.m_Y, this.m_randx, this.m_q);
 		//String trans = this.m_NapCalculate.getTrans(this.m_IDs, this.m_SID, this.m_As, this.m_Xstar, this.m_B, this.m_Y);
-		if(null==this.m_cstAs || null==this.m_cstIDs){
+		if(null==this.m_cstAs ){
 			System.out.println("connect m_cstAs  and m_cstIDs failed");
 			return null;
 		}
-		String trans = this.m_NapCalculate.getTrans(m_cstIDs.get().toString(), 
+		String trans = this.m_NapCalculate.getTrans(this.m_bulletinNapClient.getConnectedPseus(), 
 				this.m_SID, 
 				m_cstAs.get().toString(),
 				this.m_Xstar, this.m_B, this.m_Y);
@@ -338,14 +338,7 @@ public class NAPClient implements IfcAkeProtocol{
 		// TODO Auto-generated method stub
 
 	}
-	
-	
-	public BigInteger getM_q() {
-		return m_q;
-	}
-	public BigInteger getM_g() {
-		return m_g;
-	}
+
 	public BigInteger getM_Y() {
 		return m_Y;
 	}
@@ -367,15 +360,7 @@ public class NAPClient implements IfcAkeProtocol{
 	public String getM_pw() {
 		return m_pw;
 	}
-	public String getM_SID() {
-		return m_SID;
-	}
-	public String[] getM_IDs() {
-		return m_IDs;
-	}
-	public String getM_ID() {
-		return m_ID;
-	}
+
 	public byte[] getM_Auths() {
 		return m_Auths;
 	}

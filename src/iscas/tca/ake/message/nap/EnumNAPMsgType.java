@@ -9,7 +9,7 @@ import org.junit.Test;
  * @CreateTime 2014-8-16ÏÂÎç2:02:17
  */
 public enum EnumNAPMsgType {
-	IDs("C->S | <IDs of A group> "),
+	GroupID("C->S | <ID of the group> "),
 	SAs("S->C | <S,{Aj}1¡Üj¡Ün> "),
 	XstarB("C->S | <X*, B>"),
 	YAuths("S->C | <Y, Auths >"),
@@ -28,6 +28,6 @@ public enum EnumNAPMsgType {
 	}
 	@Test
 	public static void testEnum(){
-		System.out.println(EnumNAPMsgType.IDs);
+		System.out.println(EnumNAPMsgType.GroupID);
 	}
 }

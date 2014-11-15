@@ -1,6 +1,6 @@
 package iscas.tca.ake.test.swing.module.bulletin;
 
-import iscas.tca.ake.veap.bulletin.IfcBulletinClient;
+import iscas.tca.ake.veap.bulletin.IfcBulletinVEAPClient;
 import iscas.tca.ake.veap.calculate.U_C;
 
 import java.io.Serializable;
@@ -12,9 +12,9 @@ import java.sql.Time;
  * @author zn
  * @CreateTime 2014-9-12ÉÏÎç9:40:04
  */
-public class Bulletin_Veap extends IfcBulletinClient implements Serializable{	
+public class BulletinVeapClient extends IfcBulletinVEAPClient implements Serializable{	
 	
-	public Bulletin_Veap() {
+	public BulletinVeapClient() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -27,7 +27,7 @@ public class Bulletin_Veap extends IfcBulletinClient implements Serializable{
 	 */
 	
 	
-	public Bulletin_Veap(BigInteger x, 
+	public BulletinVeapClient(BigInteger x, 
 			U_C[] u_cs, 
 			Long t, 
 			Long t0,
@@ -35,7 +35,7 @@ public class Bulletin_Veap extends IfcBulletinClient implements Serializable{
 		super(x, u_cs, t, t0, groupID);
 	}
 	@Override
-	public IfcBulletinClient fetchData(String groupID) throws Exception {
+	public IfcBulletinVEAPClient fetchData(String groupID) throws Exception {
 		return this;
 	}
 	public String toString(){

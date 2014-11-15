@@ -5,7 +5,7 @@ package iscas.tca.ake.test.swing.module.bulletin;
  * @author zn
  * @CreateTime 2014-11-13обнГ3:20:33
  */
-public interface IfcBulletinNAP {
+public interface IfcBulletinNAPClient {
 	int index(String id);
 	String getConnectedPseus();
 }

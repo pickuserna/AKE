@@ -11,7 +11,7 @@ import java.math.BigInteger;
  * @author zn
  * @CreateTime 2014-9-11上午10:09:07
  */
-public abstract class IfcBulletinClient implements Serializable{
+public abstract class IfcBulletinVEAPClient implements Serializable{
 	protected BigInteger X;
 	protected	U_C[] u_cs;
 	protected Long publishTime;
@@ -24,7 +24,7 @@ public abstract class IfcBulletinClient implements Serializable{
 	/**
 	 * 
 	 */
-	public IfcBulletinClient() {
+	public IfcBulletinVEAPClient() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -36,7 +36,7 @@ public abstract class IfcBulletinClient implements Serializable{
 	 * @param t0
 	 * @param groupID
 	 */
-	public IfcBulletinClient(BigInteger x, U_C[] u_cs, Long t, Long t0,
+	public IfcBulletinVEAPClient(BigInteger x, U_C[] u_cs, Long t, Long t0,
 			String groupID) {
 		super();
 		X = x;
@@ -54,7 +54,7 @@ public abstract class IfcBulletinClient implements Serializable{
 	 * TODO:<从服务器的公告板上取数据>
 	 * @return 如果取数据超时抛出异常
 	 */
-	public abstract IfcBulletinClient fetchData(String groupID) throws Exception;
+	public abstract IfcBulletinVEAPClient fetchData(String groupID) throws Exception;
 	
 	//Getters 
 	public BigInteger getX() {

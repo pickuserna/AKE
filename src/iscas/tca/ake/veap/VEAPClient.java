@@ -6,11 +6,11 @@ import iscas.tca.ake.ProtocolStack;
 import iscas.tca.ake.message.IfcMessage;
 import iscas.tca.ake.message.veap.EnumVEAPMsgType;
 import iscas.tca.ake.message.veap.VEAPMessage;
-import iscas.tca.ake.test.swing.module.bulletin.Bulletin_Veap;
+import iscas.tca.ake.test.swing.module.bulletin.BulletinVeapClient;
 import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.rand.IfcRand;
 import iscas.tca.ake.util.rand.Rand;
-import iscas.tca.ake.veap.bulletin.IfcBulletinClient;
+import iscas.tca.ake.veap.bulletin.IfcBulletinVEAPClient;
 import iscas.tca.ake.veap.calculate.IfcVEAPCalculate;
 import iscas.tca.ake.veap.calculate.U_C;
 import iscas.tca.ake.veap.calculate.VEAPCalculate;
@@ -65,7 +65,7 @@ public class VEAPClient implements IfcAkeProtocol {
 
 	ProtocolStack<EnumVEAPMsgType> m_proStack;
 	IfcVEAPCalculate m_calculate;
-	IfcBulletinClient m_bulletinClient;
+	IfcBulletinVEAPClient m_bulletinClient;
 	boolean m_isVerified;
 	
 	long m_t;

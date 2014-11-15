@@ -2,7 +2,7 @@ package iscas.tca.ake.test.swing.module.bulletin;
 
 import iscas.tca.ake.test.swing.module.tools.SendAndRecv;
 import iscas.tca.ake.util.Assist;
-import iscas.tca.ake.veap.bulletin.IfcBulletinClient;
+import iscas.tca.ake.veap.bulletin.IfcBulletinVEAPClient;
 import iscas.tca.ake.veap.calculate.U_C;
 
 import java.math.BigInteger;
@@ -14,16 +14,26 @@ import java.net.SocketAddress;
  * @author zn
  * @CreateTime 2014-10-13ÏÂÎç3:07:02
  */
-public class ClientBulletin extends IfcBulletinClient implements Runnable, IfcBulletinNAP{
+public class ClientBulletin extends IfcBulletinVEAPClient implements Runnable, IfcBulletinNAPClient{
 	private boolean isDone = false;
-	private IfcBulletinClient bulletinClient;
+	private IfcBulletinVEAPClient bulletinClient;
 	private SocketAddress addr;
 	String groupID;
 	String proType;
-	private IfcBulletinNAP bulletinNAP;
+	private IfcBulletinNAPClient bulletinNAP;
 	
 	//get index of the id
 	public int index(String id){
+		try{
+			synchronized(this){
+				if(bulletinNAP==null){
+					this.wait();
+				}
+			}
+		}catch(Exception e){
+			System.out.println("error at the synchronized index!!");
+			e.printStackTrace();
+		}
 		return bulletinNAP.index(id);
 	}
 	//get connected String
@@ -52,14 +62,20 @@ public class ClientBulletin extends IfcBulletinClient implements Runnable, IfcBu
 			
 			//++++++++++++nap+++++++++++++++++
 			if(this.proType.equals("NAP")){
-				this.bulletinNAP = (IfcBulletinNAP)SendAndRecv.recvMsg(socket);
+				//asynchronized maybe nullPointer
+				
+				synchronized(this){
+					this.bulletinNAP = (IfcBulletinNAPClient)SendAndRecv.recvMsg(socket);
+					this.notifyAll();
+				}
+				
 				System.out.println("NAP Bulletin done!!");
 				System.out.println("admin's index is "+ bulletinNAP.index("admin"));
 			}
 			//------------nap-----------------
 			//++++++++++++veap++++++++++++++++
 			if(this.proType.equals("VEAP")){
-				this.bulletinClient = (IfcBulletinClient)SendAndRecv.recvMsg(socket);
+				this.bulletinClient = (IfcBulletinVEAPClient)SendAndRecv.recvMsg(socket);
 				System.out.println("bulletinCLient receive 2"+this.bulletinClient);
 				
 				synchronized(this){
@@ -76,7 +92,7 @@ public class ClientBulletin extends IfcBulletinClient implements Runnable, IfcBu
 	
 	//a Future task
 	@Override
-	public IfcBulletinClient fetchData(String groupID) throws Exception {
+	public IfcBulletinVEAPClient fetchData(String groupID) throws Exception {
 		if(!isDone){
 			synchronized(this){
 				System.out.println("bulletin 3: waiting ");

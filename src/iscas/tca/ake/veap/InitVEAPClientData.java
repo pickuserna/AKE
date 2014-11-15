@@ -1,7 +1,7 @@
 package iscas.tca.ake.veap;
 
 import iscas.tca.ake.IfcInitData;
-import iscas.tca.ake.veap.bulletin.IfcBulletinClient;
+import iscas.tca.ake.veap.bulletin.IfcBulletinVEAPClient;
 
 import java.math.BigInteger;
 
@@ -27,7 +27,7 @@ public class InitVEAPClientData  implements IfcInitData{
 	String m_pw;
 	String m_groupID;//ÊôÓÚÄÄ¸öGroup¡¢
 	
-	IfcBulletinClient m_bulletinClient;
+	IfcBulletinVEAPClient m_bulletinClient;
 	
 	
 	
@@ -50,7 +50,7 @@ public class InitVEAPClientData  implements IfcInitData{
 	 */
 	public InitVEAPClientData(int m_lenK, int m_lenSK, BigInteger m_g,
 			BigInteger m_q, String m_ID, String m_pw, String m_groupID,
-			IfcBulletinClient m_bulletinClient) {
+			IfcBulletinVEAPClient m_bulletinClient) {
 		super();
 		this.m_lenK = m_lenK;
 		this.m_lenSK = m_lenSK;
@@ -61,10 +61,10 @@ public class InitVEAPClientData  implements IfcInitData{
 		this.m_groupID = m_groupID;
 		this.m_bulletinClient = m_bulletinClient;
 	}
-	public IfcBulletinClient getM_bulletinClient() {
+	public IfcBulletinVEAPClient getM_bulletinClient() {
 		return m_bulletinClient;
 	}
-	public void setM_bulletinClient(IfcBulletinClient m_bulletinClient) {
+	public void setM_bulletinClient(IfcBulletinVEAPClient m_bulletinClient) {
 		this.m_bulletinClient = m_bulletinClient;
 	}
 	public int getM_lenK() {

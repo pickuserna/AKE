@@ -40,19 +40,6 @@ public class MyClient {
 
 	ClientBulletin bulletinClient = null;
 	boolean isGetBulletin = false;
-	/**
-	 * TODO:<>
-	 * 
-	 * @param response
-	 * @param socket
-	 * @param proArgs
-	 * @return
-	 * @throws Exception
-	 */
-	public void bulletinService(){
-		
-	}
-	// set NAP bulletin 
 	
 	//set BulletinClient
 	public void setBulletinClient(ClientBulletin bc){
@@ -70,15 +57,15 @@ public class MyClient {
 		
 		this.socket = socket;
 		this.bulletinClient = bulletinClient;
-		// set args
+		// send groupID
 		SendAndRecv.sendMsg(groupID, socket);
-		//receiving initData;
+		//receiving protocol initData;
 		System.out.println("receive configInitData...");
 		cfgInitArgs = (ConfigInitData) SendAndRecv.recvMsg(socket);
 
 		System.out.println("received configInitData...");
 
-		System.out.println("preParaclient is OK...");
+		System.out.println("prepareclient is OK...");
 		response.setBit(cfgInitArgs.q.bitLength());
 		response.setG(cfgInitArgs.g);
 		response.setQ(cfgInitArgs.q);
@@ -96,7 +83,7 @@ public class MyClient {
 
 			if (type.equals("NAP")) {
 				this.akeClient = new NAPClient();
-				init = new InitClientData(password, cfgInitArgs.groupUserIDs, this.name,
+				init = new InitClientData(password, this.groupID, this.name,
 						cfgInitArgs.q, cfgInitArgs.g, this.bulletinClient);
 			} else if (type.equals("VEAP")) {
 				this.akeClient = new VEAPClient();
@@ -171,11 +158,11 @@ public class MyClient {
 				SendAndRecv.sendMsg(cMsg, socket);
 			}
 		}
-		if (cfgInitArgs.proType.equals("NAP")) {
-			showResult((NAPClient) akeClient);
-		} else if (cfgInitArgs.proType.equals("VEAP")) {
-			showIsVerified(this.akeClient, "client");
-		}
+//		if (cfgInitArgs.proType.equals("NAP")) {
+//			showResult((NAPClient) akeClient);
+//		} else if (cfgInitArgs.proType.equals("VEAP")) {
+//			showIsVerified(this.akeClient, "client");
+//		}
 		this.timeRecord.showResult();
 		this.response.putTimeRecord(this.timeRecord.getResult());
 		this.response.putParameter("isVerified", this.akeClient.isVerified()+"");
@@ -186,26 +173,26 @@ public class MyClient {
 	 * 
 	 * @param napClient
 	 */
-	public void showResult(NAPClient napClient) {
-		String s = null;
-		System.out.println("q  :" + napClient.getM_q());
-		System.out.println("g  :" + napClient.getM_g());
-		System.out.println("IDs :" + napClient.getM_IDs().length);
-		if (akeClient.isVerified()) {
-			s = "passed verify\r\nAuths:"
-					+ Assist.bytesToHexString(napClient.getM_myAuths())
-					+ "\r\n";
-			s = s + "sk:   " + Assist.bytesToHexString(napClient.getM_sk())
-					+ "\r\n";
-			System.out.println(s);
-		} else {
-			System.out.println("did not passed \nClient Auths£º"
-					+ Assist.bytesToHexString(napClient.getM_myAuths()));
-			System.out.println("Server Auths£º"
-					+ Assist.bytesToHexString(napClient.getM_Auths()));
-			s = "did not passed \r\n";
-		}
-	}
+//	public void showResult(NAPClient napClient) {
+//		String s = null;
+//		System.out.println("q  :" + napClient.getM_q());
+//		System.out.println("g  :" + napClient.getM_g());
+//		System.out.println("IDs :" + napClient.getM_IDs().length);
+//		if (akeClient.isVerified()) {
+//			s = "passed verify\r\nAuths:"
+//					+ Assist.bytesToHexString(napClient.getM_myAuths())
+//					+ "\r\n";
+//			s = s + "sk:   " + Assist.bytesToHexString(napClient.getM_sk())
+//					+ "\r\n";
+//			System.out.println(s);
+//		} else {
+//			System.out.println("did not passed \nClient Auths£º"
+//					+ Assist.bytesToHexString(napClient.getM_myAuths()));
+//			System.out.println("Server Auths£º"
+//					+ Assist.bytesToHexString(napClient.getM_Auths()));
+//			s = "did not passed \r\n";
+//		}
+//	}
 	public static void showIsVerified(IfcAkeProtocol cs, String type) {
 		System.out.println(type + "verify result£º" + cs.isVerified() + "\n  SK:"
 				+ Assist.bytesToHexString(cs.getsk()));

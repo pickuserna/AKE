@@ -51,16 +51,17 @@ public class NAPMessage implements IfcMessage {
 	}
 	//消息类
 	//第一条消息的类?length 是需要,设置getIDsData的作用是进行类型检查
-	public static class IDsData implements IfcMessage{
-		String[] m_IDs;
-		public IDsData(String[] m_IDs) {
+	public static class GroupIDData implements IfcMessage{
+//		String[] m_IDs;
+		String m_groupID;
+		public GroupIDData(String groupID) {
 			super();
-			this.m_IDs = m_IDs;
+			this.m_groupID = groupID;
 		}
 		@Override
 		public boolean isMsgLegle() {
 			// TODO Auto-generated method stub
-			if(m_IDs.length<=0){
+			if(m_groupID==null){
 				return false;
 			}
 			return true;
@@ -74,39 +75,32 @@ public class NAPMessage implements IfcMessage {
 		@Override
 		public String getMsgContent() {
 			// TODO Auto-generated method stub
-			return Assist.arrayFormatToString("ID-", "\r\n", m_IDs);
+			return Assist.kvFormat("groupID", m_groupID);
 		}
-		public static IDsData getIDsData(String[] ids)
+		public static GroupIDData getGroupIDData(String groupID)
 		{
-			return new IDsData(ids);
+			return new GroupIDData(groupID);
 		}
-		public String[] getM_IDs() {
-			return m_IDs;
-		}
-		public void setM_IDs(String[] m_IDs) {
-			this.m_IDs = m_IDs;
+		public String getM_groupID() {
+			return m_groupID;
 		}
 		
 	}
 	//2
 	public static class SAsData implements IfcMessage{
 		String m_SID;//S的名字
-		String[] m_IDs;//客户端对应的ID
 		BigInteger[] m_As;//A[]
 		
-		public SAsData(String m_SID, String[] m_IDs, BigInteger[] m_As) {
+		public SAsData(String m_SID, BigInteger[] m_As) {
 			super();
 			this.m_SID = m_SID;
-			this.m_IDs = m_IDs;
 			this.m_As = m_As;
 		}
 		@Override
 		public boolean isMsgLegle() {
 			// TODO Auto-generated method stub
 			if(m_SID==null ||
-					 m_IDs.length<=0 ||
-					 m_As.length<=0 ||
-					m_As.length!=m_IDs.length)
+					 m_As.length<=0)
 			{
 				return false;
 			}
@@ -121,14 +115,13 @@ public class NAPMessage implements IfcMessage {
 		public String getMsgContent() {
 			// TODO Auto-generated method stub
 			StringBuilder sb = new StringBuilder();
-			String ids = Assist.arrayFormatToString("ID-", "\r\n", this.m_IDs);
 			String as = Assist.arrayFormatToString("As-", "\r\n", m_As);
-			sb.append(ids+as);
+			sb.append(as);
 			return sb.toString();
 		}
-		public static SAsData getSAsData(String sID, String[] ids, BigInteger[] as)
+		public static SAsData getSAsData(String sID, BigInteger[] as)
 		{
-			return new SAsData(sID, ids, as);
+			return new SAsData(sID, as);
 		}
 		//Getters and Setters
 		public String getM_SID() {
@@ -137,13 +130,7 @@ public class NAPMessage implements IfcMessage {
 		public void setM_SID(String m_SID) {
 			this.m_SID = m_SID;
 		}
-		public String[] getM_IDs() {
-			return m_IDs;
-		}
-		public void setM_IDs(String[] m_IDs) {
-			this.m_IDs = m_IDs;
-		}
-
+		
 		public BigInteger[] getM_As() {
 			return m_As;
 		}

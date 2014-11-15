@@ -1,6 +1,9 @@
 package iscas.tca.ake.napake;
 
 import iscas.tca.ake.IfcInitData;
+import iscas.tca.ake.test.swing.module.bulletin.IfcBulletinNAPServer;
+import iscas.tca.ake.veap.IfcGetUsers;
+import iscas.tca.ake.veap.bulletin.IfcBulletinServer;
 
 import java.math.BigInteger;
 
@@ -14,21 +17,23 @@ public class InitServerData implements IfcInitData{
 	BigInteger m_q;//q群
 	BigInteger m_g; //g底数
 	
-	IfcNAPServerUser m_NapServerUser;//NapServer协议的上层使用者，里面有需要它完成的功能
+	IfcGetUsers m_getUsers;//NapServer协议的上层使用者，里面有需要它完成的功能
 	String m_S;//S的ID
+	public IfcBulletinNAPServer m_bulletinNAPServer;
 	/**
 	 * @param m_q
 	 * @param m_g
 	 * @param m_S
-	 * @param m_NapServerUser
+	 * @param m_getUsers
 	 */
 	public InitServerData(BigInteger m_q, BigInteger m_g, String m_S,
-			IfcNAPServerUser m_NapServerUser) {
+			IfcGetUsers m_getUsers, IfcBulletinNAPServer bns) {
 		super();
 		this.m_q = m_q;
 		this.m_g = m_g;
 		this.m_S = m_S;
-		this.m_NapServerUser = m_NapServerUser;
+		this.m_getUsers = m_getUsers;
+		this.m_bulletinNAPServer  = bns;
 	}
 
 	
@@ -56,12 +61,12 @@ public class InitServerData implements IfcInitData{
 		this.m_S = m_S;
 	}
 
-	public IfcNAPServerUser getM_NapServerUser() {
-		return m_NapServerUser;
+	public IfcGetUsers getM_getUsers() {
+		return m_getUsers;
 	}
 
-	public void setM_NapServerUser(IfcNAPServerUser m_NapServerUser) {
-		this.m_NapServerUser = m_NapServerUser;
+	public void setM_NapServerUser(IfcGetUsers m_NapServerUser) {
+		this.m_getUsers = m_NapServerUser;
 	}
 	
 }

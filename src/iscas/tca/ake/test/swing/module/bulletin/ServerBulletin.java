@@ -5,7 +5,7 @@ import iscas.tca.ake.test.swing.module.Response;
 import iscas.tca.ake.test.swing.module.tools.SendAndRecv;
 import iscas.tca.ake.veap.IfcGetUsers;
 import iscas.tca.ake.veap.User;
-import iscas.tca.ake.veap.bulletin.IfcBulletinClient;
+import iscas.tca.ake.veap.bulletin.IfcBulletinVEAPClient;
 import iscas.tca.ake.veap.bulletin.IfcBulletinServer;
 import iscas.tca.ake.veap.calculate.GroupData;
 import iscas.tca.ake.veap.calculate.GroupInput;
@@ -26,8 +26,16 @@ import java.util.Map;
  * @author zn
  * @CreateTime 2014-10-13ÏÂÎç2:05:13
  */
+class NAP_ServerBulletinData{
+	String connectedPseudonyms;
+	BulletinNAPClient bulletinNAP;
+	NAP_ServerBulletinData(BulletinNAPClient bn){
+		this.connectedPseudonyms = bn.getConnectedPseus();
+		this.bulletinNAP = bn;
+	}
+}
 // bulletin server
-public class ServerBulletin implements Runnable, IfcBulletinServer {
+public class ServerBulletin implements Runnable, IfcBulletinServer, IfcBulletinNAPServer {
 	int port = 7070;
 	ServerSocket serverSocket;
 	//
@@ -40,7 +48,8 @@ public class ServerBulletin implements Runnable, IfcBulletinServer {
 	private Response response;
 	Long timeOut = 10000000000l;
 	private Map<String, GroupData> groupDatas = new HashMap<String, GroupData>();
-	private Map<String, Object> napBulletinData = new HashMap<String, Object>();
+	private Map<String, NAP_ServerBulletinData> napBulletinServerData = new HashMap<String, NAP_ServerBulletinData>();
+	
 	
 	// ===================================== Constructor =====================================//
 	public ServerBulletin(Config config, IfcGetUsers getUsers, int lenMS, Response response) {
@@ -58,6 +67,20 @@ public class ServerBulletin implements Runnable, IfcBulletinServer {
 
 	// =====================================public=====================================//
 	@Override
+	public String getConnectedPseudonyms(String groupID) throws Exception{
+		// TODO Auto-generated method stub
+		NAP_ServerBulletinData nsb = null;
+		synchronized(this){
+			nsb = this.napBulletinServerData.get(groupID);
+			if(nsb==null){
+				this.wait();
+			}
+			nsb = this.napBulletinServerData.get(groupID);
+		}
+		return nsb.connectedPseudonyms;
+	}
+	
+	@Override
 	public GroupData getGroupData(String groupID) throws Exception {
 
 		GroupData gd = null;
@@ -66,9 +89,7 @@ public class ServerBulletin implements Runnable, IfcBulletinServer {
 			System.out.println("getGroupData In....\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\.");
 			gd = groupDatas.get(groupID);
 			if (!isValid(gd)) {
-				System.out.println("waiting for ....");
-				System.out.println(System.currentTimeMillis() - gd.getM_publishTime());
-				isValid(gd);
+				System.out.println("waiting for VEAP bulletin...");
 				this.wait();
 				gd = groupDatas.get(groupID);
 			}
@@ -157,9 +178,9 @@ public class ServerBulletin implements Runnable, IfcBulletinServer {
 		}
 	}
 
-	private IfcBulletinClient getBulletinClient(GroupData gd) {
+	private IfcBulletinVEAPClient getBulletinClient(GroupData gd) {
 		// ///time setting
-		return new Bulletin_Veap(gd.getM_X(), gd.getM_ucs(), gd.getM_publishTime(), gd.getM_timeOut(), gd.getM_groupID());
+		return new BulletinVeapClient(gd.getM_X(), gd.getM_ucs(), gd.getM_publishTime(), gd.getM_timeOut(), gd.getM_groupID());
 	}
 
 	// ============================file operate============================//
@@ -234,11 +255,15 @@ public class ServerBulletin implements Runnable, IfcBulletinServer {
 				String groupID = (String) SendAndRecv.recvMsg(socket);
 				//++++++++++++++++++ nap ++++++++++++++++++
 				if(this.proType.equals("NAP")){
-					Bulletin_NAP bn =(Bulletin_NAP) this.napBulletinData.get(groupID);
-					if(bn==null){
-						bn = Bulletin_NAP.newInstance(getIDs(this.getUsers.getUsers(groupID)), this.getAddin());
-						this.napBulletinData.put(groupID, bn);
+					NAP_ServerBulletinData nsb = this.napBulletinServerData.get(groupID);
+					BulletinNAPClient  bn = null;
+					if(nsb==null){
+						bn = BulletinNAPClient.newInstance(getIDs(this.getUsers.getUsers(groupID)), this.getAddin());
+						this.napBulletinServerData.put(groupID, new NAP_ServerBulletinData(bn));
+						nsb = new NAP_ServerBulletinData(bn);
 					}
+					bn = nsb.bulletinNAP;
+					
 					SendAndRecv.sendMsg(bn, socket);	
 					System.out.println("NAP Bulletin send message!");
 				}
@@ -277,4 +302,6 @@ public class ServerBulletin implements Runnable, IfcBulletinServer {
 		}
 		return ids;
 	}
+
+	
 }

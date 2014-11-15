@@ -1,6 +1,6 @@
 package iscas.tca.ake.napake.calculate;
 
-import iscas.tca.ake.test.swing.module.bulletin.IfcBulletinNAP;
+import iscas.tca.ake.test.swing.module.bulletin.IfcBulletinNAPClient;
 import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.connectStrings.ConnectStrsTask;
 import iscas.tca.ake.util.hashs.H0;
@@ -19,7 +19,7 @@ public class NAPCalculate implements IfcNapCalculate{
 
 	
 	@Override
-	public BigInteger getAself(String id, BigInteger[] as, IfcBulletinNAP bn) {
+	public BigInteger getAself(String id, BigInteger[] as, IfcBulletinNAPClient bn) {
 		// TODO Auto-generated method stub
 		int index = bn.index(id);
 		return as[index];
