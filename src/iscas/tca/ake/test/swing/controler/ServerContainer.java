@@ -6,7 +6,6 @@ import iscas.tca.ake.test.swing.module.Response;
 import iscas.tca.ake.test.swing.module.Session;
 import iscas.tca.ake.test.swing.module.bulletin.ServerBulletin;
 import iscas.tca.ake.test.swing.view.observer.IfcObserver;
-import iscas.tca.ake.veap.User;
 import iscas.tca.ake.veap.VEAPConstants;
 
 import java.net.ServerSocket;
@@ -27,7 +26,7 @@ import java.util.concurrent.Executors;
  * @CreateTime 2014-10-9上午9:29:34
  */
 // 控制，负责接收请求，返回响应
-public class ServerContainer implements Runnable {
+public class ServerContainer implements Runnable, IfcServerContanier, IfcRecSession{
 	private static ServerContainer serverContainer;
 	
 	private  ServerSocket serverSocket;// serverSocket
@@ -41,11 +40,15 @@ public class ServerContainer implements Runnable {
 	ExecutorService exeService = Executors.newCachedThreadPool();
 	
 	//protocol execution servlet
-	private MyServer serverProtocol;
+//	private MyServer serverProtocol;
 	int logonCount = 0;
 	int current = 0;
 
 	Map<Integer, String> historySessionID = new TreeMap<Integer, String>();
+	
+	//需要线程本地ThreadLocal变量支持
+	private boolean isVerified =false;
+	private boolean isDone = false;//验证是否完成
 	
 	public int getOnlineCount(){
 		return this.logonCount;
@@ -61,12 +64,19 @@ public class ServerContainer implements Runnable {
 		}
 		return null;
 	}
-	
-	private void recSession(Session session)throws Exception{
+	//record the session
+	public void recSession(Session session)throws Exception{
 		session.recSession(config.getLogsDir());
-		this.historySessionID.put(++logonCount, session.getSessionID());
+		//synchronized to update the view
+		synchronized(this){
+			this.historySessionID.put(++logonCount, session.getSessionID());
+			session.getResponse().setArg("order", logonCount);
+			session.getResponse().setArg("logonCount", logonCount);
+		}
 	}
-	
+	public void showSession(Session session){
+		session.getResponse().update(null);
+	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////xuyao gai de /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,21 +89,20 @@ public class ServerContainer implements Runnable {
 ///////////////////////////////////////////////xuyao gai de /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	//session operation
-
-	List<OneService> serviceList = new LinkedList<OneService>();
-
 	//singleton
 	private ServerContainer(){
+		this.isDone = false;
+		this.isVerified = false;
 	}
-	
+	//newInstance->init->service->close()
 	public static ServerContainer newInstance(Config config, IfcObserver mainObsv, IfcObserver bulletinObsv){
 		if(serverContainer==null){
 			serverContainer = new ServerContainer();
-			serverContainer.config = config;
-			serverContainer.registBulltinObserver(bulletinObsv);
-			serverContainer.registMainObserver(mainObsv);
 		}
+		serverContainer.config = config;
+		serverContainer.registBulltinObserver(bulletinObsv);
+		serverContainer.registMainObserver(mainObsv);
+		//serverContainer.init();
 		return serverContainer;
 	}
 	public void registMainObserver(IfcObserver mainObsv){
@@ -102,14 +111,23 @@ public class ServerContainer implements Runnable {
 	public void registBulltinObserver(IfcObserver bulletinObsv){
 		this.bulletinObserver = bulletinObsv;
 	}
+	
+	//using xml to init the protocol
+	 public void initFromConfigFile(){
+		 this.config.initFromConfigFile();
+		 init();
+	 }
 	public void init(Config cng){
 		this.config = cng;
 		init();
 	}
 	//config, and init the bulletin
 	public void init(){
-
-		this.serverBulletin = new ServerBulletin(config,
+		this.close();
+		this.isDone = false;
+		this.isVerified = false;
+		//
+		this.serverBulletin = ServerBulletin.newInstance(config,
 				config,
 				VEAPConstants.LengthOfMS,
 				new Response(bulletinObserver));		
@@ -120,7 +138,6 @@ public class ServerContainer implements Runnable {
 	public void run(){
 		try {
 			service();
-			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("unknown Exception occurred");
@@ -137,8 +154,34 @@ public class ServerContainer implements Runnable {
 		System.out.println("exit the ServerControler!");
 		this.observerMain.setStatus("Exception!! Exit the ServerContainer!");
 	}
+	
+	public boolean getIsVerified() throws Exception{
+		System.out.println("isVerified!!!!!");
+		if(this==null){
+			System.out.println("ServerContainer==null");
+		}
 
-	private void service() throws Exception{	
+		synchronized(this){
+			if(!this.isDone){
+				System.out.println("isVerified waiting ......==========");
+				this.wait();
+				System.out.println("isVerified outoutoutoutoutoutotuoutoutout......==========");
+				//非常关键的一点
+				this.isDone = false;
+				return this.isVerified;
+			}
+		}
+		this.isDone = false;
+		return this.isVerified;
+	}
+//	private void startVerify(){
+//		this.isDone = false;
+//		this.isVerified = false;
+//	}
+	private void endVerify(){
+		this.isDone = true;
+	}
+	public void service() throws Exception{	
 		
 			this.startServerSocket(config.getPortMain());
 			while (!Thread.interrupted()) {
@@ -149,21 +192,27 @@ public class ServerContainer implements Runnable {
 					socket = this.serverSocket.accept();
 					System.out.println("receive a connection");
 					this.observerMain.setStatus("new connection...");
-				
-					//prepare for the execution of the Verify protocol
+					//start a session ,session settings 
 					Response mainResponse = new Response(this.observerMain);
 					Session session = new  Session(config,mainResponse);
-					serverProtocol = new MyServer(session);
-					serverProtocol.prepareServer(socket, new ConfigInitData(config.getG(), config.getQ(), config.getProType()), this.serverBulletin);
-					//start a session 
-					boolean isVerified = serverProtocol.service(socket);
-					this.observerMain.setStatus("isVerified:"+isVerified);
-				//end of one service()
-					this.recSession(session);
+					
+					session.setSocket(socket);
+					//start the verification
+					VerifyService vs = new VerifyService(session,this.serverBulletin, this);
+					this.exeService.execute(vs);
+//					startVerify();
+//					serverProtocol = new MyServer(session);
+//					serverProtocol.preProServer(socket, new ProtocolConfigInitData(config.getG(), config.getQ(), config.getProType()), this.serverBulletin);
+//					this.isVerified = serverProtocol.service(socket);
+//					//end the verification
+//					endVerify();
+				//record state
+//					this.observerMain.setStatus("isVerified:"+isVerified);
+					/////////////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++////////////
+//					this.recSession(session);
 				    //use mainResponse to update the observer
-					mainResponse.setArg("order", logonCount);
-					mainResponse.setArg("logonCount", logonCount);
-					mainResponse.update(mainResponse);
+//					mainresponse.set("order", "logoncount");
+//					mainResponse.update(mainResponse);
 
 				}catch(SocketException se){
 					se.printStackTrace();
@@ -174,6 +223,13 @@ public class ServerContainer implements Runnable {
 					nse.printStackTrace();
 					System.out.println("not serializable");
 				}
+				finally{
+//					synchronized (this) {
+//						endVerify();
+//						System.out.println("notify all ===========");
+//						notifyAll();
+//					}
+				}
 			}
 		
 	}
@@ -182,16 +238,17 @@ public class ServerContainer implements Runnable {
 	private void startServerSocket(int port) throws Exception {
 		serverSocket = new ServerSocket(port);
 	}
-	private void reset(){
-		
-	}
 	public void close(){
 		try{
 			//Thread.currentThread().interrupt();
-			this.socket.close();
-			this.serverSocket.close();
+			if(this.socket!=null){
+				this.socket.close();
+			}
+			if(this.serverSocket!=null)
+				this.serverSocket.close();
+			if(this.serverBulletin!=null)
+				this.serverBulletin.close();
 			
-			this.serverBulletin.close();
 			this.serverBulletin = null;
 			this.exeService.shutdownNow();
 		}catch(Exception e){
@@ -209,45 +266,80 @@ public class ServerContainer implements Runnable {
 
 //暂时没有用到
 // 每次接到请求 启动的线程
-class OneService implements Runnable {
-	MyServer myserver;
-	Socket socket;
-	// 存放结果
-	Map<String, String> result;
+enum Enum_VerifyStatus{
+	Verification_Passed("OK!!!"),
+	Verification_Failed("Verify Failed!!!");
+	String introductions;
+	private Enum_VerifyStatus(String intro){
+		this.introductions = intro;
+	}
+}
+interface IfcRecSession{
+	public void recSession(Session session)throws Exception;
+	public void showSession(Session session);
+}
+class VerifyService implements Runnable{
+	public boolean isVerified = false;
 	public boolean isDone = false;
-
-	public OneService(MyServer myserver, Socket socket) {
-		this.myserver = myserver;
-		this.socket = socket;
-		result = new HashMap<String, String>();
-		isDone = false;
-	}
-
-	public void run() {
-		try {
-			myserver.service( socket);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			synchronized (this) {
-				isDone = true;
-				notifyAll();
-			}
-		}
-	}
-
-	public boolean isDone() {
-		return this.isDone;
+	
+	//input args
+	Session session;
+	ServerBulletin serverBulletin;
+	IfcRecSession recSession;
+	public VerifyService(Session sesn,ServerBulletin sb, IfcRecSession recSe){
+		this.session = sesn;
+		this.serverBulletin = sb;
+		this.recSession = recSe;
 	}
 	
-	public Map<String, String> getResult() throws Exception {
-		// /如果没有完成，那么等待
+	public void run(){
+		try{
+			service();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	public void service() throws Exception{
+		startVerify();
+		MyServer serverProtocol = new MyServer(session);
+		serverProtocol.preProServer(session.getSocket(), new ProtocolConfigInitData(session.getConfig().getG(), session.getConfig().getQ(), session.getConfig().getProType()), this.serverBulletin);
+		this.isVerified = serverProtocol.service(session.getSocket());
+		//end the verification, notify the waitors;
 		synchronized (this) {
-			if (!isDone) {
-				wait();
+			endVerify();
+			System.out.println("notify all ===========");
+			notifyAll();
+		}
+		//record and show the result of session
+		this.recSession.recSession(this.session);
+		this.recSession.showSession(this.session);
+	}
+	
+	public boolean getIsVerified() throws Exception{
+		System.out.println("isVerified!!!!!");
+		if(this==null){
+			System.out.println("ServerContainer==null");
+		}
+
+		synchronized(this){
+			if(!this.isDone){
+				System.out.println("isVerified waiting ......==========");
+				this.wait();
+				System.out.println("isVerified outoutoutoutoutoutotuoutoutout......==========");
+				//非常关键的一点
+				this.isDone = false;
+				return this.isVerified;
 			}
 		}
-		return result;
+		this.isDone = false;
+		return this.isVerified;
+	}
+	private void startVerify(){
+		this.isDone = false;
+		this.isVerified = false;
+	}
+	private void endVerify(){
+		this.isDone = true;
 	}
 	
 }

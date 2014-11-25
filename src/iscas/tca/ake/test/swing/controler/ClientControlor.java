@@ -30,6 +30,7 @@ public class ClientControlor {
 	 * TODO:<协议执行前的准备阶段 ,发送配置参数> 
 	 * bit位数，协议类型，ID个数，groupID, 需要由server生成，在server中注入
 	 */
+	//frameArgs:name,password,groupID,host,port;
 	public ClientControlor(IfcObserver obs, Map<String, Object> frameArgs){
 		this.frameArgs = frameArgs;
 		response = new Response(obs);

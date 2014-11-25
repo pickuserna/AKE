@@ -1,9 +1,9 @@
 package iscas.tca.ake.napake;
 
 import iscas.tca.ake.IfcInitData;
-import iscas.tca.ake.test.swing.module.bulletin.IfcBulletinNAPServer;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPServer;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPServer;
 import iscas.tca.ake.veap.IfcGetUsers;
-import iscas.tca.ake.veap.bulletin.IfcBulletinServer;
 
 import java.math.BigInteger;
 

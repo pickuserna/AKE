@@ -5,7 +5,7 @@ import iscas.tca.ake.IfcInitData;
 import iscas.tca.ake.message.IfcMessage;
 import iscas.tca.ake.napake.InitClientData;
 import iscas.tca.ake.napake.NAPClient;
-import iscas.tca.ake.test.swing.controler.ConfigInitData;
+import iscas.tca.ake.test.swing.controler.ProtocolConfigInitData;
 import iscas.tca.ake.test.swing.module.bulletin.ClientBulletin;
 import iscas.tca.ake.test.swing.module.tools.SendAndRecv;
 import iscas.tca.ake.test.swing.module.tools.TimeRecord;
@@ -34,7 +34,7 @@ public class MyClient {
 	String name;
 	String password;
 	String groupID;
-	ConfigInitData cfgInitArgs;
+	ProtocolConfigInitData cfgInitArgs;
 	private TimeRecord timeRecord = new TimeRecord();
 	private Response response;
 
@@ -61,7 +61,7 @@ public class MyClient {
 		SendAndRecv.sendMsg(groupID, socket);
 		//receiving protocol initData;
 		System.out.println("receive configInitData...");
-		cfgInitArgs = (ConfigInitData) SendAndRecv.recvMsg(socket);
+		cfgInitArgs = (ProtocolConfigInitData) SendAndRecv.recvMsg(socket);
 
 		System.out.println("received configInitData...");
 
@@ -70,9 +70,9 @@ public class MyClient {
 		response.setG(cfgInitArgs.g);
 		response.setQ(cfgInitArgs.q);
 		response.setProType(cfgInitArgs.proType);
-		if(cfgInitArgs.groupUserIDs!=null){
-			response.setIds(cfgInitArgs.groupUserIDs.length);
-		}
+//		if(cfgInitArgs.groupUserIDs!=null){
+//			response.setIds(cfgInitArgs.groupUserIDs.length);
+//		}
 		return true;
 	}
 
@@ -164,6 +164,7 @@ public class MyClient {
 //			showIsVerified(this.akeClient, "client");
 //		}
 		this.timeRecord.showResult();
+		this.response.setIdsNum(this.akeClient.getIDNum());
 		this.response.putTimeRecord(this.timeRecord.getResult());
 		this.response.putParameter("isVerified", this.akeClient.isVerified()+"");
 		this.response.putParameter("sk", Assist.bytesToHexString(this.akeClient.getsk()));

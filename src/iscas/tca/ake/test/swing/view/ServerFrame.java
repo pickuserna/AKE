@@ -132,7 +132,7 @@ public class ServerFrame extends javax.swing.JFrame implements IfcObserver,
 
 	private ServerFrame() {
 		try {
-			this.config = Config.newInstantce(Config.ConfigPath);
+			this.config = Config.newInstance(Config.ConfigPath);
 			initComponents();
 
 			//init the config instance

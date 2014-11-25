@@ -6,9 +6,9 @@ import iscas.tca.ake.ProtocolStack;
 import iscas.tca.ake.message.IfcMessage;
 import iscas.tca.ake.message.veap.EnumVEAPMsgType;
 import iscas.tca.ake.message.veap.VEAPMessage;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPServer;
 import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.rand.Rand;
-import iscas.tca.ake.veap.bulletin.IfcBulletinServer;
 import iscas.tca.ake.veap.calculate.GroupData;
 import iscas.tca.ake.veap.calculate.GroupInput;
 import iscas.tca.ake.veap.calculate.IfcVEAPCalculate;
@@ -67,7 +67,11 @@ public class VEAPServer implements IfcAkeProtocol {
 	long m_t0;
 	
 	IfcGetUsers m_getUsers;
-	IfcBulletinServer m_bulletinServer;
+	IfcBulletinVEAPServer m_bulletinServer;
+	@Override
+	public int getIDNum(){
+		throw new UnsupportedOperationException();
+	}
 	@Override
 	public boolean init(IfcInitData init) throws Exception {
 		//初始化协议栈

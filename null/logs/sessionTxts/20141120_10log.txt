@@ -1,0 +1,14 @@
+
+
+
+Args:
+    bit := 1024
+    proType := NAP
+    step-_-!-_-C->S | <ID of the group>  :=     groupID := group_U
+
+    step-_-!-_-S->C | <S,{Aj}1¡Üj¡Ün>  := 
+    timeRecord := {server process=3, server process C->S | <ID of the group>=2}
+result:
+    groupID := group_U
+    ids := 0
+    isVerified := false

@@ -4,8 +4,9 @@ import iscas.tca.ake.IfcAkeProtocol;
 import iscas.tca.ake.message.IfcMessage;
 import iscas.tca.ake.napake.InitServerData;
 import iscas.tca.ake.napake.NAPServer;
-import iscas.tca.ake.test.swing.controler.ConfigInitData;
+import iscas.tca.ake.test.swing.controler.ProtocolConfigInitData;
 import iscas.tca.ake.test.swing.module.bulletin.ServerBulletin;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPServer;
 import iscas.tca.ake.test.swing.module.tools.SendAndRecv;
 import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.exceptions.CannotFindSuchIDException;
@@ -14,7 +15,6 @@ import iscas.tca.ake.veap.InitVEAPServerData;
 import iscas.tca.ake.veap.User;
 import iscas.tca.ake.veap.VEAPConstants;
 import iscas.tca.ake.veap.VEAPServer;
-import iscas.tca.ake.veap.bulletin.IfcBulletinServer;
 
 import java.io.EOFException;
 import java.math.BigInteger;
@@ -126,7 +126,7 @@ public class MyServer implements /*IfcNAPServerUser,*/ IfcGetUsers {
 		this.session.getResponse().putTimeRecord(this.session.getTimeRecord().getResult());		
 	}
 
-	public void prepareServer(Socket s, ConfigInitData cid, ServerBulletin bulletinServer) throws Exception {
+	public void preProServer(Socket s, ProtocolConfigInitData cid, ServerBulletin bulletinServer) throws Exception {
 		this.socket = s;
 		this.session.setProType(cid.proType);
 		String groupID = (String) SendAndRecv.recvMsg(s);
@@ -134,7 +134,7 @@ public class MyServer implements /*IfcNAPServerUser,*/ IfcGetUsers {
 	//,,,,
 		this.bulletinServer = bulletinServer;
 		this.session.setGroupID(groupID);
-		cid.setGroupUserIDs(session.getUserIds());
+//		cid.setGroupUserIDs(session.getUserIds());
 		this.session.getResponse().putParameter("groupID",groupID);
 		
 		this.session.getResponse().putParameter("ids",session.getUserIds().length+"");
@@ -148,7 +148,7 @@ public class MyServer implements /*IfcNAPServerUser,*/ IfcGetUsers {
 	public boolean service(Socket sct) throws Exception {
 		this.socket = sct;
 		this.runProtocol();
-		System.out.println("exist service  !!");
+		System.out.println("exist service  !!!!!new new new!!");
 		this.socket.close();
 		return this.akeServer.isVerified();
 	}

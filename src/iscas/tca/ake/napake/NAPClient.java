@@ -8,7 +8,7 @@ import iscas.tca.ake.message.nap.NAPMessage;
 import iscas.tca.ake.message.nap.NAPMessage.GroupIDData;
 import iscas.tca.ake.napake.calculate.FactoryCalculate;
 import iscas.tca.ake.napake.calculate.IfcNapCalculate;
-import iscas.tca.ake.test.swing.module.bulletin.IfcBulletinNAPClient;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPClient;
 import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.connectStrings.ConnectStrsTask;
 import iscas.tca.ake.util.exceptions.CannotGenerateNewMsgException;
@@ -108,7 +108,11 @@ public class NAPClient implements IfcAkeProtocol{
 			return false;
 		}
 	}
-
+	@Override
+	public int getIDNum(){
+		return this.m_As.length;
+	}
+	
 	@Override
 	public boolean isVerified() {
 		return m_isVerified;

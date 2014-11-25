@@ -1,6 +1,6 @@
 package iscas.tca.ake.napake.calculate;
 
-import iscas.tca.ake.test.swing.module.bulletin.IfcBulletinNAPClient;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPClient;
 import iscas.tca.ake.util.connectStrings.ConnectStrsTask;
 
 import java.math.BigInteger;

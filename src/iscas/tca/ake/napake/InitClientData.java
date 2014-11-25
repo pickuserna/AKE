@@ -2,7 +2,7 @@ package iscas.tca.ake.napake;
 
 import iscas.tca.ake.IfcInitData;
 import iscas.tca.ake.test.swing.module.bulletin.BulletinNAPClient;
-import iscas.tca.ake.test.swing.module.bulletin.IfcBulletinNAPClient;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPClient;
 
 import java.math.BigInteger;
 

@@ -1,7 +1,7 @@
 package iscas.tca.ake.veap;
 
 import iscas.tca.ake.IfcInitData;
-import iscas.tca.ake.veap.bulletin.IfcBulletinServer;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPServer;
 
 import java.math.BigInteger;
 
@@ -21,7 +21,7 @@ public class InitVEAPServerData implements IfcInitData {
 	//获取用户的信息
 	IfcGetUsers m_getUsers;
 	//公告板相关的数据，从公告板上取数据
-	IfcBulletinServer m_bulletinServer;
+	IfcBulletinVEAPServer m_bulletinServer;
 	
 	
 	/**
@@ -43,7 +43,7 @@ public class InitVEAPServerData implements IfcInitData {
 	 */
 	public InitVEAPServerData(int m_lenMS, int m_lenVerify, int m_lenSK,
 			BigInteger m_g, BigInteger m_q, String m_sid,
-			IfcGetUsers m_getUsers, IfcBulletinServer m_bulletinServer) {
+			IfcGetUsers m_getUsers, IfcBulletinVEAPServer m_bulletinServer) {
 		super();
 		this.m_lenMS = m_lenMS;
 		this.m_lenVerify = m_lenVerify;
@@ -54,10 +54,10 @@ public class InitVEAPServerData implements IfcInitData {
 		this.m_getUsers = m_getUsers;
 		this.m_bulletinServer = m_bulletinServer;
 	}
-	public IfcBulletinServer getM_bulletinServer() {
+	public IfcBulletinVEAPServer getM_bulletinServer() {
 		return m_bulletinServer;
 	}
-	public void setM_bulletinServer(IfcBulletinServer m_bulletinServer) {
+	public void setM_bulletinServer(IfcBulletinVEAPServer m_bulletinServer) {
 		this.m_bulletinServer = m_bulletinServer;
 	}
 	public int getM_lenMS() {

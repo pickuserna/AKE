@@ -1,7 +1,7 @@
 package iscas.tca.ake.veap;
 
 import iscas.tca.ake.IfcInitData;
-import iscas.tca.ake.veap.bulletin.IfcBulletinVEAPClient;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPClient;
 
 import java.math.BigInteger;
 

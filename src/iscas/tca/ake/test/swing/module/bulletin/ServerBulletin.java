@@ -2,11 +2,12 @@ package iscas.tca.ake.test.swing.module.bulletin;
 
 import iscas.tca.ake.test.swing.module.Config;
 import iscas.tca.ake.test.swing.module.Response;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPServer;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPClient;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPServer;
 import iscas.tca.ake.test.swing.module.tools.SendAndRecv;
 import iscas.tca.ake.veap.IfcGetUsers;
 import iscas.tca.ake.veap.User;
-import iscas.tca.ake.veap.bulletin.IfcBulletinVEAPClient;
-import iscas.tca.ake.veap.bulletin.IfcBulletinServer;
 import iscas.tca.ake.veap.calculate.GroupData;
 import iscas.tca.ake.veap.calculate.GroupInput;
 
@@ -35,7 +36,7 @@ class NAP_ServerBulletinData{
 	}
 }
 // bulletin server
-public class ServerBulletin implements Runnable, IfcBulletinServer, IfcBulletinNAPServer {
+public class ServerBulletin implements Runnable, IfcBulletinVEAPServer, IfcBulletinNAPServer {
 	int port = 7070;
 	ServerSocket serverSocket;
 	//
@@ -52,19 +53,26 @@ public class ServerBulletin implements Runnable, IfcBulletinServer, IfcBulletinN
 	
 	
 	// ===================================== Constructor =====================================//
-	public ServerBulletin(Config config, IfcGetUsers getUsers, int lenMS, Response response) {
+	private static ServerBulletin serverBulletin = null;
+	private ServerBulletin(){
+	}
+	private void init(Config config, IfcGetUsers getUsers, int lenMS, Response response){
 		this.port = config.getBulletinPort();
 		this.g = config.getG();
 		this.q = config.getQ();
 		this.proType = config.getProType();//proType
-		// this.bulletinFilePath =
-		// this.getBulletinPath(config.getBulletinDir());
 
 		this.getUsers = getUsers;
 		this.lenMS = lenMS;
 		this.response = response;
 	}
-
+	public static synchronized ServerBulletin newInstance(Config config, IfcGetUsers getUsers, int lenMS, Response response){
+		if(serverBulletin==null){
+			serverBulletin = new ServerBulletin();
+		}
+		serverBulletin.init(config, getUsers, lenMS, response);
+		return serverBulletin;
+	}
 	// =====================================public=====================================//
 	@Override
 	public String getConnectedPseudonyms(String groupID) throws Exception{
@@ -117,7 +125,7 @@ public class ServerBulletin implements Runnable, IfcBulletinServer, IfcBulletinN
 
 	// connection management
 	public void close() throws Exception {
-		System.out.println("close Bulletin");
+		System.out.println("\n\n==================close Bulletin");
 		this.serverSocket.close();
 	}
 
@@ -247,8 +255,9 @@ public class ServerBulletin implements Runnable, IfcBulletinServer, IfcBulletinN
 			System.out.println("start the bulletin");
 			this.startSocket();
 			while (!Thread.interrupted()) {
-
+                   
 				Socket socket = this.serverSocket.accept();
+				serverSocket.isClosed();
 				// receive groupID from user
 				this.response.putExecutionStep(prefix + step_listenPort, content, true);
 

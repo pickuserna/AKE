@@ -1,6 +1,6 @@
 package iscas.tca.ake.test.swing.module;
 
-import iscas.tca.ake.test.swing.controler.ConfigInitData;
+import iscas.tca.ake.test.swing.controler.ProtocolConfigInitData;
 import iscas.tca.ake.test.swing.module.tools.FileOperator;
 import iscas.tca.ake.test.swing.module.tools.UtilMy;
 import iscas.tca.ake.test.swing.view.observer.IfcObserver;
@@ -124,10 +124,10 @@ public class Response implements Serializable, IfcObserver{
 	public void setQ(BigInteger q){
 		this.argMap.put("q",q.toString());
 	}
-	public void setIds(int ids){
+	public void setIdsNum(int ids){
 		this.argMap.put("ids",ids+"");
 	}
-	public void setConfigInitData(ConfigInitData cid){
+	public void setConfigInitData(ProtocolConfigInitData cid){
 		
 	}
 	//config the args

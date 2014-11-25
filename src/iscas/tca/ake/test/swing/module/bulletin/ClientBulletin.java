@@ -1,8 +1,9 @@
 package iscas.tca.ake.test.swing.module.bulletin;
 
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPClient;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPClient;
 import iscas.tca.ake.test.swing.module.tools.SendAndRecv;
 import iscas.tca.ake.util.Assist;
-import iscas.tca.ake.veap.bulletin.IfcBulletinVEAPClient;
 import iscas.tca.ake.veap.calculate.U_C;
 
 import java.math.BigInteger;

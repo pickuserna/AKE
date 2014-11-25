@@ -8,6 +8,7 @@ import iscas.tca.ake.veap.User;
 
 import java.io.File;
 import java.math.BigInteger;
+import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -27,7 +28,8 @@ public class Session {
 	BigInteger q;
 	String proType;
 	Response response;
-
+	private Socket socket;
+	
 	//date_time_rand
 	private String sessionID;
 	//before the constructor
@@ -96,6 +98,13 @@ public class Session {
 	}
 	public String getProType(){
 		return proType;
+	}
+	//add socket
+	public void setSocket(Socket sock){
+		this.socket = sock;
+	}
+	public Socket getSocket(){
+		return this.socket;
 	}
 	public Response getResponse(){
 		return this.response;

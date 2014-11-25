@@ -7,7 +7,7 @@ import iscas.tca.ake.message.nap.EnumNAPMsgType;
 import iscas.tca.ake.message.nap.NAPMessage;
 import iscas.tca.ake.napake.calculate.FactoryCalculate;
 import iscas.tca.ake.napake.calculate.IfcNapCalculate;
-import iscas.tca.ake.test.swing.module.bulletin.IfcBulletinNAPServer;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPServer;
 import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.connectStrings.ConnectStrsTask;
 import iscas.tca.ake.util.exceptions.CannotGenerateNewMsgException;
@@ -97,7 +97,10 @@ public class NAPServer implements IfcAkeProtocol {
 		// TODO Auto-generated method stub
 		return this.m_isVerified;
 	}
-	
+	@Override
+	public int getIDNum(){
+		throw new UnsupportedOperationException();
+	}
 
 	@Override
 	public boolean init(IfcInitData init) throws Exception{

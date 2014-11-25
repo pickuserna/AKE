@@ -17,6 +17,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.junit.Test;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -111,7 +112,7 @@ public class XMLTools {
 		}
 
 	}
-
+//º”»Îtext Node[tagName, value]
 	public Node appendTextElement(Node pNode, String tagName, String value) {
 		Element child = doc.createElement(tagName);
 		Text textNode = doc.createTextNode(value);
@@ -130,6 +131,8 @@ public class XMLTools {
 		}
 		return sub;
 	}
+	@Test
+	//public void testAdd()
 	public Node appendElement(Node pNode, String tagName, String[] attrNames,
 			String[] attrValues) {
 		Element elem = this.doc.createElement(tagName);

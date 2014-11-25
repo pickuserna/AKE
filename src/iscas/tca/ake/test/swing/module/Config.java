@@ -39,7 +39,7 @@ public class Config implements  IfcGetUsers{
 	private boolean isPlainText = true;//
 	public static boolean isPassed = true;
 	public static final String ConfigPath = "settings\\config.xml";
-
+	private static String  rootPath = null;
 	//args from the framseting mapping 
 
 	// g and q is according to the settings 
@@ -67,17 +67,43 @@ public class Config implements  IfcGetUsers{
 	
 	//bit length , proType and listenning port will not write to the file
 	public void set_FrameArgs(Map<String, Object> settings){
-		int bitLengh = (Integer)settings.get(BitLength);
-		this.g = this.readGQ(GTag, bitLengh);
-		this.q = this.readGQ(QTag, bitLengh);
+		int bitLength = (Integer)settings.get(BitLength);
+		this.g = this.readGQ(GTag, bitLength);
+		this.q = this.readGQ(QTag, bitLength);
 		this.proType = (String)settings.get(ProType_Arg);
 		this.portMain = (Integer)settings.get(PortMain);
+//		this.xmlTool_Config.writeToFile();;; write to File
+//		this.xmlTool_Config.appendTextElement(pNode, tagName, value);
+		String[] bitLengthPath = {EnumTags.ConfigRootTag, EnumTags.BitLength};
+		String[] proTypePath = {EnumTags.ConfigRootTag, EnumTags.ProType_Arg};
+		String[] portMainPath = {EnumTags.ConfigRootTag, EnumTags.PortMain};
+		setNode( this.proType, proTypePath);
+		setNode( this.portMain+"",portMainPath);
+		setNode(bitLength+"", bitLengthPath);
 	}
 	
+	//need to change
+	private void setArgs(){
+		Map<String, Object> settings = new HashMap<String, Object>();
+		String proType = this.readProType();
+		int portMain = this.readMainPort();
+		int bitlength = this.readBitLength();
+		settings.put(BitLength, bitlength);
+		settings.put(ProType_Arg, proType);
+		settings.put(PortMain, portMain);
+		this.set_FrameArgs(settings);
+	}
+	
+	//read configuration from xml files 
+	public void initFromConfigFile(){
+		setArgs();
+		init();
+	}
 	public void init(){
 		//read all the args from the file
+		//change
+//		setArgs();
 		resetGroupCache();
-		
 		isPlainText = readIsPlainText();
 		bulletinDir = readBulletinDir();
 		logsDir = readLogsDir();
@@ -87,8 +113,15 @@ public class Config implements  IfcGetUsers{
 		sid = readSid();
 	}
 	//args from the frame settings
+	public static synchronized Config newInstance_WebDeploy(String rt)throws Exception{
+		String configPath = rt+File.separator+Config.ConfigPath;
+		rootPath = rt;
+		config = newInstance(configPath);
+		config.init();
+		return config;
+	}
 	
-	public static synchronized Config newInstantce(String configPath) throws Exception{
+	public static synchronized Config newInstance(String configPath) throws Exception{
 		if(config==null){
 			config = new Config();
 //			this.bulletinDirpath;
@@ -183,7 +216,7 @@ private void resetGroupCache(){
 	@Test
 	public static void testGetUsers(){
 		try{
-			Config config = Config.newInstantce(Config.ConfigPath);
+			Config config = Config.newInstance(Config.ConfigPath);
 			User[] users = config.getUsers("group_U");
 			for(User u :users){
 				
@@ -194,7 +227,10 @@ private void resetGroupCache(){
 		}
 	}
 
-	
+	//--------------------------------------set Node-----------------------------
+	private void setNode(String value, String... tagPath){
+		this.xmlTool_Config.setNode(tagPath, value);
+	}
 	//--------------------------------------read config from file--------------------------------------//
 	//--------------------------------------read config from file--------------------------------------//
 	private void readAllConfig(){
@@ -203,29 +239,41 @@ private void resetGroupCache(){
 	//--------------------dir config -------------//
 	
 	private String readUsersFilePath(boolean isPlain){
-		String dir = this.xmlTool_Config.getEndNodeValue("usersDir");
+		String dir = getFilePath("usersDir");
 		String fileName = isPlain ? "users_plainDB.xml":"users_cypherDB.xml";
 		return dir+File.separator+fileName;
 	}
 	private String readGroupsFilePath(boolean isPlain){
-		String dir =  this.xmlTool_Config.getEndNodeValue("groupsDir");
+		String dir =  getFilePath("groupsDir");
 		String fileName = isPlain ? "groups_plain_DB.xml":"groups_cypherDB.xml";
 		return dir+File.separator+fileName;
 	}
-	
 	private String readBulletinDir(){
-		return 	this.xmlTool_Config.getEndNodeValue("bulletinDir");
+		return 	getFilePath("bulletinDir");
 	}
 	
 	private String readLogsDir(){
-		return this.xmlTool_Config.getEndNodeValue( "logsDir");
+		return getFilePath( "logsDir");
+	}
+	private String getFilePath(String tagPath){
+		String relativePath = this.xmlTool_Config.getEndNodeValue(tagPath);
+		if(rootPath==null){
+			return relativePath;
+		}
+		if(rootPath.endsWith(File.separator)){
+			return rootPath+relativePath;
+		}
+		else
+			return rootPath+File.separator+relativePath;
 	}
 	//-------------args config ----------------//
 	private boolean readIsPlainText(){
 		return (Boolean.valueOf(this.xmlTool_Config.getEndNodeValue("isPlainText")));
 	}
 	private BigInteger readGQ( String gq, int bit){
+		System.out.println(gq+bit);
 		String value = this.xmlTool_Config.getEndNodeValue(getGQPath(gq, bit));
+		System.out.println(value);
 		return new BigInteger(value);
 	}
 	private int readBulletinPort(){
@@ -234,7 +282,19 @@ private void resetGroupCache(){
 	private String readSid(){
 		return this.xmlTool_Config.getEndNodeValue("sid");
 	}
-	
+	//Tags 
+	private String readProType(){
+		return this.xmlTool_Config.getEndNodeValue(EnumTags.ProType_Arg);
+	}
+	private int readMainPort(){
+		return Integer.valueOf(readTag(EnumTags.PortMain));
+	}
+	private int readBitLength(){
+		return Integer.valueOf(readTag(EnumTags.BitLength));
+	}
+	private String readTag(String endPointTagName){
+		return this.xmlTool_Config.getEndNodeValue(endPointTagName);
+	}
 	//--------------------------------------write config to file--------------------------------------//
 	//--------------------------------------write config to file--------------------------------------//
 	public void setArgsToFile(String argName, String argValue){

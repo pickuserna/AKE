@@ -7,10 +7,10 @@ import iscas.tca.ake.message.IfcMessage;
 import iscas.tca.ake.message.veap.EnumVEAPMsgType;
 import iscas.tca.ake.message.veap.VEAPMessage;
 import iscas.tca.ake.test.swing.module.bulletin.BulletinVeapClient;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPClient;
 import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.rand.IfcRand;
 import iscas.tca.ake.util.rand.Rand;
-import iscas.tca.ake.veap.bulletin.IfcBulletinVEAPClient;
 import iscas.tca.ake.veap.calculate.IfcVEAPCalculate;
 import iscas.tca.ake.veap.calculate.U_C;
 import iscas.tca.ake.veap.calculate.VEAPCalculate;
@@ -107,6 +107,10 @@ public class VEAPClient implements IfcAkeProtocol {
 	 * TODO:<生成UAB消息>
 	 * @return 
 	 */
+	@Override
+	public int getIDNum(){
+		return this.m_u_cs.length;
+	}
 	private IfcMessage generateUAB()
 	{
 		this.m_pvd = new User(m_id,m_password).getPvd();

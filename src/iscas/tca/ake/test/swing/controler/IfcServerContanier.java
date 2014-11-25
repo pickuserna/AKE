@@ -9,6 +9,6 @@ import iscas.tca.ake.test.swing.module.Config;
  */
 public interface IfcServerContanier{
 	public void init(Config conifg);
-	public void service();
+	public void service()throws Exception;
 	public void close();
 }

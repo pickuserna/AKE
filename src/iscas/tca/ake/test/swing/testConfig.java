@@ -16,7 +16,7 @@ public class testConfig {
 	 */
 	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
-		Config c = Config.newInstantce(Config.ConfigPath);
+		Config c = Config.newInstance(Config.ConfigPath);
 		System.out.println(c.getBulletinDir());
 	}
 

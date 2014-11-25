@@ -46,4 +46,6 @@ public interface IfcAkeProtocol {
 	 * @return 
 	 */
 	public byte[] getsk();
+	
+	public int getIDNum();
 }

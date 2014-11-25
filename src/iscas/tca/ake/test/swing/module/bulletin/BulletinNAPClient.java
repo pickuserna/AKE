@@ -1,5 +1,6 @@
 package iscas.tca.ake.test.swing.module.bulletin;
 
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPClient;
 import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.hashs.H256;
 

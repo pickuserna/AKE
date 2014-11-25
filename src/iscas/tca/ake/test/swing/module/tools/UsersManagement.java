@@ -76,7 +76,7 @@ public class UsersManagement {
 	}
 	@Test
 	public void testUser()throws Exception {
-		Config c = Config.newInstantce(Config.ConfigPath);
+		Config c = Config.newInstance(Config.ConfigPath);
 		readUsersOfGroup("group_U", false, c.getUsersFilePath());
 		readUsersOfGroup("group_U", true, c.getUsersFilePath());
 		
@@ -89,7 +89,7 @@ public class UsersManagement {
 		return true;
 	}
 	public static boolean isRegist(String id, String groupID)throws Exception{
-			Config c = Config.newInstantce(Config.ConfigPath);
+			Config c = Config.newInstance(Config.ConfigPath);
 			User[] users = (c.getUsers(groupID));
 			if(users!=null){
 				for(User u :users){

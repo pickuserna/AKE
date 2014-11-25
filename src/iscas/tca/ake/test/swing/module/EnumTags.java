@@ -15,12 +15,14 @@ import org.junit.Test;
 public class EnumTags {
 	public static final String GTag = ("g"),
 	QTag = ("q"),
-	PortMain= ("port"),
+	PortMain= ("portMain"),
 	PortBulletin=("portBulletin"),
 	ProType_Arg= ("proType"),
 	//ProType_NAP_YZ("nap_yz"),
 	//ProType_SKI("ski"),
 	BitLength= ("bitLength"),
+	//whether the database stored in plainText
+	IsPlainText = ("isPlainText"),
 	//dirs
 	bulletinDirTag= ("bulletinDir"),
 	usersFilePathTag= ("usersFilePath"),
