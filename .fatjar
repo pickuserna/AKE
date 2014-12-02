@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Fri Nov 28 11:31:33 CST 2014
+onejar.license.required=false
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=ake_lib.jar
+manifest.mergeall=true
+manifest.mainclass=
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=<jar|poi-examples-3.10.1-20140818.jar>;<jar|junit.jar>;<jar|org.hamcrest.core_1.1.0.v20090501071000.jar>;<jar|jxl.jar>;<jar|stax-api-1.0.1.jar>;<jar|xmlbeans-2.6.0.jar>;<jar|poi-excelant-3.10.1-20140818.jar>;<jar|poi-ooxml-3.10.1-20140818.jar>;<jar|poi-ooxml-schemas-3.10.1-20140818.jar>;<jar|poi-scratchpad-3.10.1-20140818.jar>;<jar|commons-lang3-3.3.2.jar>;<jar|poi-3.10.1-20140818.jar>
+includes=

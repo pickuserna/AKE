@@ -45,7 +45,6 @@ public class MyClient {
 	public void setBulletinClient(ClientBulletin bc){
 		this.bulletinClient = bc;
 	}
-	
 	public boolean prepareClient(Socket socket,
 			ClientBulletin bulletinClient, 
 			Map<String, Object> proArgs,
@@ -57,8 +56,16 @@ public class MyClient {
 		
 		this.socket = socket;
 		this.bulletinClient = bulletinClient;
-		// send groupID
-		SendAndRecv.sendMsg(groupID, socket);
+		
+		String httpSessionID=(String)proArgs.get("httpSessionID");
+		//+++++++++++++++++++++++++++++++++++++++++++++++++
+		if(httpSessionID!=null){
+			SendAndRecv.sendMsg(new C2S_PreProData(groupID, httpSessionID),socket);
+		}
+		else{
+			// send groupID
+			SendAndRecv.sendMsg(groupID, socket);
+		}
 		//receiving protocol initData;
 		System.out.println("receive configInitData...");
 		cfgInitArgs = (ProtocolConfigInitData) SendAndRecv.recvMsg(socket);

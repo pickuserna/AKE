@@ -38,7 +38,6 @@ public class ServerContainer implements Runnable, IfcServerContanier, IfcRecSess
 	ServerBulletin serverBulletin;
 	Config config;// = Config.newInstantce();	
 	ExecutorService exeService = Executors.newCachedThreadPool();
-	
 	//protocol execution servlet
 //	private MyServer serverProtocol;
 	int logonCount = 0;
@@ -121,7 +120,7 @@ public class ServerContainer implements Runnable, IfcServerContanier, IfcRecSess
 		this.config = cng;
 		init();
 	}
-	//config, and init the bulletin
+	//config args, and init the bulletin
 	public void init(){
 		this.close();
 		this.isDone = false;
@@ -174,13 +173,6 @@ public class ServerContainer implements Runnable, IfcServerContanier, IfcRecSess
 		this.isDone = false;
 		return this.isVerified;
 	}
-//	private void startVerify(){
-//		this.isDone = false;
-//		this.isVerified = false;
-//	}
-	private void endVerify(){
-		this.isDone = true;
-	}
 	public void service() throws Exception{	
 		
 			this.startServerSocket(config.getPortMain());
@@ -200,19 +192,6 @@ public class ServerContainer implements Runnable, IfcServerContanier, IfcRecSess
 					//start the verification
 					VerifyService vs = new VerifyService(session,this.serverBulletin, this);
 					this.exeService.execute(vs);
-//					startVerify();
-//					serverProtocol = new MyServer(session);
-//					serverProtocol.preProServer(socket, new ProtocolConfigInitData(config.getG(), config.getQ(), config.getProType()), this.serverBulletin);
-//					this.isVerified = serverProtocol.service(socket);
-//					//end the verification
-//					endVerify();
-				//record state
-//					this.observerMain.setStatus("isVerified:"+isVerified);
-					/////////////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++////////////
-//					this.recSession(session);
-				    //use mainResponse to update the observer
-//					mainresponse.set("order", "logoncount");
-//					mainResponse.update(mainResponse);
 
 				}catch(SocketException se){
 					se.printStackTrace();
@@ -305,6 +284,15 @@ class VerifyService implements Runnable{
 		serverProtocol.preProServer(session.getSocket(), new ProtocolConfigInitData(session.getConfig().getG(), session.getConfig().getQ(), session.getConfig().getProType()), this.serverBulletin);
 		this.isVerified = serverProtocol.service(session.getSocket());
 		//end the verification, notify the waitors;
+		String httpSessionID = serverProtocol.getHttpSessionID();
+		if(httpSessionID!=null){
+			WaitorSession ws = WaitorSession.getInstanceById(httpSessionID);
+			synchronized(ws){
+				ws.setAkeProtocol(serverProtocol.getAkeServer());
+				System.out.println("waitorSession id:"+httpSessionID+" notifyAll===================");
+				ws.overAndNotify();
+			}
+		}
 		synchronized (this) {
 			endVerify();
 			System.out.println("notify all ===========");
@@ -314,6 +302,8 @@ class VerifyService implements Runnable{
 		this.recSession.recSession(this.session);
 		this.recSession.showSession(this.session);
 	}
+	//A future task, get the waitorSession of the sessionID 
+	
 	
 	public boolean getIsVerified() throws Exception{
 		System.out.println("isVerified!!!!!");

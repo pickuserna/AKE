@@ -5,6 +5,7 @@ import iscas.tca.ake.message.IfcMessage;
 import iscas.tca.ake.napake.InitServerData;
 import iscas.tca.ake.napake.NAPServer;
 import iscas.tca.ake.test.swing.controler.ProtocolConfigInitData;
+import iscas.tca.ake.test.swing.controler.WaitorSession;
 import iscas.tca.ake.test.swing.module.bulletin.ServerBulletin;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPServer;
 import iscas.tca.ake.test.swing.module.tools.SendAndRecv;
@@ -35,10 +36,15 @@ public class MyServer implements /*IfcNAPServerUser,*/ IfcGetUsers {
 	public Socket socket;//
 	IfcAkeProtocol akeServer;
 	ServerBulletin bulletinServer;
+	String httpSessionID;
+	WaitorSession waitorSession;
+	
 	public MyServer(Session session) {
 		this.session = session;
 	}
-
+	public IfcAkeProtocol getAkeServer (){
+		return this.akeServer;
+	}
 	@Override
 	public User[] getUsers(String groupID) {
 		// TODO Auto-generated method stub
@@ -76,7 +82,7 @@ public class MyServer implements /*IfcNAPServerUser,*/ IfcGetUsers {
 	//
 	private void runProtocol() throws Exception {
 		initProtocol();
-		try {
+//		try {
 			while (!this.akeServer.isProtocolOver()) {
 				// receive the message
 				
@@ -103,20 +109,14 @@ public class MyServer implements /*IfcNAPServerUser,*/ IfcGetUsers {
 					
 					//bulletin
 					SendAndRecv.sendMsg(sMsg, socket);
-					
 				}
 			}
-		} catch (EOFException e) {
-			e.printStackTrace();
-			System.out.println("Maybe the remote terminate the connection!!");
-		}
-
-//		if (this.session.getProType().equals("NAP")) {
-//			showResult((NAPServer) akeServer);
-//		} else if (this.session.getProType().equals("VEAP")) {
-//			showIsVerified(this.akeServer, "server");
+//		} catch (EOFException e) {
+//			e.printStackTrace();
+//			System.out.println("Maybe the remote terminate the connection!!");
 //		}
-		//
+		//protocol over
+		
 		this.session.getResponse().putParameter("isVerified", this.akeServer.isVerified() + "");
 		if (this.akeServer.isVerified()) {
 			this.session.getResponse().putParameter("sk",
@@ -125,16 +125,28 @@ public class MyServer implements /*IfcNAPServerUser,*/ IfcGetUsers {
 		this.session.getTimeRecord().showResult();
 		this.session.getResponse().putTimeRecord(this.session.getTimeRecord().getResult());		
 	}
-
+	
+	public String getHttpSessionID(){
+		return this.httpSessionID;
+	}
+	
 	public void preProServer(Socket s, ProtocolConfigInitData cid, ServerBulletin bulletinServer) throws Exception {
 		this.socket = s;
 		this.session.setProType(cid.proType);
-		String groupID = (String) SendAndRecv.recvMsg(s);
+		Object obj = SendAndRecv.recvMsg(s);
+		//old CS module 
+		String groupID=null;
+		if(obj instanceof String){
+			groupID = (String) obj;
+		}
+		//web BS module
+		else if(obj instanceof C2S_PreProData){
+			groupID = ((C2S_PreProData)obj).groupID;
+			httpSessionID = ((C2S_PreProData)obj).httpSessionID;
+		}
 		//bulletin 
-	//,,,,
 		this.bulletinServer = bulletinServer;
 		this.session.setGroupID(groupID);
-//		cid.setGroupUserIDs(session.getUserIds());
 		this.session.getResponse().putParameter("groupID",groupID);
 		
 		this.session.getResponse().putParameter("ids",session.getUserIds().length+"");
@@ -151,39 +163,5 @@ public class MyServer implements /*IfcNAPServerUser,*/ IfcGetUsers {
 		System.out.println("exist service  !!!!!new new new!!");
 		this.socket.close();
 		return this.akeServer.isVerified();
-	}
-
-	/*public void cleanBoard() {
-		Constants.groupData = null;
-		Constants.clientBulletin = null;
-	}*/
-
-//	private void showResult(NAPServer napServer) {
-//		System.out.println("q  :" + napServer.getM_q());
-//		System.out.println("g  :" + napServer.getM_g());
-////		System.out.println("IDs :" + napServer.getM_IDs().length);
-//		System.out.println("Auths: "
-//				+ Assist.bytesToHexString(napServer.getM_Auths()));
-//		System.out.println("sk:   "
-//				+ Assist.bytesToHexString(napServer.getM_sk()));
-//		System.out.println("rS  :" + napServer.getM_rS());
-//		System.out.println("ry  :" + napServer.getM_randy());
-//	}
-
-	private String findPws(String id) {
-		User[] users = session.getUsers();
-		for (int i = 0; i < users.length; i++) {
-			if (id.equals(users[i].user_id)) {
-				return users[i].user_pw;
-			}
-		}
-		return null;
-	}
-
-
-	public static void showIsVerified(IfcAkeProtocol cs, String type) {
-		System.out.println(type + "Verify result£º" + cs.isVerified() + "\n  SK:"
-				+ Assist.bytesToHexString(cs.getsk()));
-
 	}
 }

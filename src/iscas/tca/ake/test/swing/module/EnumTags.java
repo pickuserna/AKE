@@ -42,7 +42,7 @@ public class EnumTags {
 	public static final String GroupPasswordTag = "password";;
 	
 	String argTag;
-	
+	///
 	private EnumTags(String tag){
 		argTag = tag;
 	}
