@@ -137,12 +137,14 @@ public class MyServer implements /*IfcNAPServerUser,*/ IfcGetUsers {
 		//old CS module 
 		String groupID=null;
 		if(obj instanceof String){
+			System.out.println("CS module ");
 			groupID = (String) obj;
 		}
 		//web BS module
 		else if(obj instanceof C2S_PreProData){
 			groupID = ((C2S_PreProData)obj).groupID;
 			httpSessionID = ((C2S_PreProData)obj).httpSessionID;
+			System.out.println("web BS module ++ receiving httpSessionID"+httpSessionID);
 		}
 		//bulletin 
 		this.bulletinServer = bulletinServer;

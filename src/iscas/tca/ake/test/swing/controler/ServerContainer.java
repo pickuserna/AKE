@@ -258,13 +258,13 @@ interface IfcRecSession{
 	public void showSession(Session session);
 }
 class VerifyService implements Runnable{
-	public boolean isVerified = false;
-	public boolean isDone = false;
 	
 	//input args
 	Session session;
 	ServerBulletin serverBulletin;
 	IfcRecSession recSession;
+	//variables for web application
+	private MyServer serverProtocol;
 	public VerifyService(Session sesn,ServerBulletin sb, IfcRecSession recSe){
 		this.session = sesn;
 		this.serverBulletin = sb;
@@ -275,61 +275,41 @@ class VerifyService implements Runnable{
 		try{
 			service();
 		}catch(Exception e){
+			endVerify();
 			e.printStackTrace();
 		}
 	}
-	public void service() throws Exception{
-		startVerify();
-		MyServer serverProtocol = new MyServer(session);
-		serverProtocol.preProServer(session.getSocket(), new ProtocolConfigInitData(session.getConfig().getG(), session.getConfig().getQ(), session.getConfig().getProType()), this.serverBulletin);
-		this.isVerified = serverProtocol.service(session.getSocket());
-		//end the verification, notify the waitors;
+	// notify All the waitors of the specific httpSessionID
+	private void endVerify(){
 		String httpSessionID = serverProtocol.getHttpSessionID();
+		System.out.println("endVerify():::"+httpSessionID);
 		if(httpSessionID!=null){
-			WaitorSession ws = WaitorSession.getInstanceById(httpSessionID);
-			synchronized(ws){
-				ws.setAkeProtocol(serverProtocol.getAkeServer());
-				System.out.println("waitorSession id:"+httpSessionID+" notifyAll===================");
-				ws.overAndNotify();
-			}
+			try{
+				WaitorSession ws = WaitorSession.getInstanceById(httpSessionID);
+				synchronized(ws){
+					ws.setAkeProtocol(serverProtocol.getAkeServer());
+					System.out.println("waitorSession id:"+httpSessionID+" notifyAll===================");
+					ws.overAndNotify();
+				}
+				}
+				catch(Exception e){
+					System.out.println("endVerify() Exception!!!!");
+					e.printStackTrace();
+				}
 		}
-		synchronized (this) {
-			endVerify();
-			System.out.println("notify all ===========");
-			notifyAll();
-		}
+		System.out.println("isVerified:!!!!!!"+serverProtocol.getAkeServer().isVerified());
+	}
+
+	public void service() throws Exception{
+		serverProtocol = new MyServer(session);
+		serverProtocol.preProServer(session.getSocket(), new ProtocolConfigInitData(session.getConfig().getG(), session.getConfig().getQ(), session.getConfig().getProType()), this.serverBulletin);
+		serverProtocol.service(session.getSocket());
+		//end the verification, notify the waitors;
+		
+		this.endVerify();
 		//record and show the result of session
 		this.recSession.recSession(this.session);
 		this.recSession.showSession(this.session);
-	}
-	//A future task, get the waitorSession of the sessionID 
-	
-	
-	public boolean getIsVerified() throws Exception{
-		System.out.println("isVerified!!!!!");
-		if(this==null){
-			System.out.println("ServerContainer==null");
-		}
-
-		synchronized(this){
-			if(!this.isDone){
-				System.out.println("isVerified waiting ......==========");
-				this.wait();
-				System.out.println("isVerified outoutoutoutoutoutotuoutoutout......==========");
-				//非常关键的一点
-				this.isDone = false;
-				return this.isVerified;
-			}
-		}
-		this.isDone = false;
-		return this.isVerified;
-	}
-	private void startVerify(){
-		this.isDone = false;
-		this.isVerified = false;
-	}
-	private void endVerify(){
-		this.isDone = true;
 	}
 	
 }

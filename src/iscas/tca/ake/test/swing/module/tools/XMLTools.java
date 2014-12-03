@@ -5,8 +5,6 @@ import static iscas.tca.ake.test.swing.module.tools.UtilMy.printnb;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -237,9 +235,9 @@ public class XMLTools {
 				nip.order++;
 				nip.pNode = nl.item(i);
 				i = 0;
-				System.out.print(nip.pNode.getChildNodes().getLength());
+				//System.out.print(nip.pNode.getChildNodes().getLength());
 				nl = nip.pNode.getChildNodes();
-				System.out.print(nl.item(i).getNodeName()+"--");
+				//System.out.print(nl.item(i).getNodeName()+"--");
 			}
 			else{i++;}//System.out.println(nl.getLength());}
 		}
