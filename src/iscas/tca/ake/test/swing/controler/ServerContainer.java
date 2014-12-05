@@ -275,8 +275,8 @@ class VerifyService implements Runnable{
 		try{
 			service();
 		}catch(Exception e){
-			endVerify();
 			e.printStackTrace();
+			endVerify();
 		}
 	}
 	// notify All the waitors of the specific httpSessionID

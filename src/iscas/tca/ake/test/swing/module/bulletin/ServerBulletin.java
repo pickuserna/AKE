@@ -185,52 +185,10 @@ public class ServerBulletin implements Runnable, IfcBulletinVEAPServer, IfcBulle
 			return null;
 		}
 	}
-
 	private IfcBulletinVEAPClient getBulletinClient(GroupData gd) {
 		// ///time setting
 		return new BulletinVeapClient(gd.getM_X(), gd.getM_ucs(), gd.getM_publishTime(), gd.getM_timeOut(), gd.getM_groupID());
 	}
-
-	// ============================file operate============================//
-
-	// private String getBulletinPath(String root){
-	// return root+File.separator+"Bulletin_"+new
-	// SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-	// }
-	// private String getFilePath( String groupID) {
-	// return this.bulletinFilePath + File.separator + groupID;
-	// }
-	// private void writeToFile(String groupID, GroupData gd) throws Exception {
-	// String filePath = this.getFilePath( groupID);
-	// FileOperator.writeObjectToFile(gd, filePath);
-	// }
-	// private GroupData readFromFile(String groupID) throws Exception {
-	// String filePath = this.getFilePath(groupID);
-	// GroupData gd = (GroupData) FileOperator.readObjectFromFile(filePath);
-	// return gd;
-	// }
-	// private boolean isFileExist(String groupID) {
-	// String filePath = this.getFilePath(groupID);
-	// File f = new File(filePath);
-	// return f.exists();
-	// }
-	// private GroupData readGroupData(String groupID) {
-	// try {
-	// if (isFileExist(groupID)) {
-	// GroupData gd = this.readFromFile(groupID);
-	// if (isValid(gd)) {
-	// return gd;
-	// }
-	// else{
-	// ///delete invalid data
-	// deleteData(groupID);
-	// }
-	// }
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// return null;
-	// }
 
 // ================================ run ==================================
 	// veap status
