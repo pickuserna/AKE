@@ -187,7 +187,7 @@ public class Assist{
 		if(divisor.equals(BigInteger.ZERO))
 			return null;
 		BigInteger inverse = modInverse(divisor,q);
-		return modPow(dividend, inverse, q);
+		return modMutiply(dividend, inverse, q);
 	}
 	
 	public static <K, V> String traverseMap(Map<K, V> map) {

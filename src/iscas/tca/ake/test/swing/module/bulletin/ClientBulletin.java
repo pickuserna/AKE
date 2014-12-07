@@ -88,6 +88,11 @@ public class ClientBulletin extends IfcBulletinVEAPClient implements Runnable, I
 		System.out.println("existing the bulletin client");
 	}
 	
+	@Override
+	public String getMsgType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	//a Future task
 	@Override
 	public IfcBulletinVEAPClient fetchData(String groupID) throws Exception {

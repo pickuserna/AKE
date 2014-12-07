@@ -11,16 +11,14 @@ public class WaitorAndNotifierOfBulletin implements IfcWaitorAndNotifier {
 	private WaitorAndNotifierOfBulletin(){
 	}
 	//get the waitorAndNotifier for the specific groupID
-	public static WaitorAndNotifierOfBulletin getWaitorAndNotifier(String groupID){
+	public static synchronized WaitorAndNotifierOfBulletin getWaitorAndNotifier(String groupID){
 		WaitorAndNotifierOfBulletin wn =null;
-		synchronized(groupID){
 			wn = wnMap.get(groupID);
 			if(wn==null){
 				wn = new WaitorAndNotifierOfBulletin();
 				wn.groupID = groupID;
 			}
 			wnMap.put(groupID, wn);
-		}
 		return wn;
 	}
 	

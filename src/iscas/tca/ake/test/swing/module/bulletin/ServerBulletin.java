@@ -1,12 +1,15 @@
 package iscas.tca.ake.test.swing.module.bulletin;
 
+import iscas.tca.ake.napake.calculate.NAPCalculate;
 import iscas.tca.ake.test.swing.module.Config;
+import iscas.tca.ake.test.swing.module.EnumTags;
 import iscas.tca.ake.test.swing.module.Response;
 import iscas.tca.ake.test.swing.module.bulletin.csdata.BulletinNAPServerHashData;
 import iscas.tca.ake.test.swing.module.bulletin.csimplements.BulletinNAPServerHash;
 import iscas.tca.ake.test.swing.module.bulletin.csimplements.BulletinNAPServerSecurity;
 import iscas.tca.ake.test.swing.module.bulletin.csimplements.BulletinVeapClient;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPServerHash;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPServerSecurity;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPClient;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPServer;
 import iscas.tca.ake.test.swing.module.tools.SendAndRecv;
@@ -36,7 +39,12 @@ public class ServerBulletin implements Runnable, IfcBulletinVEAPServer, IfcBulle
 	@Override
 	public String getConnectedPseudonyms(String groupID) throws Exception {
 		// TODO Auto-generated method stub
-		return bulletinServer_Hash.getConnectedPseudonyms(groupID);
+		if(this.bulletinServer_Hash!=null){
+			return bulletinServer_Hash.getConnectedPseudonyms(groupID);
+		}
+		else {
+			return bulletinServerSecurity.getConnectedPseudonyms(groupID);
+		}
 	}
 
 	int port = 7070;
@@ -51,10 +59,10 @@ public class ServerBulletin implements Runnable, IfcBulletinVEAPServer, IfcBulle
 	private Response response;
 	Long timeOut = 10000l;
 	private Map<String, GroupData> groupDatas = new HashMap<String, GroupData>();
-	
+	private String napBulletinMode;
 	//BulletinServer
 	private IfcBulletinNAPServerHash bulletinServer_Hash;
-	
+	private IfcBulletinNAPServerSecurity bulletinServerSecurity;
 	// ===================================== Constructor =====================================//
 	private static ServerBulletin serverBulletin = null;
 	private ServerBulletin(){
@@ -64,7 +72,7 @@ public class ServerBulletin implements Runnable, IfcBulletinVEAPServer, IfcBulle
 		this.g = config.getG();
 		this.q = config.getQ();
 		this.proType = config.getProType();//proType
-
+		this.napBulletinMode = config.getBulletinMode();
 		this.getUsers = getUsers;
 		this.lenMS = lenMS;
 		this.response = response;
@@ -210,8 +218,15 @@ public class ServerBulletin implements Runnable, IfcBulletinVEAPServer, IfcBulle
 				if(this.proType.equals("NAP")){
 					//Hash 
 					//if(){}
-					this.bulletinServer_Hash = BulletinNAPServerHash.newInstance();
-					this.bulletinServer_Hash.service(socket, this.getUsers);
+					System.out.println("napBulletinMode++++++++++++++ "+ this.napBulletinMode);
+					if(this.napBulletinMode.equals(EnumTags.NapBulletinHashMode)){
+						this.bulletinServer_Hash = BulletinNAPServerHash.newInstance();
+						this.bulletinServer_Hash.service(socket, this.getUsers);
+					}
+					else {
+						this.bulletinServerSecurity = BulletinNAPServerSecurity.newInstance();
+						this.bulletinServerSecurity.service(socket, getUsers, g, q, new NAPCalculate());
+					}
 				}
 				//------------------nap --------------------
 				

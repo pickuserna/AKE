@@ -1,5 +1,6 @@
 package iscas.tca.ake.test.swing.module.bulletin.csdata;
 
+import iscas.tca.ake.test.swing.module.EnumTags;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPClient;
 import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.hashs.H256;
@@ -18,6 +19,11 @@ public class BulletinNAPClientHashData implements Serializable, IfcBulletinNAPCl
 	public String addin;
 	public byte[][] pseudonym;
 	
+	@Override
+	public String getMsgType() {
+		// TODO Auto-generated method stub
+		return EnumTags.NapBulletinHashMode;
+	}
 	private BulletinNAPClientHashData(){}
 	//calculate the pseudonym with the addin of the given id
 	private static byte[] getPseudonym( String id, String addin){

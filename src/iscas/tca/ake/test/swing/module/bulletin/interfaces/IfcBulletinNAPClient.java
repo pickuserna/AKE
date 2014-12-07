@@ -12,5 +12,6 @@ public interface IfcBulletinNAPClient {
 	int index(String id);
 	//get the connected Pseudonyms of the group
 	String getConnectedPseus();
+	String getMsgType();
 	
 }

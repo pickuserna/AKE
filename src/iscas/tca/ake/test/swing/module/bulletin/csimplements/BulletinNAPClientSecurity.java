@@ -11,8 +11,6 @@ import iscas.tca.ake.util.rand.Rand;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import sun.security.x509.X400Address;
-
 public class BulletinNAPClientSecurity implements IfcWaitorAndNotifier,  IfcBulletinNAPClient{
 
 	NAPS2CMsg.ConfigMsg configMsg;
@@ -35,6 +33,12 @@ public class BulletinNAPClientSecurity implements IfcWaitorAndNotifier,  IfcBull
 		this.napCalculata = napCalculate;
 	}
 	
+	@Override
+	public String getMsgType() {
+		// TODO Auto-generated method stub
+		return this.configMsg.getMsgType();
+	}
+
 	public BigInteger getA(){
 		BigInteger g = configMsg.getG();
 		BigInteger q = configMsg.getQ();
@@ -42,6 +46,7 @@ public class BulletinNAPClientSecurity implements IfcWaitorAndNotifier,  IfcBull
 		randa = (new Rand()).randOfMax(q);
 		Ap = Assist.modPow(g, randa, q);
 		pvd = napCalculata.getPW(id, password, q);
+		System.out.println("pvd:"+pvd.toString());
 		A =	Assist.modMutiply(Ap, pvd, q);
 		return A;
 	}
@@ -53,7 +58,7 @@ public class BulletinNAPClientSecurity implements IfcWaitorAndNotifier,  IfcBull
 		BigInteger pvdX = Assist.modDivision(Ax, Xa, q);
 		
 		String s = Assist.connectStrings(id, X.toString(), pvd.toString(), pvdX.toString()).toString();
-				
+		System.out.println("pvdX:"+pvdX +"\nAx:"+Ax+"\nXa:"+Xa+"\nranda:"+randa+"\nX:"+X+"\nq:"+q+"\ng:"+configMsg.getG());
 		byte[] cj = new H256().process(s);
 		this.index = indexOfArray(configMsg.getCjs(), cj);
 		doneIt();
@@ -82,7 +87,7 @@ public class BulletinNAPClientSecurity implements IfcWaitorAndNotifier,  IfcBull
 	@Override
 	public String getConnectedPseus() {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		return 	this.configMsg.getConnectedPseus();
 	}
 
 	@Override

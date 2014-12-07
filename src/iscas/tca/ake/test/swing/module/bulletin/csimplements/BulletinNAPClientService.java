@@ -13,6 +13,10 @@ import java.net.Socket;
 
 public class BulletinNAPClientService implements IfcBulletinNAPClient, IfcBulletinNAPClientService, IfcWaitorAndNotifier {
 	@Override
+	public String getMsgType(){
+		throw new UnsupportedOperationException();
+	}
+	@Override
 	public void service(Socket socket, String groupID, String id, String password, IfcNapCalculate napCalculate ) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("BulletinNAPClientService send groupID"+groupID);
@@ -20,18 +24,21 @@ public class BulletinNAPClientService implements IfcBulletinNAPClient, IfcBullet
 		
 		synchronized(this){
 			System.out.println("BulletinNAPClientService recv...."+groupID);
-			Object msg = SendAndRecv.recvMsg(socket);
+			IfcBulletinNAPClient msg =(IfcBulletinNAPClient) SendAndRecv.recvMsg(socket);
 			System.out.println("BulletinNAPClientService recv over ...."+groupID+msg);
+			
 			//Hash Mode
-			if(msg instanceof IfcBulletinNAPClient){
+			if(msg.getMsgType().equals(EnumTags.NapBulletinHashMode)){
 				this.bulletinMode = EnumTags.NapBulletinHashMode;
 				this.bulletinNAPClient = (IfcBulletinNAPClient)msg;
 				doneIt();
 			}
 			//security mode
 			else {
+				System.out.println("security mode!!");
 				BulletinNAPClientSecurity bncs = new BulletinNAPClientSecurity((NAPS2CMsg.ConfigMsg)msg, id, password, napCalculate);
 				BigInteger A = bncs.getA();
+				System.out.println("A:"+A.toString());
 				SendAndRecv.sendMsg(A, socket);
 				BigInteger Ax = (BigInteger)SendAndRecv.recvMsg(socket);
 				bncs.calculateIndex(Ax);
