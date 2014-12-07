@@ -9,6 +9,12 @@ import iscas.tca.ake.test.swing.module.tools.SendAndRecv;
 import java.net.Socket;
 
 public class BulletinNAPClientService implements IfcBulletinNAPClient, IfcBulletinNAPClientService, IfcWaitorAndNotifier {
+	@Override
+	public void service(Socket socket, String groupID, String id, String password) throws Exception {
+		// TODO Auto-generated method stub
+		,,,
+	}
+
 	IfcBulletinNAPClient bulletinNAPClient;
 	
 	boolean isDone = false;

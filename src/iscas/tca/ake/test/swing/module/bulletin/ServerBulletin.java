@@ -4,7 +4,7 @@ import iscas.tca.ake.test.swing.module.Config;
 import iscas.tca.ake.test.swing.module.Response;
 import iscas.tca.ake.test.swing.module.bulletin.csdata.BulletinNAPServerHashData;
 import iscas.tca.ake.test.swing.module.bulletin.csimplements.BulletinNAPServerHash;
-import iscas.tca.ake.test.swing.module.bulletin.csimplements.BulletinNAPServer_Security;
+import iscas.tca.ake.test.swing.module.bulletin.csimplements.BulletinNAPServerSecurity;
 import iscas.tca.ake.test.swing.module.bulletin.csimplements.BulletinVeapClient;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPServerHash;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPClient;

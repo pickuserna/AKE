@@ -1,5 +1,6 @@
 package iscas.tca.ake.test.swing.module.bulletin;
 
+import iscas.tca.ake.napake.calculate.IfcNapCalculate;
 import iscas.tca.ake.test.swing.module.bulletin.csimplements.BulletinNAPClientService;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPClient;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPClientService;
@@ -13,7 +14,6 @@ import java.net.Socket;
 import java.net.SocketAddress;
 
 /**
- * ÃèÊö£º<>
  * @author zn
  * @CreateTime 2014-10-13ÏÂÎç3:07:02
  */
@@ -23,20 +23,14 @@ public class ClientBulletin extends IfcBulletinVEAPClient implements Runnable, I
 	private SocketAddress addr;
 	String groupID;
 	String proType;
+	//
+	String id;
+	String password;
+	private IfcNapCalculate napCalCulate;
 	private  BulletinNAPClientService bulletinNAPClient = new BulletinNAPClientService();
 	
 	//get index of the id
 	public int index(String id){
-		try{
-			synchronized(this){
-				if(bulletinNAPClient==null){
-					this.wait();
-				}
-			}
-		}catch(Exception e){
-			System.out.println("error at the synchronized index!!");
-			e.printStackTrace();
-		}
 		return bulletinNAPClient.index(id);
 	}
 	//get connected String
@@ -47,11 +41,22 @@ public class ClientBulletin extends IfcBulletinVEAPClient implements Runnable, I
 		this.proType = proType ;
 	}
 	//set BulletinNAP
-	public ClientBulletin(String groupID, SocketAddress addr){
+//	public ClientBulletin(String groupID, SocketAddress addr){
+//		this.addr = addr;
+//		isDone = false;
+//		this.groupID = groupID;
+//	}
+	
+	//the ClientBulletin for security mode
+	public ClientBulletin (String groupID, SocketAddress addr, String id, String password, IfcNapCalculate napCal){
 		this.addr = addr;
-		isDone = false;
+		this.isDone = false;
 		this.groupID = groupID;
+		this.id = id;
+		this.password = password;
+		this.napCalCulate = napCal;
 	}
+	
 	
 	public void run(){
 		

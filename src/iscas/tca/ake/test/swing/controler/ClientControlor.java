@@ -1,5 +1,6 @@
 package iscas.tca.ake.test.swing.controler;
 
+import iscas.tca.ake.napake.calculate.NAPCalculate;
 import iscas.tca.ake.test.swing.module.MyClient;
 import iscas.tca.ake.test.swing.module.Response;
 import iscas.tca.ake.test.swing.module.bulletin.ClientBulletin;
@@ -79,9 +80,13 @@ public class ClientControlor {
 		frameArgs.put("result", this.response);
 		// start the connection c
 		this.socket = new Socket((String)frameArgs.get("host"), (Integer)frameArgs.get("port"));
-		System.out.println("connect is ok...");
+		System.out.println("connect is ok..."+frameArgs.get("name")+frameArgs.get("password"));
 		
-		this.clientBulletin = new ClientBulletin((String)this.frameArgs.get("groupID"), new InetSocketAddress((String)frameArgs.get("host"), 7070));
+		this.clientBulletin = new ClientBulletin((String)this.frameArgs.get("groupID"), new InetSocketAddress((String)frameArgs.get("host"), 7070),
+				(String)this.frameArgs.get("name"),
+				(String)this.frameArgs.get("password"),
+				new NAPCalculate());
+		
 		myclient.prepareClient(socket,  this.clientBulletin ,Collections.unmodifiableMap(frameArgs),this.response);
 		// bulletin service 
 		System.out.println("client booting");
