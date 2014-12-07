@@ -1,6 +1,8 @@
 package iscas.tca.ake.test.swing.module.bulletin;
 
+import iscas.tca.ake.test.swing.module.bulletin.csimplements.BulletinNAPClientService;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPClient;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPClientService;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPClient;
 import iscas.tca.ake.test.swing.module.tools.SendAndRecv;
 import iscas.tca.ake.util.Assist;
@@ -17,17 +19,17 @@ import java.net.SocketAddress;
  */
 public class ClientBulletin extends IfcBulletinVEAPClient implements Runnable, IfcBulletinNAPClient{
 	private boolean isDone = false;
-	private IfcBulletinVEAPClient bulletinClient;
+	private IfcBulletinVEAPClient bulletinVEAPClient;
 	private SocketAddress addr;
 	String groupID;
 	String proType;
-	private IfcBulletinNAPClient bulletinNAP;
+	private  BulletinNAPClientService bulletinNAPClient = new BulletinNAPClientService();
 	
 	//get index of the id
 	public int index(String id){
 		try{
 			synchronized(this){
-				if(bulletinNAP==null){
+				if(bulletinNAPClient==null){
 					this.wait();
 				}
 			}
@@ -35,11 +37,11 @@ public class ClientBulletin extends IfcBulletinVEAPClient implements Runnable, I
 			System.out.println("error at the synchronized index!!");
 			e.printStackTrace();
 		}
-		return bulletinNAP.index(id);
+		return bulletinNAPClient.index(id);
 	}
 	//get connected String
 	public String getConnectedPseus(){
-		return bulletinNAP.getConnectedPseus();
+		return bulletinNAPClient.getConnectedPseus();
 	}
 	public void setProType(String proType){
 		this.proType = proType ;
@@ -57,27 +59,17 @@ public class ClientBulletin extends IfcBulletinVEAPClient implements Runnable, I
 		try{
 			Socket socket = new Socket();
 			socket.connect(addr);
-			//send groupID
-			System.out.println("bulletin 1 :"+"send groupID");
-			SendAndRecv.sendMsg(groupID, socket);
-			
 			//++++++++++++nap+++++++++++++++++
 			if(this.proType.equals("NAP")){
-				//asynchronized maybe nullPointer
-				
-				synchronized(this){
-					this.bulletinNAP = (IfcBulletinNAPClient)SendAndRecv.recvMsg(socket);
-					this.notifyAll();
-				}
-				
-				System.out.println("NAP Bulletin done!!");
-				System.out.println("admin's index is "+ bulletinNAP.index("admin"));
+				//synchronized;  maybe nullPointer
+				this.bulletinNAPClient.service(socket, this.groupID);
 			}
 			//------------nap-----------------
 			//++++++++++++veap++++++++++++++++
 			if(this.proType.equals("VEAP")){
-				this.bulletinClient = (IfcBulletinVEAPClient)SendAndRecv.recvMsg(socket);
-				System.out.println("bulletinCLient receive 2"+this.bulletinClient);
+				SendAndRecv.sendMsg(groupID, socket);
+				this.bulletinVEAPClient = (IfcBulletinVEAPClient)SendAndRecv.recvMsg(socket);
+				System.out.println("bulletinCLient receive 2"+this.bulletinVEAPClient);
 				
 				synchronized(this){
 					isDone = true;
@@ -102,66 +94,66 @@ public class ClientBulletin extends IfcBulletinVEAPClient implements Runnable, I
 				
 			}
 		}
-		return this.bulletinClient;
+		return this.bulletinVEAPClient;
 	}
 
 	@Override
 	public String getGroupID() {
 		// TODO Auto-generated method stub
-		return this.bulletinClient.getGroupID();
+		return this.bulletinVEAPClient.getGroupID();
 	}
 
 	@Override
 	public BigInteger getX() {
 		// TODO Auto-generated method stub
-		return this.bulletinClient.getX();
+		return this.bulletinVEAPClient.getX();
 	}
 
 	@Override
 	public U_C[] getU_Cs() {
 		// TODO Auto-generated method stub
-		return this.bulletinClient.getU_Cs();
+		return this.bulletinVEAPClient.getU_Cs();
 	}
 
 	@Override
 	public Long getT() {
 		// TODO Auto-generated method stub
-		return this.bulletinClient.getT();
+		return this.bulletinVEAPClient.getT();
 	}
 
 	@Override
 	public Long getT0() {
 		// TODO Auto-generated method stub
-		return this.bulletinClient.getT0();
+		return this.bulletinVEAPClient.getT0();
 	}
 
 	@Override
 	public void setGroupID(String groupID) {
 		// TODO Auto-generated method stub
-		this.bulletinClient.setGroupID(groupID);
+		this.bulletinVEAPClient.setGroupID(groupID);
 	}
 
 	@Override
 	public void setU_Cs(U_C[] ucs) {
 		// TODO Auto-generated method stub
-		this.bulletinClient.setU_Cs(ucs);
+		this.bulletinVEAPClient.setU_Cs(ucs);
 	}
 
 	@Override
 	public void setX(BigInteger x) {
 		// TODO Auto-generated method stub
-		this.bulletinClient.setX(x);
+		this.bulletinVEAPClient.setX(x);
 	}
 
 	@Override
 	public void setT(Long t) {
 		// TODO Auto-generated method stub
-		this.bulletinClient.setT(t);
+		this.bulletinVEAPClient.setT(t);
 	}
 
 	@Override
 	public void setT0(Long t0) {
 		// TODO Auto-generated method stub
-		this.bulletinClient.setT0(t0);
+		this.bulletinVEAPClient.setT0(t0);
 	}	
 }

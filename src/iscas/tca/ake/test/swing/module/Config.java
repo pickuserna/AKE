@@ -52,7 +52,9 @@ public class Config implements  IfcGetUsers{
 	String proType;
 	int portMain;
 	String sid;
+	private String bulletinMode;
 	
+	//dirs 
 	private String bulletinDir;
 	private String usersFilePath;
 	private String groupsFilePath;
@@ -106,6 +108,7 @@ public class Config implements  IfcGetUsers{
 		resetGroupCache();
 		isPlainText = readIsPlainText();
 		bulletinDir = readBulletinDir();
+		this.bulletinMode = readBulletinMode();
 		logsDir = readLogsDir();
 		usersFilePath = readUsersFilePath(isPlainText);
 		groupsFilePath = readGroupsFilePath(isPlainText);
@@ -169,7 +172,9 @@ public class Config implements  IfcGetUsers{
 	public String getLogsDir() {
 		return logsDir;
 	}
-
+	public String getBulletinMode(){
+		return this.bulletinMode;
+	}
 	public String getBulletinDir(){
 		return this.bulletinDir;
 	}	
@@ -250,7 +255,7 @@ private void resetGroupCache(){
 	private String readBulletinDir(){
 		return 	getFilePath("bulletinDir");
 	}
-	
+
 	private String readLogsDir(){
 		return getFilePath( "logsDir");
 	}
@@ -266,12 +271,16 @@ private void resetGroupCache(){
 			return rootPath+File.separator+relativePath;
 	}
 	//-------------args config ----------------//
+	private String readBulletinMode(){
+		return (String)this.readTag(EnumTags.NapBulletinModeTag);
+	}
+	
 	private boolean readIsPlainText(){
-		return (Boolean.valueOf(this.xmlTool_Config.getEndNodeValue("isPlainText")));
+		return (Boolean.valueOf(this.readTag("isPlainText")));
 	}
 	private BigInteger readGQ( String gq, int bit){
 		System.out.println(gq+bit);
-		String value = this.xmlTool_Config.getEndNodeValue(getGQPath(gq, bit));
+		String value = this.readTag(getGQPath(gq, bit));
 		System.out.println(value);
 		return new BigInteger(value);
 	}
@@ -291,7 +300,7 @@ private void resetGroupCache(){
 	private int readBitLength(){
 		return Integer.valueOf(readTag(EnumTags.BitLength));
 	}
-	private String readTag(String endPointTagName){
+	private String readTag(String... endPointTagName){
 		return this.xmlTool_Config.getEndNodeValue(endPointTagName);
 	}
 	//--------------------------------------write config to file--------------------------------------//

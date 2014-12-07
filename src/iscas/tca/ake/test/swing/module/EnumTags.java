@@ -41,7 +41,9 @@ public class EnumTags {
 	public static final String GroupIdTag = "groupID";
 	public static final String GroupPasswordTag = "password";;
 	//nap bulletin model: hash or exponent
-	public static final String NapBulletinModelTag="napBulletinModel";
+	public static final String NapBulletinModeTag="napBulletinMode";
+	public static final String NapBulletinHashMode = "hash";
+	public static final String NapBulletinSecurityMode = "security";
 	String argTag;
 	///
 	private EnumTags(String tag){

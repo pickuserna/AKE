@@ -1,14 +1,23 @@
 package iscas.tca.ake.test.swing.module.bulletin.csdata;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 
-public class NAPS2CMsg<T> {
+public class NAPS2CMsg<T> implements Serializable{
 	T msg;
-	//1st msg
-	public NAPS2CMsg(T msg){
-		this.msg = msg;
+	public static String MSGBulletinTypeHash = "BulletinHashMsgType";
+	public static String MSGBulltinTypeConfigSecurity = "BulletinConfigSecurityMsgType";
+	public static String MSGBulltinTypeResponseSecurity = "BulletinResponseSecurityMsgType";
+	String msgType;
+	//HashMsg
+	public static class HashMsg{
+		
 	}
-	//2nd msg
+	public NAPS2CMsg(T msg, String msgType){
+		this.msg = msg;
+		this.msgType = msgType;
+	}
+	//1st msg
 	public static class ConfigMsg{
 		BigInteger g;
 		BigInteger q;
@@ -16,6 +25,7 @@ public class NAPS2CMsg<T> {
 		
 	}
 	
+	//2nd msg
 	public static class ResponseMsg{
 		BigInteger Ax;
 	}

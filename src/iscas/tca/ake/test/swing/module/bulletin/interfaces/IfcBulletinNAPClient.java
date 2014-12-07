@@ -1,5 +1,7 @@
 package iscas.tca.ake.test.swing.module.bulletin.interfaces;
 
+import java.net.Socket;
+
 /**
  * √Ë ˆ£∫<>
  * @author zn
@@ -10,4 +12,5 @@ public interface IfcBulletinNAPClient {
 	int index(String id);
 	//get the connected Pseudonyms of the group
 	String getConnectedPseus();
+	
 }

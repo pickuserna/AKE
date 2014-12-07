@@ -5,6 +5,7 @@ import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.hashs.H256;
 
 import java.io.Serializable;
+import java.net.Socket;
 import java.util.Arrays;
 
 /**
@@ -13,6 +14,7 @@ import java.util.Arrays;
  * @CreateTime 2014-11-13ионГ10:07:58
  */
 public class BulletinNAPClientHashData implements Serializable, IfcBulletinNAPClient {
+
 	public String addin;
 	public byte[][] pseudonym;
 	
