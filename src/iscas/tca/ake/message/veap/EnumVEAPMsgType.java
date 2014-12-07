@@ -1,7 +1,6 @@
 package iscas.tca.ake.message.veap;
 
 /**
- * ÃèÊö£º<>
  * @author zn
  * @CreateTime 2014-9-4ÉÏÎç10:16:27
  */

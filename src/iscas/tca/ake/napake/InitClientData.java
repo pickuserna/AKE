@@ -1,25 +1,23 @@
 package iscas.tca.ake.napake;
 
 import iscas.tca.ake.IfcInitData;
-import iscas.tca.ake.test.swing.module.bulletin.BulletinNAPClient;
+import iscas.tca.ake.test.swing.module.bulletin.csdata.BulletinNAPClientHashData;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPClient;
 
 import java.math.BigInteger;
 
 /**
- * 描述：<>
- * 类名：<InitNAPClientData>
+ * InitData of the NAPClient
  * @author zn
  * @CreateTime 2014-8-16上午10:58:25
  */
 public class InitClientData implements IfcInitData{
-	String m_pw;//自己的密码
-//	String[] m_IDs;//T数组
+	String m_pw;//password of the client
 	String m_groupID;// the group that the client belongs to
-	String m_ID;//自己的ID
-	BigInteger m_q;//q群
-	BigInteger m_g; //g底数
-	public IfcBulletinNAPClient m_bn;
+	String m_ID;//the id of the client
+	BigInteger m_q;// q is the finite field containing q elements
+	BigInteger m_g; //g is a group element
+	public IfcBulletinNAPClient m_bn;// the bulletin module of the NAPClient
 	
 	/**
 	 * @param m_pw

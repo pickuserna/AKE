@@ -1,4 +1,4 @@
-package iscas.tca.ake.test.swing.module.bulletin;
+package iscas.tca.ake.test.swing.module.bulletin.csimplements;
 
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPClient;
 import iscas.tca.ake.veap.calculate.U_C;

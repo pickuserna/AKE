@@ -6,16 +6,13 @@ import iscas.tca.ake.util.Assist;
 import java.math.BigInteger;
 
 /**
- * 描述：<>
- * 类名：<NAPMessage>
  * @author zn
  * @CreateTime 2014-8-16上午11:06:37
  */
 public class NAPMessage implements IfcMessage {
 
-	IfcMessage m_data;//消息体
-    EnumNAPMsgType m_msgType;//
-	public static EnumNAPMsgType m_endMsgType;//最后一条消息的类型
+	IfcMessage m_data;//message entity
+    EnumNAPMsgType m_msgType;// the type of message
 	public NAPMessage(IfcMessage m_data, EnumNAPMsgType m_msgType) {
 		super();
 		this.m_data = m_data;
@@ -25,13 +22,12 @@ public class NAPMessage implements IfcMessage {
 	public boolean isMsgLegle() {
 		// TODO Auto-generated method stub
 //     switch(this.m_msgType){}
-		if(this.m_msgType!=null)//msgType不是为空
+		if(this.m_msgType!=null)//msgType is not null
 		{
 			return this.m_data.isMsgLegle();
 		}
 		return false;
 	}
-	//使用统一接口获取消息
 	
 	@Override
 	public String getMsgType() {
@@ -44,13 +40,12 @@ public class NAPMessage implements IfcMessage {
 		
 		return this.m_data.getMsgContent();
 	}
-	//用于自己构造data，然后获取NAPMessage
+	//construct the NAPMessage with the data and type, the unique entrance
 	public static NAPMessage getNAPMessage(IfcMessage data,EnumNAPMsgType type)
 	{
 		return new NAPMessage(data, type);
 	}
-	//消息类
-	//第一条消息的类?length 是需要,设置getIDsData的作用是进行类型检查
+	//message classes for every specific message
 	public static class GroupIDData implements IfcMessage{
 //		String[] m_IDs;
 		String m_groupID;
@@ -88,7 +83,7 @@ public class NAPMessage implements IfcMessage {
 	}
 	//2
 	public static class SAsData implements IfcMessage{
-		String m_SID;//S的名字
+		String m_SID;//the name of the server
 		BigInteger[] m_As;//A[]
 		
 		public SAsData(String m_SID, BigInteger[] m_As) {
@@ -139,6 +134,7 @@ public class NAPMessage implements IfcMessage {
 			this.m_As = m_As;
 		}
 	}
+	// 3
 	public static class XstarBData implements IfcMessage{
 		BigInteger m_Xstar;
 		BigInteger m_B;
@@ -169,7 +165,6 @@ public class NAPMessage implements IfcMessage {
 			String b = "B := "+m_B.toString();
 			return xStart+"\n"+b+"\n";
 		}
-		//构造一条XstarB类型的消息
 		public static XstarBData getXstarBData(BigInteger xStar, BigInteger b)
 		{
 			XstarBData xbData = new XstarBData(xStar, b);
@@ -189,7 +184,7 @@ public class NAPMessage implements IfcMessage {
 			this.m_B = m_B;
 		}
 	}
-	//4
+	//4 
 	public static class YAuthsData  implements IfcMessage{
 		BigInteger m_Y;
 		byte[] m_Auths;
@@ -240,6 +235,7 @@ public class NAPMessage implements IfcMessage {
 			this.m_Auths = m_Auths;
 		}
 	}
+	//5
 	public static class AuthcData implements IfcMessage{
 		byte[] authc;
 		public AuthcData(byte[] authc){

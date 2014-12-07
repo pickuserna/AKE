@@ -232,7 +232,6 @@ private void resetGroupCache(){
 		this.xmlTool_Config.setNode(tagPath, value);
 	}
 	//--------------------------------------read config from file--------------------------------------//
-	//--------------------------------------read config from file--------------------------------------//
 	private void readAllConfig(){
 		throw new UnsupportedOperationException();
 	}
@@ -295,7 +294,6 @@ private void resetGroupCache(){
 	private String readTag(String endPointTagName){
 		return this.xmlTool_Config.getEndNodeValue(endPointTagName);
 	}
-	//--------------------------------------write config to file--------------------------------------//
 	//--------------------------------------write config to file--------------------------------------//
 	public void setArgsToFile(String argName, String argValue){
 		throw new UnsupportedOperationException("hai mieyou  shixian ne ");

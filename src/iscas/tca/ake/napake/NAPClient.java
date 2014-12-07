@@ -21,8 +21,8 @@ import java.util.Arrays;
 import java.util.Stack;
 
 /**
- * 描述：<Nap协议的client>
- * 类名：<NapClient>
+ * description：<Nap协议的client>
+ * class-name：<NapClient>
  * @author zn
  * @CreateTime 2014-8-16上午11:05:16
  */
@@ -54,9 +54,7 @@ public class NAPClient implements IfcAkeProtocol{
 	public boolean m_isInited;
 	public boolean m_isVerified;
 	String m_Trans; 
-	//多线程连接字符串，在发送XStarB时进行处理
-	ConnectStrsTask m_cstAs;//多线程连接As
-//	ConnectStrsTask m_cstIDs;//多线程连接IDs，启动和获取不在一个位置
+	ConnectStrsTask m_cstAs;//Concurrent mutipletask to connect As array
 	
 	Stack<EnumNAPMsgType> m_stack;
 	//bulletin 
@@ -72,12 +70,12 @@ public class NAPClient implements IfcAkeProtocol{
 	@Override
 	public boolean init(IfcInitData init) throws InitializationException{
 		// TODO Auto-generated method stub
-		//获取底层计算object
+		//m_NapCalculate undertake the task of calculation relevant to  NAP protocol
 		this.m_NapCalculate = FactoryCalculate.getCalculate("NAPCalculate");
 		
 		if(init instanceof InitClientData){
 			InitClientData initClt = (InitClientData)init;
-			//初始化数据
+			//initialization
 			this.m_pw = initClt.getM_pw();
 			this.m_g = initClt.getM_g();
 			this.m_q = initClt.getM_q();
@@ -85,17 +83,17 @@ public class NAPClient implements IfcAkeProtocol{
 			this.m_groupID = initClt.getM_groupID();
 			//record the bulletinNAP
 			this.m_bulletinNapClient = initClt.m_bn;
-			//参数合法性检查
+			//initialization validity checking
 			if(this.m_q.isProbablePrime(NAPConstants.ProbablePrimeCertainty) &&
 					this.m_g.compareTo(BigInteger.ZERO)>0 &&
 					null!=this.m_pw && 
 					null != this.m_ID)// && 
 					//isInArrays(this.m_ID, this.m_IDs))
 			{
-				//初始化协议栈
+				//init the stack of the protocol 
 				EnumNAPMsgType[] order = { EnumNAPMsgType.SAs,EnumNAPMsgType.YAuths};
 				initProtocolStack(order);
-				//初始化成功
+				//set the flag of initialization
 				this.m_isInited = true;
 				return true;
 			}
@@ -123,7 +121,7 @@ public class NAPClient implements IfcAkeProtocol{
 		return this.m_stack.isEmpty();
 	}
 	
-	//初始化协议栈:协议栈设置接收消息的顺序
+	//set the order of the protocol stack 
 	public void initProtocolStack(EnumNAPMsgType[] order)
 	{
 		m_stack = new Stack<EnumNAPMsgType>();
@@ -166,18 +164,18 @@ public class NAPClient implements IfcAkeProtocol{
 	@Override
 	public IfcMessage processMessage(IfcMessage m) throws IllegalMsgException, CannotGenerateNewMsgException, InitializationException, InterruptedException{
 		// TODO Auto-generated method stub	
-		//确保初始化成功
 		if(!this.m_isInited){
 			throw new InitializationException();
 		}
 		else{
+			//check if the message is legal and extract information from the message
 			if(!drawInfo(m)){			
 				throw new IllegalMsgException();
 			}
-			else{//消息合法				
+			else{//	legal			
 				NAPMessage mNap = (NAPMessage)m;
 				IfcMessage newMsg = null;
-				//处理信息
+				//process
 				switch (mNap.getM_msgType()){
 				case SAs:
 					newMsg = createXstarBMsg();
@@ -211,7 +209,6 @@ public class NAPClient implements IfcAkeProtocol{
 				isInOrder(m)){
 			NAPMessage mNap = (NAPMessage)m;
 			
-			//记录到NAPServer中
 			switch(mNap.getM_msgType())
 			{
 			case SAs:
@@ -219,7 +216,6 @@ public class NAPClient implements IfcAkeProtocol{
 				this.m_As = data.getM_As();
 				this.m_SID = data.getM_SID();
 				this.m_A = this.m_NapCalculate.getAself(m_ID, m_As, m_bulletinNapClient);
-				//如果能够找到m_A，true，否则，返回false
 				if(this.m_A!=null)
 					break;
 				else{

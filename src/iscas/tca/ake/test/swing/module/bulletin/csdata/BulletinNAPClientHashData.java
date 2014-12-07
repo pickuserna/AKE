@@ -1,4 +1,4 @@
-package iscas.tca.ake.test.swing.module.bulletin;
+package iscas.tca.ake.test.swing.module.bulletin.csdata;
 
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPClient;
 import iscas.tca.ake.util.Assist;
@@ -12,11 +12,11 @@ import java.util.Arrays;
  * @author zn
  * @CreateTime 2014-11-13ÉÏÎç10:07:58
  */
-public class BulletinNAPClient implements Serializable, IfcBulletinNAPClient {
+public class BulletinNAPClientHashData implements Serializable, IfcBulletinNAPClient {
 	public String addin;
 	public byte[][] pseudonym;
 	
-	private BulletinNAPClient(){}
+	private BulletinNAPClientHashData(){}
 	//calculate the pseudonym with the addin of the given id
 	private static byte[] getPseudonym( String id, String addin){
 		String s = Assist.connectStrings(id, addin).toString();
@@ -40,8 +40,8 @@ public class BulletinNAPClient implements Serializable, IfcBulletinNAPClient {
 		}
 		return -1;
 	}
-	public static BulletinNAPClient newInstance(String[] ids, String addin){
-		BulletinNAPClient bn = new BulletinNAPClient();
+	public static BulletinNAPClientHashData newInstance(String[] ids, String addin){
+		BulletinNAPClientHashData bn = new BulletinNAPClientHashData();
 		// create pseudonym
 		bn.pseudonym = new byte[ids.length][];
 		bn.addin = addin;

@@ -2,9 +2,7 @@ package iscas.tca.ake.message.nap;
 
 import org.junit.Test;
 
-/**
- * ÃèÊö£º<>
- * ÀàÃû£º<EnumNapMsgType>
+/**the enumerable message types 
  * @author zn
  * @CreateTime 2014-8-16ÏÂÎç2:02:17
  */

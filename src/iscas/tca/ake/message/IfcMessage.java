@@ -10,12 +10,11 @@ import java.io.Serializable;
  */
 public interface IfcMessage extends Serializable{
 	/**
-	 * TODO:<检查消息是否合法，检查完整性，数据范围>
+	 * TODO: verify the validity of the message 
 	 * @param m
 	 * @return 
 	 */
 	public boolean isMsgLegle();
-	//public IfcMessage getMessage();
 	public String getMsgType();
 	public String getMsgContent();
 }

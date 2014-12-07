@@ -1,25 +1,23 @@
 package iscas.tca.ake.napake;
 
 import iscas.tca.ake.IfcInitData;
-import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPServer;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPServerHash;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPServer;
 import iscas.tca.ake.veap.IfcGetUsers;
 
 import java.math.BigInteger;
 
 /**
- * 描述：<>
- * 类名：<InitNAPServerData>
  * @author zn
  * @CreateTime 2014-8-16上午11:02:54
  */
 public class InitServerData implements IfcInitData{
-	BigInteger m_q;//q群
-	BigInteger m_g; //g底数
+	BigInteger m_q;//q is the finite field containing q elements
+	BigInteger m_g; //g is a group element
 	
-	IfcGetUsers m_getUsers;//NapServer协议的上层使用者，里面有需要它完成的功能
-	String m_S;//S的ID
-	public IfcBulletinNAPServer m_bulletinNAPServer;
+	IfcGetUsers m_getUsers;//you can get all the Users of a given group(denoted by groupID) by m_getUsers
+	String m_S;//the name of the server 
+	public IfcBulletinNAPServerHash m_bulletinNAPServer;//NAP Server Bulletin module
 	/**
 	 * @param m_q
 	 * @param m_g
@@ -27,7 +25,7 @@ public class InitServerData implements IfcInitData{
 	 * @param m_getUsers
 	 */
 	public InitServerData(BigInteger m_q, BigInteger m_g, String m_S,
-			IfcGetUsers m_getUsers, IfcBulletinNAPServer bns) {
+			IfcGetUsers m_getUsers, IfcBulletinNAPServerHash bns) {
 		super();
 		this.m_q = m_q;
 		this.m_g = m_g;

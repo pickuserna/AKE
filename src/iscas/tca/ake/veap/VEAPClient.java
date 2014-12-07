@@ -6,7 +6,7 @@ import iscas.tca.ake.ProtocolStack;
 import iscas.tca.ake.message.IfcMessage;
 import iscas.tca.ake.message.veap.EnumVEAPMsgType;
 import iscas.tca.ake.message.veap.VEAPMessage;
-import iscas.tca.ake.test.swing.module.bulletin.BulletinVeapClient;
+import iscas.tca.ake.test.swing.module.bulletin.csimplements.BulletinVeapClient;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPClient;
 import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.rand.IfcRand;

@@ -9,7 +9,6 @@ import java.util.Map;
 import static iscas.tca.ake.message.veap.EnumVEAPMsgType.*;
 
 /**
- * 描述：<>
  * 
  * @author zn
  * @CreateTime 2014-9-4上午10:17:35
@@ -41,7 +40,6 @@ public class VEAPMessage implements IfcMessage {
 		this.m_msgType = msgType;
 	}
 
-	// 消息中包含信息的数据结构
 	// 1
 	public class UABData implements IfcMessage {
 		BigInteger data_A;
@@ -94,7 +92,6 @@ public class VEAPMessage implements IfcMessage {
 	}
 	// 2
 	public class S2CData implements IfcMessage {
-		// client查询的方式，服务器发布方式实现时：不需要 (U,C)中的C
 		String data_sid;
 		BigInteger data_Ax;
 		BigInteger data_Y;

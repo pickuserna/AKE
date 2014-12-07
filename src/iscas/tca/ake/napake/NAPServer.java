@@ -7,7 +7,7 @@ import iscas.tca.ake.message.nap.EnumNAPMsgType;
 import iscas.tca.ake.message.nap.NAPMessage;
 import iscas.tca.ake.napake.calculate.FactoryCalculate;
 import iscas.tca.ake.napake.calculate.IfcNapCalculate;
-import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPServer;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPServerHash;
 import iscas.tca.ake.util.Assist;
 import iscas.tca.ake.util.connectStrings.ConnectStrsTask;
 import iscas.tca.ake.util.exceptions.CannotGenerateNewMsgException;
@@ -74,7 +74,7 @@ public class NAPServer implements IfcAkeProtocol {
 	
 	//add groupID
 	String m_groupID;
-	IfcBulletinNAPServer m_bulletinNapServer;//nap bulletin
+	IfcBulletinNAPServerHash m_bulletinNapServer;//nap bulletin
 	String m_connnectedIDs;//connected IDs 
 	
 	public NAPServer() {

@@ -2,7 +2,11 @@ package iscas.tca.ake.test.swing.module.bulletin;
 
 import iscas.tca.ake.test.swing.module.Config;
 import iscas.tca.ake.test.swing.module.Response;
-import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPServer;
+import iscas.tca.ake.test.swing.module.bulletin.csdata.BulletinNAPServerHashData;
+import iscas.tca.ake.test.swing.module.bulletin.csimplements.BulletinNAPServerHash;
+import iscas.tca.ake.test.swing.module.bulletin.csimplements.BulletinNAPServer_Security;
+import iscas.tca.ake.test.swing.module.bulletin.csimplements.BulletinVeapClient;
+import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPServerHash;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPClient;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPServer;
 import iscas.tca.ake.test.swing.module.tools.SendAndRecv;
@@ -27,16 +31,14 @@ import java.util.Map;
  * @author zn
  * @CreateTime 2014-10-13ÏÂÎç2:05:13
  */
-class NAP_ServerBulletinData{
-	String connectedPseudonyms;
-	BulletinNAPClient bulletinNAP;
-	NAP_ServerBulletinData(BulletinNAPClient bn){
-		this.connectedPseudonyms = bn.getConnectedPseus();
-		this.bulletinNAP = bn;
-	}
-}
 // bulletin server
-public class ServerBulletin implements Runnable, IfcBulletinVEAPServer, IfcBulletinNAPServer {
+public class ServerBulletin implements Runnable, IfcBulletinVEAPServer, IfcBulletinNAPServerHash {
+	@Override
+	public String getConnectedPseudonyms(String groupID) throws Exception {
+		// TODO Auto-generated method stub
+		return bulletinServer_Hash.getConnectedPseudonyms(groupID);
+	}
+
 	int port = 7070;
 	ServerSocket serverSocket;
 	//
@@ -49,8 +51,9 @@ public class ServerBulletin implements Runnable, IfcBulletinVEAPServer, IfcBulle
 	private Response response;
 	Long timeOut = 10000l;
 	private Map<String, GroupData> groupDatas = new HashMap<String, GroupData>();
-	private Map<String, NAP_ServerBulletinData> napBulletinServerData = new HashMap<String, NAP_ServerBulletinData>();
 	
+	//BulletinServer
+	private IfcBulletinNAPServerHash bulletinServer_Hash;
 	
 	// ===================================== Constructor =====================================//
 	private static ServerBulletin serverBulletin = null;
@@ -74,19 +77,6 @@ public class ServerBulletin implements Runnable, IfcBulletinVEAPServer, IfcBulle
 		return serverBulletin;
 	}
 	// =====================================public=====================================//
-	@Override
-	public String getConnectedPseudonyms(String groupID) throws Exception{
-		// TODO Auto-generated method stub
-		NAP_ServerBulletinData nsb = null;
-		synchronized(this){
-			nsb = this.napBulletinServerData.get(groupID);
-			if(nsb==null){
-				this.wait();
-			}
-			nsb = this.napBulletinServerData.get(groupID);
-		}
-		return nsb.connectedPseudonyms;
-	}
 	
 	@Override
 	public GroupData getGroupData(String groupID) throws Exception {
@@ -133,10 +123,7 @@ public class ServerBulletin implements Runnable, IfcBulletinVEAPServer, IfcBulle
 		this.serverSocket = new ServerSocket(port);
 	}
 	
-	///===========================NAP Bulletin operate============================//
-	public String getAddin(){
-		return "Addin";
-	}
+	
 	// ===========================Veap Bulletin operate===========================//
 	// judge if the gd is valid
 	private boolean isValid(GroupData gd) {
@@ -219,25 +206,18 @@ public class ServerBulletin implements Runnable, IfcBulletinVEAPServer, IfcBulle
 				// receive groupID from user
 				this.response.putExecutionStep(prefix + step_listenPort, content, true);
 
-				String groupID = (String) SendAndRecv.recvMsg(socket);
 				//++++++++++++++++++ nap ++++++++++++++++++
 				if(this.proType.equals("NAP")){
-					NAP_ServerBulletinData nsb = this.napBulletinServerData.get(groupID);
-					BulletinNAPClient  bn = null;
-					if(nsb==null){
-						bn = BulletinNAPClient.newInstance(getIDs(this.getUsers.getUsers(groupID)), this.getAddin());
-						this.napBulletinServerData.put(groupID, new NAP_ServerBulletinData(bn));
-						nsb = new NAP_ServerBulletinData(bn);
-					}
-					bn = nsb.bulletinNAP;
-					
-					SendAndRecv.sendMsg(bn, socket);	
-					System.out.println("NAP Bulletin send message!");
+					//Hash 
+					//if(){}
+					this.bulletinServer_Hash = BulletinNAPServerHash.newInstance();
+					this.bulletinServer_Hash.service(socket, this.getUsers);
 				}
 				//------------------nap --------------------
 				
 				//++++++++++++++++++ veap ++++++++++++++++++
 				if(this.proType.equals("VEAP")){
+					String groupID = (String) SendAndRecv.recvMsg(socket);
 					synchronized (this) {
 						System.out.println("bulletin : received request" + groupID);
 						GroupData gd = this.groupDatas.get(groupID);
@@ -261,14 +241,15 @@ public class ServerBulletin implements Runnable, IfcBulletinVEAPServer, IfcBulle
 			e.printStackTrace();
 		}
 	}
-	//============================ assist =================================
-	private String[] getIDs(User[] users){
-		String[] ids = new String[users.length];
-		for(int i=0; i<users.length; i++){
-			ids[i] = users[i].user_id;
-		}
-		return ids;
+	//provide service by the bulletinServer_Hash
+	@Override
+	public void service(Socket socket, IfcGetUsers getUsers) throws Exception {
+		// TODO Auto-generated method stub
+		this.bulletinServer_Hash.service(socket, getUsers);
 	}
+	
+	//============================ assist =================================
+
 
 	
 }
