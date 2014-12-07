@@ -67,7 +67,7 @@ public class ClientBulletin extends IfcBulletinVEAPClient implements Runnable, I
 			//++++++++++++nap+++++++++++++++++
 			if(this.proType.equals("NAP")){
 				//synchronized;  maybe nullPointer
-				this.bulletinNAPClient.service(socket, this.groupID);
+				this.bulletinNAPClient.service(socket, this.groupID, id, password, napCalCulate);
 			}
 			//------------nap-----------------
 			//++++++++++++veap++++++++++++++++
