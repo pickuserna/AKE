@@ -124,7 +124,15 @@ public class ServerBulletin implements Runnable, IfcBulletinVEAPServer, IfcBulle
 	// connection management
 	public void close() throws Exception {
 		System.out.println("\n\n==================close Bulletin");
+		this.groupDatas.clear();
 		this.serverSocket.close();
+		if(this.bulletinServer_Hash!=null){
+			this.bulletinServer_Hash.close();
+		}
+		if(this.bulletinServerSecurity!=null){
+			this.bulletinServerSecurity.close();
+		}
+		serverBulletin = null;
 	}
 
 	private void startSocket() throws Exception {

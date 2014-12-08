@@ -16,7 +16,7 @@ public class BulletinNAPServerHash implements IfcBulletinNAPServerHash{
 	private String groupID;
 	
 	//store all the server bulletin data for every calculated groupID
-	private static HashMap<String,BulletinNAPServerHashData> bulletinServerLib = new HashMap<String, BulletinNAPServerHashData>();
+	private HashMap<String,BulletinNAPServerHashData> bulletinServerLib = new HashMap<String, BulletinNAPServerHashData>();
 	private static BulletinNAPServerHash staticBulletinServer;
 	//==========================constructor====================================//
 	private BulletinNAPServerHash(){
@@ -83,5 +83,11 @@ public class BulletinNAPServerHash implements IfcBulletinNAPServerHash{
 				ids[i] = users[i].user_id;
 			}
 			return ids;
+		}
+		@Override
+		public void close() throws Exception {
+			// TODO Auto-generated method stub
+			bulletinServerLib.clear();
+			staticBulletinServer = null;
 		}
 }

@@ -132,4 +132,11 @@ public class BulletinNAPServerSecurity implements IfcBulletinNAPServerSecurity {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
+	@Override
+	public void close() throws Exception {
+		// TODO Auto-generated method stub
+		this.serverDataLib.clear();
+		bulletinNAPServerSecurity = null;
+		
+	}
 }
