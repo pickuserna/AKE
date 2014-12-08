@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
- * ÃèÊö£º<need to delete>
+ * initial args of the Protocol
  * @author zn
  * @CreateTime 2014-10-11ÉÏÎç9:39:25
  */

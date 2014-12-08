@@ -22,14 +22,13 @@ import java.util.Arrays;
 import java.util.Stack;
 //import static java.lang.System;
 /**
- * 描述：<>
- * 类名：<NAPServer>
+ * Class：<NAPServer>
  * @author zn
  * @CreateTime 2014-8-16下午2:26:21
  */
 public class NAPServer implements IfcAkeProtocol {
 
-	/*static*/ BigInteger m_q;//是否需要static
+	/*static*/ BigInteger m_q;
 	/*static*/ BigInteger m_g;
 	
 	BigInteger m_Y;
@@ -43,31 +42,27 @@ public class NAPServer implements IfcAkeProtocol {
 	BigInteger m_Kp;
 	BigInteger m_Xp;
 	
-	//BigInteger m_K;//可以不记录
 	
 	String m_SID;
 
-//	String[] m_IDs;
-//	String[] m_pws;
 	User[] m_users;
 	
 	byte[] m_Auths;
 	byte[] m_sk;
 	byte[] m_Authc;
 	byte[] m_serverAuthc;
-	 String m_ClientID;//和此服务端程序相关联的客户端程序。
-	Stack<EnumNAPMsgType> m_stackProtocol;//协议栈，规定协议的执行顺序
+	 String m_ClientID;//
+	Stack<EnumNAPMsgType> m_stackProtocol;//
 	
 	IfcNapCalculate m_NapCalculate;
 	IfcGetUsers m_getUsers;
 	boolean m_isInited;
-	//调试
+	//debug information
 	String m_Trans;
 	private boolean m_isVerified = false;
 	
-	//多线程连接字符串，在发送XStarB时进行处理
-	ConnectStrsTask m_cstAs;//多线程连接As
-//	ConnectStrsTask m_cstIDs;//多线程连接IDs，启动和获取不在一个位置
+	//multiple task
+	ConnectStrsTask m_cstAs;
 	/**
 	 * 
 	 */
@@ -85,13 +80,11 @@ public class NAPServer implements IfcAkeProtocol {
 //	public boolean isM_isInited() {
 //		return m_isInited;
 //	}
-	//noooooooooooooooo由客户端启动，所以不用实现
 	@Override	
 	public IfcMessage startProtocol() {
 		// 
 		return null;
 	}
-	//noooooooooooooooo没有服务器端的验证机制
 	@Override	
 	public boolean isVerified() {
 		// TODO Auto-generated method stub
@@ -115,7 +108,7 @@ public class NAPServer implements IfcAkeProtocol {
 			this.m_g = ( init2).getM_g();
 			this.m_SID = (init2).getM_S();
 			this.m_bulletinNapServer = (init2).m_bulletinNAPServer;
-			//检查数据合法性，SID不为空,q为素数, g>0,m_NapServerUser 不为空
+			//validation
 			if(this.m_SID!=null && 
 					this.m_q.isProbablePrime(NAPConstants.ProbablePrimeCertainty) &&
 					this.m_g.compareTo(BigInteger.ZERO)>0 &&
@@ -123,7 +116,7 @@ public class NAPServer implements IfcAkeProtocol {
 			{
 				EnumNAPMsgType[] order = {EnumNAPMsgType.GroupID,EnumNAPMsgType.XstarB,EnumNAPMsgType.Authc};
 				initStack(order);
-				//初始化成功的唯一条件
+				//set the success flag of initialization
 				this.m_isInited = true;
 				return true;
 			}
@@ -138,8 +131,8 @@ public class NAPServer implements IfcAkeProtocol {
 	}
 	
 	/**
-	 * TODO:<使用order对协议栈进行初始化>
-	 * @param order ：协议的接收顺序 [第一条，第二条，第三条]
+	 * TODO:<init the stack with the order>
+	 * @param order ：the order of receiving  [1st，2nd，3rd]
 	 */
 	public void initStack(EnumNAPMsgType[] order)
 	{
@@ -191,12 +184,12 @@ public class NAPServer implements IfcAkeProtocol {
 					//end the protocol
 					return null;
 				default:
-					//消息不合法
+					//illegal Message
 					throw new IllegalMsgException();
 				}
 				
 				if(null==newMsg){
-					//抛出不能生成新消息异常
+					//throw CannotGenerateNewMsgException 
 					throw new CannotGenerateNewMsgException();
 				}
 				else{
@@ -210,19 +203,18 @@ public class NAPServer implements IfcAkeProtocol {
 		return m_stackProtocol.isEmpty();
 	}
 	/**
-	 * TODO:<如果m合法 ,提取m中的信息>
-	 * @param m:<消息>
-	 * @return true 合法，false:不合法
+	 * TODO:<if message m is legal ,then extract the information out of the message >
+	 * @param m:<msg>
+	 * @return true legal，false:illegal
 	 */
 	private boolean drawInfo(IfcMessage m)
 	{
-		//判断消息是否合法，合序
 	
 		if(m.isMsgLegle() &&
 				isInOrder(m)){
 				NAPMessage mNap = (NAPMessage)m;
 				
-				//记录到NAPServer中
+				//record in NAPServer
 				switch(mNap.getM_msgType())
 				{
 				case GroupID:
@@ -243,7 +235,7 @@ public class NAPServer implements IfcAkeProtocol {
 				default:
 					return false;
 				}
-				//提取了消息后，在消息栈中退出
+				//pop the msg in the stack after process the message
 				//this.m_stackProtocol.pop();
 				return true;	
 		}
@@ -252,8 +244,8 @@ public class NAPServer implements IfcAkeProtocol {
 
 
 	/**
-	 * TODO:<生成SAs消息>
-	 * @return 如果无法创建，返回null
+	 * TODO:<generate SAs MSg>
+	 * @return if failed，return null
 	 */
 	
 	private IfcMessage createSAsMsg(){
@@ -274,12 +266,12 @@ public class NAPServer implements IfcAkeProtocol {
 	}
 	
 	/**
-	 * TODO:<生成YAuths消息>
+	 * TODO:<generate the YAuths Msg>
 	 * @return 
 	 */
 	private IfcMessage createYAuthsMsg() throws Exception
 	{
-		//计算
+		//calculate the Msg
 		Rand rd = new Rand();
 	//	BigInteger Zp, Xp, Zinverse, Kp;
 		this.m_Zp = Assist.modPow(this.m_B, this.m_rS, this.m_q);
@@ -290,7 +282,7 @@ public class NAPServer implements IfcAkeProtocol {
  	    this.m_Kp = Assist.modPow(this.m_Xp, this.m_randy, this.m_q);
 		if(null==m_cstAs)
 		{
-			System.out.println("连接的字符串cstAs 和 cstIDs不正确");
+			System.out.println("connnecting cstAs and cstIDs maybe wrong");
 			return null;
 		}
 		String trans = this.m_NapCalculate.getTrans(this.m_bulletinNapServer.getConnectedPseudonyms(m_groupID),
@@ -304,14 +296,13 @@ public class NAPServer implements IfcAkeProtocol {
 		this.m_Auths = this.m_NapCalculate.getAuths(trans, this.m_Zp, this.m_Kp);
 		this.m_sk = this.m_NapCalculate.getsk(trans, this.m_Zp, this.m_Kp);
 		this.m_serverAuthc = this.m_NapCalculate.getAuthc(trans, m_Zp, m_Kp);
-		//构造消息
+		//generate the message
 		NAPMessage.YAuthsData data = NAPMessage.YAuthsData.getYAuthsData(this.m_Y, this.m_Auths);
 		return NAPMessage.getNAPMessage(data, EnumNAPMsgType.YAuths);
 		
 	}
 	
 	/**
-	 * TODO:<判断消息m是否符合顺序>
 	 * @param m
 	 * @return boolean
 	 */
@@ -329,7 +320,7 @@ public class NAPServer implements IfcAkeProtocol {
 		}
 	}
 	/**
-	 * TODO:<获取sk>
+	 * TODO:<get sk>
 	 * @return sk
 	 */
 	public byte[] getsk()

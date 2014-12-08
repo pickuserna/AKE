@@ -8,8 +8,7 @@ package iscas.tca.ake.util.connectStrings;
 public interface IfcConnectStrings {
 
 	/**
-	 * TODO:<获取连接好的字符串>
-	 * @param ss 需要连接的字符串数组
+	 * @param ss get the connnected string
 	 * @return 
 	 */
 	public StringBuilder getConnectedString(String[] ss);

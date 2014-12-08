@@ -12,7 +12,7 @@ import java.math.BigInteger;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
 /**
- * 描述：<计算一个group的数据，Server公布给Client，Server获取数据的数据源>
+ * description：<calculate the data of a group>
  * @author zn
  * @CreateTime 2014-9-11上午10:34:59
  */
@@ -21,16 +21,15 @@ public class GroupData implements Serializable{
 	BigInteger m_X;//
 	String m_groupID;//
 	U_C[] m_ucs;//
-	String m_sUCs;//连接好的UCs字符串
+	String m_sUCs;//connected string
 	byte[] m_MS;
 	BigInteger m_q;
-	//不是计算得到的值
 	long m_timeOut;//
 	long m_publishTime;//
 	BigInteger m_g ;
 	String groupDataID;
 	/**
-	 * TODO:<计算并获取Group数据>
+	 * TODO:<calculate and get the groupData >
 	 * @param input
 	 * @return 
 	 */
@@ -60,14 +59,14 @@ public class GroupData implements Serializable{
 		m_randx = rnd.randOfMax(m_q);
 		m_X = Assist.modPow(m_g, m_randx, m_q);
 		m_ucs = calU_Cs(input.getM_users(), lenMS);
-		//连接成字符串
+		//connect to String
 		m_sUCs = new VEAPCalculate().connectUcs(m_ucs);
 		m_timeOut = input.timeOut;
 		//System.out.println("MS:"+Assist.bytesToHexString(m_MS));
 		return this;
 	}
 	/**
-	 * TODO:<计算U_Cs>
+	 * TODO:<calculate the U_Cs>
 	 * @return 
 	 */
 	private U_C[] calU_Cs(User[] users, int lenU){		

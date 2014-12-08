@@ -1,7 +1,6 @@
 package iscas.tca.ake.util.connectStrings;
 
 /**
- * 描述：<>
  * @author zn
  * @CreateTime 2014-9-1上午9:01:35
  */
@@ -27,7 +26,6 @@ public class ConnectStrings implements IfcConnectStrings {
 		for(String s :ss){
 			totalCapacity += s.length();
 		}
-		//一次性申请内存空间	
 		sb.ensureCapacity(totalCapacity);	
 		
 		for(int i=0; i<ss.length; i++){

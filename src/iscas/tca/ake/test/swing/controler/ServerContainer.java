@@ -20,12 +20,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * 描述：<>
  * 
  * @author zn
  * @CreateTime 2014-10-9上午9:29:34
  */
-// 控制，负责接收请求，返回响应
 public class ServerContainer implements Runnable, IfcServerContanier, IfcRecSession{
 	private static ServerContainer serverContainer;
 	
@@ -45,9 +43,8 @@ public class ServerContainer implements Runnable, IfcServerContanier, IfcRecSess
 
 	Map<Integer, String> historySessionID = new TreeMap<Integer, String>();
 	
-	//需要线程本地ThreadLocal变量支持
 	private boolean isVerified =false;
-	private boolean isDone = false;//验证是否完成
+	private boolean isDone = false;//is Done
 	
 	public int getOnlineCount(){
 		return this.logonCount;
@@ -151,7 +148,7 @@ public class ServerContainer implements Runnable, IfcServerContanier, IfcRecSess
 			}
 		}
 		System.out.println("exit the ServerControler!");
-		this.observerMain.setStatus("Exception!! Exit the ServerContainer!");
+		this.observerMain.setStatus("Exit the ServerContainer!!!");
 	}
 	
 	public boolean getIsVerified() throws Exception{
@@ -165,7 +162,7 @@ public class ServerContainer implements Runnable, IfcServerContanier, IfcRecSess
 				System.out.println("isVerified waiting ......==========");
 				this.wait();
 				System.out.println("isVerified outoutoutoutoutoutotuoutoutout......==========");
-				//非常关键的一点
+				//set the done flag
 				this.isDone = false;
 				return this.isVerified;
 			}
@@ -180,7 +177,7 @@ public class ServerContainer implements Runnable, IfcServerContanier, IfcRecSess
 				try{
 				//listenning the port
 					System.out.println("listenning the port...");
-					this.observerMain.setStatus("listennign the port...");
+					this.observerMain.setStatus("listenning the port...");
 					socket = this.serverSocket.accept();
 					System.out.println("receive a connection");
 					this.observerMain.setStatus("new connection...");
@@ -195,8 +192,8 @@ public class ServerContainer implements Runnable, IfcServerContanier, IfcRecSess
 
 				}catch(SocketException se){
 					se.printStackTrace();
-					this.observerMain.setStatus("reset: Exception可能客户端终止了连接");
-					System.out.println("能客户端终止了连接Connection reset!!");
+					this.observerMain.setStatus("Exception occured!!");
+					System.out.println("maybe the client terminated the Connection reset!!");
 				}
 				catch(java.io.NotSerializableException nse){
 					nse.printStackTrace();
@@ -243,8 +240,6 @@ public class ServerContainer implements Runnable, IfcServerContanier, IfcRecSess
 	}
 }
 
-//暂时没有用到
-// 每次接到请求 启动的线程
 enum Enum_VerifyStatus{
 	Verification_Passed("OK!!!"),
 	Verification_Failed("Verify Failed!!!");

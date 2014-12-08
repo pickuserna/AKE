@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Stack;
 
 /**
- * description：<Nap协议的client>
+ * description：<Napclient Protocol>
  * class-name：<NapClient>
  * @author zn
  * @CreateTime 2014-8-16上午11:05:16

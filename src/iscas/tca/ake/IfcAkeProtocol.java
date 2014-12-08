@@ -3,46 +3,46 @@ package iscas.tca.ake;
 import iscas.tca.ake.message.IfcMessage;
 
 /**
- * 描述：<AKE协议的使用接口>
+ * description：<AKE interface >
  * @author zn
  * @CreateTime 2014-8-21下午3:16:06
  */
 public interface IfcAkeProtocol {
 	/**
-	 * TODO:<使用init对client或server进行初始化>
-	 * @param init:<初始化数据>
-	 * @return 是否成功
+	 * TODO:<use the init data to init the client or server of the protocol>
+	 * @param init:<init data>
+	 * @return if the initialization is successed
 	 */
 	public boolean init(IfcInitData init)throws Exception;
 
 	/**
-	 * TODO:<协议的启动方实现,发送协议启动消息>
-	 * @return IfcMessage要发送给服务器的消息
+	 * TODO:<implemented by the starter of the protocol>
+	 * @return IfcMessage message to send to the other part
 	 */
 
 	public IfcMessage startProtocol();
 	
 	/**
-	 * TODO:<处理消息m，并返回处理后的结果>
-	 * @param m :要处理的消息
-	 * @return IfcMessage处理的结果
+	 * TODO:<process the message m and get the response >
+	 * @param m :message need to be processed 
+	 * @return IfcMessage the response 
 	 */
 	public IfcMessage processMessage(IfcMessage m)throws Exception;
 	
 	/**
-	 * TODO:<消息的验证方实现，判断对方是否通过了验证>
-	 * @return true 通过了验证，false没有通过
+	 * TODO:<if the other part passed the verification>
+	 * @return true yes, false no
 	 */
 	public boolean isVerified();
 	
 	/**
-	 * TODO:<判断协议是否正常结束了>
+	 * TODO:<if the protocol is over >
 	 * @return 
 	 */
 	public boolean isProtocolOver();
 	
 	/**
-	 * TODO:<获取sk,如果无法生成，返回null>
+	 * TODO:<get the sk, if error occurred or failed to pass the verification return null>
 	 * @return 
 	 */
 	public byte[] getsk();

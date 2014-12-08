@@ -6,7 +6,6 @@ import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPServer
 import java.math.BigInteger;
 
 /**
- * 描述：<>
  * @author zn
  * @CreateTime 2014-9-12上午9:13:26
  */
@@ -18,9 +17,8 @@ public class InitVEAPServerData implements IfcInitData {
 	BigInteger m_g;
 	BigInteger m_q;
 	String m_sid;
-	//获取用户的信息
+	//the tool to get the users
 	IfcGetUsers m_getUsers;
-	//公告板相关的数据，从公告板上取数据
 	IfcBulletinVEAPServer m_bulletinServer;
 	
 	

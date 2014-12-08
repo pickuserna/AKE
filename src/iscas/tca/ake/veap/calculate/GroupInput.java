@@ -5,14 +5,14 @@ import iscas.tca.ake.veap.User;
 import java.math.BigInteger;
 
 /**
- * 描述：<计算Group数据时的输入数据>
+ * <inputData when calculating the data of a group >
  * @author zn
  * @CreateTime 2014-9-11上午9:46:38
  */
 public class GroupInput {
 	String m_groupID;
 	User[] m_users;
-	int m_lenMS;//字节数
+	int m_lenMS;//byte length of the MS
 	BigInteger m_g;
 	BigInteger m_q;
 	Long timeOut;

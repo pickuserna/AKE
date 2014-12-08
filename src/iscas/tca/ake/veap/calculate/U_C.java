@@ -5,7 +5,7 @@ import iscas.tca.ake.util.Assist;
 import java.io.Serializable;
 
 /**
- * 描述：<U,C>结构
+ * description <U,C>structure
  * @author zn
  * @CreateTime 2014-9-11上午10:12:28
  */
@@ -29,7 +29,6 @@ public class U_C implements Serializable{
 		this.m_c = m_c;
 	}
 	/**
-	 * TODO:<将m_u , m_c 连接成字符串>
 	 * @return 
 	 */
 	public String u_c2String(){

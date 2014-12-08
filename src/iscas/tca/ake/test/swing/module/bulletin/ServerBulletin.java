@@ -213,21 +213,33 @@ public class ServerBulletin implements Runnable, IfcBulletinVEAPServer, IfcBulle
 				serverSocket.isClosed();
 				// receive groupID from user
 				this.response.putExecutionStep(prefix + step_listenPort, content, true);
-
+				final Socket innerSocket = socket;
 				//++++++++++++++++++ nap ++++++++++++++++++
-				if(this.proType.equals("NAP")){
-					//Hash 
-					//if(){}
-					System.out.println("napBulletinMode++++++++++++++ "+ this.napBulletinMode);
-					if(this.napBulletinMode.equals(EnumTags.NapBulletinHashMode)){
-						this.bulletinServer_Hash = BulletinNAPServerHash.newInstance();
-						this.bulletinServer_Hash.service(socket, this.getUsers);
+				System.out.println("new Thread:"+socket.getRemoteSocketAddress());
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						try{
+						if(proType.equals("NAP")){
+							//Hash 
+							System.out.println("napBulletinMode++++++++++++++ "+ napBulletinMode);
+							if(ServerBulletin.this.napBulletinMode.equals(EnumTags.NapBulletinHashMode)){
+								bulletinServer_Hash = BulletinNAPServerHash.newInstance();
+								bulletinServer_Hash.service(innerSocket, getUsers);
+							}
+							else {
+								bulletinServerSecurity = BulletinNAPServerSecurity.newInstance();
+								bulletinServerSecurity.service(innerSocket, getUsers, g, q, new NAPCalculate());
+							}
+						}
+						}catch(Exception  e){
+							e.printStackTrace();
+						}
 					}
-					else {
-						this.bulletinServerSecurity = BulletinNAPServerSecurity.newInstance();
-						this.bulletinServerSecurity.service(socket, getUsers, g, q, new NAPCalculate());
-					}
-				}
+				}).start();
+				
 				//------------------nap --------------------
 				
 				//++++++++++++++++++ veap ++++++++++++++++++

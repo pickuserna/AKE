@@ -1,7 +1,7 @@
 package iscas.tca.ake;
 
 /**
- * 描述：<初始化数据接口>
+ * 描述：<interface of the initdata for the protocol>
  * 类名：<IfcInitData>
  * @author zn
  * @CreateTime 2014-8-16上午10:56:42

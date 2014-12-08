@@ -6,7 +6,7 @@ import iscas.tca.ake.util.hashs.Hash_VEAP;
 import java.math.BigInteger;
 
 /**
- * 描述：<用户结构，id-pw>
+ * description<user structure，id-pw>
  * @author zn
  * @CreateTime 2014-9-11上午10:46:09
  */
@@ -14,7 +14,7 @@ public class User{
 	public String user_id;
 	public String user_pw;
 	/**
-	 * TODO:<获取用户对象的pvd>
+	 * TODO:<get the pvd of a user; pvd = Hash(id, password)>
 	 * @return 
 	 */
 	public User(String id, String pw){

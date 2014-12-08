@@ -18,25 +18,23 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 /**
- * 描述：<>
  * @author zn
  * @CreateTime 2014-9-11上午9:37:53
  */
 public class VEAPServer implements IfcAkeProtocol {
-	//长度
+	//length
 	int m_lenMS;
 	int m_lenK;//=lenMS
 	int m_lenVerify;
 	int m_lenSK;
-	//群运算
 	BigInteger m_g;
 	BigInteger m_q;
-	//客户端发来的变量
+	//variables from the client
 	BigInteger m_A;
 	BigInteger m_B;
 	
 
-	String m_sid;// server 的名字
+	String m_sid;// server name
 	
 	String m_groupID;
 	BigInteger m_randx;
@@ -60,7 +58,7 @@ public class VEAPServer implements IfcAkeProtocol {
 	byte[] m_Vu;
 	byte[] m_Vs;
 	byte[] m_SK;
-	byte[] m_cVu;// Client发来的Vu
+	byte[] m_cVu;// Verification information from client
 
 	
 	long m_t;
@@ -74,11 +72,11 @@ public class VEAPServer implements IfcAkeProtocol {
 	}
 	@Override
 	public boolean init(IfcInitData init) throws Exception {
-		//初始化协议栈
+		//init the protocol stack
 		m_stack = new ProtocolStack<EnumVEAPMsgType>();
 		EnumVEAPMsgType[] order = { EnumVEAPMsgType.UAB, EnumVEAPMsgType.Verify };
 		m_stack.initProtocolStack(order);
-		//提取数据
+		//extract the data
 		InitVEAPServerData serverData = (InitVEAPServerData) init;
 		m_g = serverData.getM_g();
 		m_q = serverData.getM_q();
@@ -88,16 +86,15 @@ public class VEAPServer implements IfcAkeProtocol {
 		m_lenVerify = serverData.getM_lenVerify();
 		m_lenSK = serverData.getM_lenSK();
 	
-		// 参数检验
-		m_getUsers = serverData.getM_getUsers();//获取用户集合的方法
-		m_bulletinServer = serverData.getM_bulletinServer();//获取公告板
+		// validation of the args
+		m_getUsers = serverData.getM_getUsers();//
+		m_bulletinServer = serverData.getM_bulletinServer();//Bulletin
 		this.m_calculate = new VEAPCalculate();
 		this.m_isVerified = false;
 		this.m_sid = serverData.getM_sid();
 		
 		return true;
 	}
-	//客户端实现
 	@Override
 	public IfcMessage startProtocol() {
 		// TODO Auto-generated method stub
@@ -105,13 +102,12 @@ public class VEAPServer implements IfcAkeProtocol {
 	}
 	
 	/**
-	 * TODO:<提取消息中的信息>
 	 * @param m
 	 * @return 
 	 */
 	private boolean drawInfo(IfcMessage m) {
 		VEAPMessage vm = (VEAPMessage) m;
-		// 消息以及消息的内容都合法
+		// validation the message
 		if (vm.isMsgLegle() && vm.getM_data().isMsgLegle()) {
 
 			switch (vm.getM_msgType()) {
@@ -136,16 +132,12 @@ public class VEAPServer implements IfcAkeProtocol {
 	@Override
 	public IfcMessage processMessage(IfcMessage m) throws Exception {
 		VEAPMessage vm = (VEAPMessage) m;
-		// 判断消息合法
 		if (drawInfo(vm) && m_stack.isInOrder(vm.getM_msgType())) {
-			//接收了这条消息，存下信息，在消息栈中退栈
 			m_stack.pop();
 			switch (vm.getM_msgType()) {
 			case UAB:
-				//协议出栈
 				return createS2C();
 			case Verify:
-				//协议出栈
 				verify();
 				return null;
 			}
@@ -157,13 +149,12 @@ public class VEAPServer implements IfcAkeProtocol {
 	
 
 	/**
-	 * TODO:<从公告板上取数据，如果不存在该groupID，则计算> 
+	 * TODO:<get the data from the bulletin, if there exists no correspondence data then calculate it> 
 	 */
 	private void getBulletinData()throws Exception{
 			
 		GroupData gd;
 		gd=m_bulletinServer.getGroupData(this.m_groupID);
-		// 如果没有找到groupID,重新计算并发布到bulletin上
 		if(null==gd){
 			throw new UnknownError();
 		}
@@ -179,13 +170,13 @@ public class VEAPServer implements IfcAkeProtocol {
 	
 	//////////////--------concurrent end-----------//////////////
 	/**
-	 * TODO:<生成S2C消息>
+	 * TODO:<generate S2C>
 	 * @return 
 	 */
 	private IfcMessage createS2C() throws Exception{
 		this.m_randy = new Rand().randOfMax(m_q);
 		this.m_Y = Assist.modPow(m_g, m_randy, m_q);
-		//获取公告板上的数据
+		//get the data from the bulletin
 		getBulletinData();
 		//GD,MK,sABXY,Mac
 		this.m_GD = m_calculate.getGD(this.m_sUCs, m_t, m_t0);
@@ -202,7 +193,7 @@ public class VEAPServer implements IfcAkeProtocol {
 				this.m_groupID, 
 				m_sid, m_GD, 
 				sABXY);
-		//划分vuvssk
+		//divide vuvssk
 		int[] lens = {m_lenVerify, m_lenVerify, m_lenSK};
 		
 		byte[][] bss = new byte[3][];
@@ -210,7 +201,7 @@ public class VEAPServer implements IfcAkeProtocol {
 		m_Vu = bss[0];
 		m_Vs = bss[1];
 		m_SK = bss[2];
-		//构造S2C消息
+		//generate the S2C Message
 		VEAPMessage vm =new VEAPMessage();
 		VEAPMessage.S2CData data = vm.new S2CData(this.m_sid, 
 				Ax, 

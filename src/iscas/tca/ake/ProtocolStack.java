@@ -5,7 +5,6 @@ import iscas.tca.ake.message.veap.EnumVEAPMsgType;
 import java.util.Stack;
 
 /**
- * ÃèÊö£º<>
  * 
  * @author zn
  * @CreateTime 2014-9-4ÏÂÎç12:44:18

@@ -186,17 +186,16 @@ public class VEAPClient implements IfcAkeProtocol {
 	
 	}
 	/**
-	 * TODO:<验证服务器，通过则产生Verify验证消息>
+	 * TODO:<verify the message from server, if passed then generate the Verify Msg>
 	 * @return 
 	 */
 	private IfcMessage generateVerify() throws Exception{
-		//-------------多线程优化----------------
+		//-------------concurrent optimized----------------
 		waitingcall();
-		//需要抛出异常
 		BigInteger Xa = Assist.modPow(m_X, m_randa, m_q);
 		BigInteger inverse = Assist.modInverse(Xa, m_q);
 		BigInteger pvdx = Assist.modMutiply(m_Ax, inverse, m_q);
-		//计算U_K_C
+		//calculate U_K_C
 		byte[] u_k = m_calculate.getU_K(m_id, m_X, m_pvd, pvdx);
 		int[] lens = {m_lenK,m_lenK};
 		
@@ -217,7 +216,7 @@ public class VEAPClient implements IfcAkeProtocol {
 				m_X, m_Y);
 		this.m_VuVsSK = m_calculate.getMac(m_MK,m_groupID,
 				m_sid, m_GD, sABXY);
-		//验证Vs，构造VerifyData，保存SK
+		//Verify Vs，generate VerifyData，store SK
 		int[] lensVS = {VEAPConstants.LengthOfVerify, 
 				VEAPConstants.LengthOfVerify,
 				VEAPConstants.LengthOfSK};
@@ -226,14 +225,14 @@ public class VEAPClient implements IfcAkeProtocol {
 		if(Arrays.equals(m_VsS, bssVS[1])){
 			m_isVerified = true;
 			this.m_SK = bssVS[2];
-			//构造消息
+			//generate the message 
 			VEAPMessage vm = new VEAPMessage();
 			VEAPMessage.VerifyData data = vm.new VerifyData(bssVS[0]);
 			vm.setVEAPMsg(EnumVEAPMsgType.Verify, data);
 			
 			return vm;
 		}
-		//未通过验证
+		//failed to verify
 		return null;
 	}
 	@Override
@@ -257,7 +256,7 @@ public class VEAPClient implements IfcAkeProtocol {
 	}
 
 	/**
-	 * TODO:<从公告板上获取数据，这里需要同步> 
+	 * TODO:<get data from bulletin，need to be synchronized> 
 	 */
 	protected void fetchBulletin() throws Exception{
 		this.m_bulletinClient.fetchData(this.m_groupID);

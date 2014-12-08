@@ -8,7 +8,6 @@ import iscas.tca.ake.veap.calculate.GroupInput;
 import java.math.BigInteger;
 
 /**
- * ÃèÊö£º<>
  * @author zn
  * @CreateTime 2014-10-16ÏÂÎç8:24:06
  */

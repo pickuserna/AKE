@@ -16,7 +16,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * 描述：<>
  * @author zn
  * @CreateTime 2014-9-28下午2:41:00
  */
@@ -29,8 +28,7 @@ public class ClientControlor {
 	ExecutorService executorService;// = Executors.newSingleThreadExecutor();
 	String httpSessionID;
 	/**
-	 * TODO:<协议执行前的准备阶段 ,发送配置参数> 
-	 * bit位数，协议类型，ID个数，groupID, 需要由server生成，在server中注入
+	 * TODO:<before the execution of the protocol,prepare for the protocol, > 
 	 */
 	//ClientControlor with web structure
 	
@@ -42,7 +40,7 @@ public class ClientControlor {
 	}
 	public void runIt(){
 		try{
-			///prepare the bulletin and  set the args 
+			///prepare the bulletin and set the args
 			response.setStatus("connecting...");
 			
 				this.preProtocol();

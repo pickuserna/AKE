@@ -1,8 +1,7 @@
 package iscas.tca.ake.util.exceptions;
 
 /**
- * ÃèÊö£º<>
- * ÀàÃû£º<NotPrimeException>
+// * className£º<NotPrimeException>
  * @author zn
  * @CreateTime 2014-8-18ÏÂÎç8:34:59
  */

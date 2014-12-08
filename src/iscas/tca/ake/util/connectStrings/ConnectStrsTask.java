@@ -5,11 +5,9 @@ import java.math.BigInteger;
 import iscas.tca.ake.util.Assist;
 
 /**
- * 描述：<>
  * @author zn
  * @CreateTime 2014-9-1上午10:44:04
  */
-//类似Future的一个类，需要更显式的调用run
 public class ConnectStrsTask implements Runnable{
 	private StringBuilder sb;
 	private String[] ss;
@@ -19,7 +17,7 @@ public class ConnectStrsTask implements Runnable{
 		this.ss = ss;
 	}
 	/**
-	 * 连接BigInteger形式的数组
+	 * connect the BigInteger Array to a String 
 	 * @param bs
 	 */
 	public ConnectStrsTask(final BigInteger[] bs){
@@ -38,7 +36,7 @@ public class ConnectStrsTask implements Runnable{
 			notifyAll();
 		}
 	}
-	//获取合并后的结果
+	//get the connected string ,asynchronous mechanism
 	public StringBuilder get()
 	{
 		synchronized(this){
