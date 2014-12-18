@@ -1,7 +1,6 @@
 package iscas.tca.ake.napake.calculate;
 
 /**
- * ÃèÊö£º<>
  * @author zn
  * @CreateTime 2014-8-21ÏÂÎç6:40:10
  */

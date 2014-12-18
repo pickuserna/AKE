@@ -4,7 +4,6 @@ import iscas.tca.ake.test.swing.module.Response;
 
 
 /**
- * ÃèÊö£º<>
  * @author zn
  * @CreateTime 2014-10-9ÉÏÎç10:58:27
  */

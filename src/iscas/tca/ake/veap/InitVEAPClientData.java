@@ -6,7 +6,7 @@ import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinVEAPClient
 import java.math.BigInteger;
 
 /**
- * ÃèÊö£º<>
+ * @TODO£º<initial data for the veap(SKI) protocol>
  * @author zn
  * @CreateTime 2014-9-12ÉÏÎç9:13:06
  */

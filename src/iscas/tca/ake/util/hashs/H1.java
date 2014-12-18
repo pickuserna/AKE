@@ -3,14 +3,10 @@ import iscas.tca.ake.util.Assist;
 
 import java.security.MessageDigest;
 /** 
- *文件名：[文件名]
- *描述：<MD5算法>
- * @author 作者姓名:zn   
- * @version 创建时间：2014-7-31 下午1:42:30
- *修改人：
- *修改时间：YYYY—MM-DD
- *修改内容：<修改内容>
- *类说明 
+ *描述：<SHA-256>
+ * @author :zn   
+ * @version ：2014-7-31 下午1:42:30
+
  */
 
 public class H1 implements IfcHash {

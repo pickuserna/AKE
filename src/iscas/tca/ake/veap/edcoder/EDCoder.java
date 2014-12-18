@@ -14,7 +14,6 @@ import javax.crypto.spec.SecretKeySpec;
 import org.junit.Test;
 
 /**
- * ÃèÊö£º<>
  * @author zn
  * @CreateTime 2014-9-11ÉÏÎç9:58:56
  */

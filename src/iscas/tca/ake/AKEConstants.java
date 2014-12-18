@@ -1,7 +1,6 @@
 package iscas.tca.ake;
 
 /**
- * ÃèÊö£º<>
  * @author zn
  * @CreateTime 2014-11-18ÉÏÎç9:58:23
  */

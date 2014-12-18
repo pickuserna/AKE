@@ -1,7 +1,7 @@
 package iscas.tca.ake.veap.edcoder;
 
 /**
- * ÃèÊö£º<>
+ * @TODO <encode and decode Message>
  * @author zn
  * @CreateTime 2014-9-11ÉÏÎç9:44:05
  */

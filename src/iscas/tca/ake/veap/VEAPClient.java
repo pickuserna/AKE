@@ -19,7 +19,6 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 /**
- * 描述：<>
  * @author zn
  * @CreateTime 2014-9-11上午9:37:36
  */
@@ -39,25 +38,25 @@ public class VEAPClient implements IfcAkeProtocol {
 	BigInteger m_B;
 	BigInteger m_pvd;// pvd
 	
-	byte[] m_U;//ID假名
+	byte[] m_U;
 	byte[] m_K;
-	byte[] m_C;//密文
+	byte[] m_C;
 	
-	//从公告板上获取的数据
+	//the data published on the bulletin
 	BigInteger m_X;
 	U_C[] m_u_cs;
 	
-	String m_sUCs;//连接好的U_Cs字符串
-	byte[] m_MS;//明文
-	// 身份验证
+	String m_sUCs;//connected String using UCs
+	byte[] m_MS;//MS in plain text
+	// Verification variables
 	byte[] m_MK;
 	byte[] m_VuVsSK;
 	byte[] m_GD;
-	// 最终秘钥
+	// SessinoKey
 	byte[] m_SK;
-	//S2C发来的数据
+	//S2C Message from Server to Client
 	String m_sid;
-	byte[] m_VsS;//s发来的Vs
+	byte[] m_VsS;//Vs from S
 	
 	BigInteger m_Y;
 	BigInteger m_Ax;
@@ -73,7 +72,7 @@ public class VEAPClient implements IfcAkeProtocol {
 	@Override
 	public boolean init(IfcInitData init) throws Exception {
 		m_proStack = new ProtocolStack<EnumVEAPMsgType>();
-		//设置参数
+		//extract the info from initial data
 		InitVEAPClientData initClientData = (InitVEAPClientData) init;
 		this.m_q = initClientData.getM_q();
 		this.m_g = initClientData.getM_g();
@@ -91,7 +90,7 @@ public class VEAPClient implements IfcAkeProtocol {
 		m_proStack.initProtocolStack(order);
 		this.m_isVerified = false;
 		
-		//给变量申请内存
+		//apply memory space for the variables
 		m_U = new byte[m_lenK];
 		m_K = new byte[m_lenK];
 		m_C = null;
@@ -104,7 +103,7 @@ public class VEAPClient implements IfcAkeProtocol {
 		return generateUAB();
 	}
 	/**
-	 * TODO:<生成UAB消息>
+	 * TODO:<generate UAB Message>
 	 * @return 
 	 */
 	@Override
@@ -123,7 +122,7 @@ public class VEAPClient implements IfcAkeProtocol {
 		m_Ap = Assist.modPow(this.m_g, m_randa, m_q);
 		this.m_B = Assist.modPow(m_g, m_randb, m_q);
 		this.m_A = Assist.modMutiply(m_Ap, this.m_pvd, this.m_q);
-		//构造消息
+		//create the message 
 		VEAPMessage vm = new VEAPMessage();
 		VEAPMessage.UABData data = vm.new UABData(this.m_groupID,m_A, m_B);
 		vm.setVEAPMsg(EnumVEAPMsgType.UAB, data);
@@ -131,12 +130,12 @@ public class VEAPClient implements IfcAkeProtocol {
 		
 	}
 	/**
-	 * TODO:<检查消息的合法性并提取消息变量>
-	 * @param m
-	 * @return 
+	 * TODO:<check if the message received is legal and extract the info in it>
+	 * @param m : received Message
+	 * @return if the message is legal
 	 */
 	private boolean drawInfo(IfcMessage m) {
-		// 判断消息是否合法，合序
+		// check if the message is legal
 		VEAPMessage vm = (VEAPMessage)m;
 		if(vm.isMsgLegle() &&
 				this.m_proStack.isInOrder(vm.getM_msgType())){
@@ -174,6 +173,7 @@ public class VEAPClient implements IfcAkeProtocol {
 		}
 		return null;
 	}
+	// off-line speed-up
 	//在等待期间可以进行的运算
 	//pvd计算，公告栏取数据，连接U_Cs,在U_Cs中寻找c
 	private void waitingcall()throws Exception

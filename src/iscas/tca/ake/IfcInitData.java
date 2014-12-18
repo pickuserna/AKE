@@ -1,8 +1,8 @@
 package iscas.tca.ake;
 
 /**
- * ÃèÊö£º<interface of the initdata for the protocol>
- * ÀàÃû£º<IfcInitData>
+ * @description£º<interface of the initial data for the protocol>
+ * £º<IfcInitData>
  * @author zn
  * @CreateTime 2014-8-16ÉÏÎç10:56:42
  */

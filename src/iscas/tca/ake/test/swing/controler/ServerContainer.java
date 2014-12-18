@@ -28,9 +28,9 @@ public class ServerContainer implements Runnable, IfcServerContanier, IfcRecSess
 	private static ServerContainer serverContainer;
 	
 	private  ServerSocket serverSocket;// serverSocket
-	//observer of main contorl panel
+	//observer of main control panel
 	private IfcObserver observerMain;
-	//observer of bulletin pannel
+	//observer of bulletin panel
 	private IfcObserver bulletinObserver;
 	private Socket socket;
 	ServerBulletin serverBulletin;
@@ -73,18 +73,6 @@ public class ServerContainer implements Runnable, IfcServerContanier, IfcRecSess
 	public void showSession(Session session){
 		session.getResponse().update(null);
 	}
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////xuyao gai de /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//path to Bulletin !!
-	
-	//path to save sessions
-	
-	//path to save text Response
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////xuyao gai de /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	//singleton
 	private ServerContainer(){
 		this.isDone = false;
@@ -117,7 +105,7 @@ public class ServerContainer implements Runnable, IfcServerContanier, IfcRecSess
 		this.config = cng;
 		init();
 	}
-	//config args, and init the bulletin
+	//configurate args, and initialize the bulletin
 	public void init(){
 		this.close();
 		this.isDone = false;
@@ -274,7 +262,7 @@ class VerifyService implements Runnable{
 			endVerify();
 		}
 	}
-	// notify All the waitors of the specific httpSessionID
+	// notify All the waiters of the specific httpSessionID
 	private void endVerify(){
 		String httpSessionID = serverProtocol.getHttpSessionID();
 		System.out.println("endVerify():::"+httpSessionID);
@@ -299,7 +287,7 @@ class VerifyService implements Runnable{
 		serverProtocol = new MyServer(session);
 		serverProtocol.preProServer(session.getSocket(), new ProtocolConfigInitData(session.getConfig().getG(), session.getConfig().getQ(), session.getConfig().getProType()), this.serverBulletin);
 		serverProtocol.service(session.getSocket());
-		//end the verification, notify the waitors;
+		//end the verification, notify the waiters;
 		
 		this.endVerify();
 		//record and show the result of session

@@ -5,15 +5,13 @@ import iscas.tca.ake.message.veap.EnumVEAPMsgType;
 import java.util.Stack;
 
 /**
- * 
  * @author zn
+ * the order of message to receive
  * @CreateTime 2014-9-4下午12:44:18
  */
 public class ProtocolStack<T> extends Stack<T> {
-	//协议栈
-	//Stack<T> m_proStack = new Stack<T>();
 	
-	//初始化协议栈
+	//initialize the stack of the protocol
 	public void initProtocolStack(T[] order)
 	{	
 		for(int i=order.length-1; i>=0; i--)
@@ -21,11 +19,11 @@ public class ProtocolStack<T> extends Stack<T> {
 			push(order[i]);
 		}
 	}
-
+	
 	public boolean isInOrder(T o) {
 		return (peek().equals(o));
 	}
-	
+	//for the test
 	public static void main(String[] args)
 	{
 		ProtocolStack<EnumVEAPMsgType> ps = new ProtocolStack<EnumVEAPMsgType>();

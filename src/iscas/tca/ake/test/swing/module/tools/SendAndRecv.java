@@ -8,8 +8,7 @@ import java.io.Serializable;
 import java.net.Socket;
 
 /**
- * ÃèÊö£º<>
- * ÀàÃû£º<SendAndRecv>
+ * TODO£º<Send And Receive Message >
  * @author zn
  * @CreateTime 2014-8-21ÏÂÎç1:17:32
  */

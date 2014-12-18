@@ -41,7 +41,7 @@ public class Rand implements IfcRand {
 		Random r = new Random();
 		
 		int i = r.nextInt(max);
-		while(0==i){//随机数的限制条件
+		while(0==i){//the restriction of the Random Number
 			i = r.nextInt(max);
 		}
 		return i;

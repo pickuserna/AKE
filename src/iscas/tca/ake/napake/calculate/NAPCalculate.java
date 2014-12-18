@@ -10,8 +10,7 @@ import iscas.tca.ake.util.hashs.IfcHash;
 import java.math.BigInteger;
 
 /**
- * 描述：<>
- * 类名：<NAPCalculate>
+ * Class-Name：<NAPCalculate>
  * @author zn
  * @CreateTime 2014-8-16下午2:58:05
  */
@@ -25,7 +24,7 @@ public class NAPCalculate implements IfcNapCalculate{
 		return as[index];
 	}
 
-	//计算PW
+	//calculate PW
 	public  BigInteger getPW(String id, String pw, BigInteger q)
 	{
 		H256 h = new H256();
@@ -47,14 +46,14 @@ public class NAPCalculate implements IfcNapCalculate{
 		return getHashedValue(sTrans,biZ,biK,h);
 	}
 
-	//计算Auths
+	//calculate the Auths
 	public  byte[] getAuths(String sTrans, BigInteger biZ, BigInteger biK)
 	{
 		H0 h = new H0();
 		sTrans = "1"+sTrans;
 		return getHashedValue(sTrans,biZ,biK,h);
 	}
-	//计算sk
+	//calculate sessionKey
 	public  byte[] getsk(String sTrans, BigInteger biZ, BigInteger biK)
 	{
 		H0 h = new H0();
@@ -70,15 +69,15 @@ public class NAPCalculate implements IfcNapCalculate{
 		String sJoin = Assist.connectStrings(sn).toString();
 		return h.process(sJoin);
 	}
-	//客户端获取自己的A
+	//get the A from as corresponding to the id in ids
 	public  BigInteger getAself(String id, String[] ids,BigInteger[] as)
 	{
 		int order = getOrder(ids, id);
-		if(order!=-1)//-1表示没有找到对相应的ID
+		if(order!=-1)//-1 indicate that does not exist such id
 			return as[order];
 		return null;
 	}
-	//查找val在数组a中的位置
+	//find the index of val in a
 	private  int getOrder(final String[] a, final String val)
 	{
 		for(int i=0; i<a.length; i++)

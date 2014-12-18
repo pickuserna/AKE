@@ -5,7 +5,7 @@ import iscas.tca.ake.veap.VEAPConstants;
 import java.security.MessageDigest;
 
 /**
- * ÃèÊö£º<SHA-256 HashËã·¨>
+ * Algorithm£º<SHA-256 Hash>
  * @author zn
  * @CreateTime 2014-9-11ÉÏÎç10:50:13
  */

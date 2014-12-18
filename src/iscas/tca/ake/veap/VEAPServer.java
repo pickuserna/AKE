@@ -72,7 +72,7 @@ public class VEAPServer implements IfcAkeProtocol {
 	}
 	@Override
 	public boolean init(IfcInitData init) throws Exception {
-		//init the protocol stack
+		//initialize the stack of the protocol 
 		m_stack = new ProtocolStack<EnumVEAPMsgType>();
 		EnumVEAPMsgType[] order = { EnumVEAPMsgType.UAB, EnumVEAPMsgType.Verify };
 		m_stack.initProtocolStack(order);
@@ -86,7 +86,7 @@ public class VEAPServer implements IfcAkeProtocol {
 		m_lenVerify = serverData.getM_lenVerify();
 		m_lenSK = serverData.getM_lenSK();
 	
-		// validation of the args
+		// validation of the arguments
 		m_getUsers = serverData.getM_getUsers();//
 		m_bulletinServer = serverData.getM_bulletinServer();//Bulletin
 		this.m_calculate = new VEAPCalculate();
@@ -98,7 +98,7 @@ public class VEAPServer implements IfcAkeProtocol {
 	@Override
 	public IfcMessage startProtocol() {
 		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 	
 	/**
@@ -107,7 +107,7 @@ public class VEAPServer implements IfcAkeProtocol {
 	 */
 	private boolean drawInfo(IfcMessage m) {
 		VEAPMessage vm = (VEAPMessage) m;
-		// validation the message
+		// validate the message
 		if (vm.isMsgLegle() && vm.getM_data().isMsgLegle()) {
 
 			switch (vm.getM_msgType()) {
@@ -146,10 +146,8 @@ public class VEAPServer implements IfcAkeProtocol {
 	}
 	
 	///////---------concurrent function --------/////	
-	
-
 	/**
-	 * TODO:<get the data from the bulletin, if there exists no correspondence data then calculate it> 
+	 * TODO:<get the data from the bulletin, if there exists no correspondence data in the bulletin then calculate it> 
 	 */
 	private void getBulletinData()throws Exception{
 			

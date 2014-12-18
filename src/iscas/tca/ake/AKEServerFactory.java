@@ -4,7 +4,6 @@ import iscas.tca.ake.napake.NAPServer;
 import iscas.tca.ake.veap.VEAPServer;
 
 /**
- * ÃèÊö£º<>
  * @author zn
  * @CreateTime 2014-11-18ÉÏÎç9:57:37
  */

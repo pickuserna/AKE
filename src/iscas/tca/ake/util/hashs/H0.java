@@ -11,21 +11,9 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-/** 
- *文件名：[文件名]
- *描述：<SHA算法>
- * @author 作者姓名:zn   
- * @version 创建时间：2014-7-31 下午1:42:56
- *修改人：
- *修改时间：YYYY—MM-DD
- *修改内容：<修改内容>
- *类说明 :使用SHA算法
- */
-
 /**
- * 描述：<>
+ * @TODO <algorithm: SHA-256> 
  * @author zn
- * @see [相关类]
  * @version 2014-7-31下午1:42:56
  */
 public class H0 implements IfcHash {

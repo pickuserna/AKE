@@ -9,9 +9,9 @@ import iscas.tca.ake.message.IfcMessage;
  */
 public interface IfcAkeProtocol {
 	/**
-	 * TODO:<use the init data to init the client or server of the protocol>
-	 * @param init:<init data>
-	 * @return if the initialization is successed
+	 * TODO:<use the initial data to initialize the client or server of the protocol>
+	 * @param init:<initial data>
+	 * @return true if the initialization is passed
 	 */
 	public boolean init(IfcInitData init)throws Exception;
 
@@ -25,7 +25,7 @@ public interface IfcAkeProtocol {
 	/**
 	 * TODO:<process the message m and get the response >
 	 * @param m :message need to be processed 
-	 * @return IfcMessage the response 
+	 * @return <IfcMessage> response of the received Message 
 	 */
 	public IfcMessage processMessage(IfcMessage m)throws Exception;
 	
@@ -42,8 +42,8 @@ public interface IfcAkeProtocol {
 	public boolean isProtocolOver();
 	
 	/**
-	 * TODO:<get the sk, if error occurred or failed to pass the verification return null>
-	 * @return 
+	 * TODO:<get the sessionKey, if error occurred or failed to pass the verification then return null>
+	 * @return sessionKey(passed), null failed
 	 */
 	public byte[] getsk();
 	

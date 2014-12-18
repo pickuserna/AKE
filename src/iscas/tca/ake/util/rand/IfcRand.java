@@ -4,19 +4,19 @@ import java.math.BigInteger;
 public interface IfcRand {
 	
 	/**
-	 * TODO:<得到0-max之间的随机数>
+	 * TODO:<get random number between 0 and max>
 	 * @param max
-	 * @return 0-max随机数
+	 * @return random from range of 0-max
 	 */
 	BigInteger randOfMax(BigInteger max);
 	int randOfMax(int max);
 	
 	
 	/**
-	 * TODO:<生成一个随机的n长字符串>
-	 * @param n:字符串的长度
-	 * @param s:字符源
-	 * @return n长随机字符串
+	 * TODO:<generate a random String of length n with the character base collection of s>
+	 * @param n:the length of the String to be generated
+	 * @param s: the base String
+	 * @return a random String of n-length
 	 */
 	String randString(int n, String s);
 	String randString(int n);
