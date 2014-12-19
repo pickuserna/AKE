@@ -1,6 +1,7 @@
 package iscas.tca.ake.test.swing.module.tools;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import iscas.tca.ake.test.swing.module.Config;
@@ -99,6 +100,12 @@ public class UsersManagement {
 				}
 			}
 			return false;
+	}
+	
+	public static String[] getAllGroupID(String groupFilePath){
+		XMLTools xmlTool = new XMLTools(groupFilePath, "groups");
+		String[] ss = xmlTool.getAllTagValues(EnumTags.GroupIdTag);
+		return ss;
 	}
 //	public static String[] getAllUsers(String groupID, String filePath){
 //		XMLTools xml = new XMLTools(filePath, ROOT);
