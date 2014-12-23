@@ -10,11 +10,11 @@ public class FactoryCalculate {
 	 * TODO:<>
 	 * @param args 
 	 */
-	public static IfcNapCalculate getCalculate(String name)
+	public static IfcNapAKECalculate getCalculate(String name)
 	{
 		if(name.toLowerCase().equals("napcalculate"))
 		{
-			return new NAPCalculate();
+			return new NAPAKECalculate();
 		}
 		else {
 			return null;

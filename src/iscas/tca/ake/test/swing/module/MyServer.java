@@ -2,8 +2,8 @@ package iscas.tca.ake.test.swing.module;
 
 import iscas.tca.ake.IfcAkeProtocol;
 import iscas.tca.ake.message.IfcMessage;
-import iscas.tca.ake.napake.InitServerData;
-import iscas.tca.ake.napake.NAPServer;
+import iscas.tca.ake.napake.InitNAPAKEServerData;
+import iscas.tca.ake.napake.NAPAKEServer;
 import iscas.tca.ake.test.swing.controler.ProtocolConfigInitData;
 import iscas.tca.ake.test.swing.controler.WaitorSession;
 import iscas.tca.ake.test.swing.module.bulletin.ServerBulletin;
@@ -60,8 +60,8 @@ public class MyServer implements /*IfcNAPServerUser,*/ IfcGetUsers {
 		try {
 			if (this.session.getProType() != null) {
 				if (this.session.getProType().equals("NAP")) {
-					InitServerData init = new InitServerData(q, g, sid, this, this.bulletinServer);
-					this.akeServer = new NAPServer();
+					InitNAPAKEServerData init = new InitNAPAKEServerData(q, g, sid, this, this.bulletinServer);
+					this.akeServer = new NAPAKEServer();
 					this.akeServer.init(init);
 				} else if (this.session.getProType().equals("VEAP")) {
 					InitVEAPServerData init = new InitVEAPServerData(
@@ -165,5 +165,8 @@ public class MyServer implements /*IfcNAPServerUser,*/ IfcGetUsers {
 		System.out.println("exist service  !!!!!new new new!!");
 		this.socket.close();
 		return this.akeServer.isVerified();
+	}
+	public byte[] getSessionKey(){
+		return this.akeServer.getsk();
 	}
 }

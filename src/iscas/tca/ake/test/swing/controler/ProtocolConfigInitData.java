@@ -27,7 +27,4 @@ public class ProtocolConfigInitData implements Serializable{
 	public String toString(){
 		return this.proType+this.q.bitLength();
 	}
-//	public void setGroupUserIDs(String []groupUserIDs){
-//		this.groupUserIDs = groupUserIDs;
-//	}
 }

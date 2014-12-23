@@ -20,7 +20,23 @@ public class VEAPMessage implements IfcMessage {
 	@Override
 	public boolean isMsgLegle() {
 		// TODO Auto-generated method stub
-		return true;
+		switch(m_msgType){
+		case UAB:
+			if(!(m_data instanceof UABData))
+				return false;
+			break;
+		case S2C:
+			if(!(m_data instanceof S2CData))
+				return false;
+			break;
+		case Verify:
+			if(!(m_data instanceof VerifyData))
+				return false;
+			break;
+		default: return false;
+		}
+		
+		return m_data.isMsgLegle();
 	}
 
 	@Override
@@ -76,7 +92,12 @@ public class VEAPMessage implements IfcMessage {
 		@Override
 		public boolean isMsgLegle() {
 			// TODO Auto-generated method stub
-			return true;
+			if(data_A!=null &&
+					data_B!=null &&
+					data_UID!=null){
+				return true;
+			}
+			return false;
 		}
 
 		public BigInteger getData_A() {
@@ -126,7 +147,12 @@ public class VEAPMessage implements IfcMessage {
 		@Override
 		public boolean isMsgLegle() {
 			// TODO Auto-generated method stub
-			return true;
+			if(data_sid!=null &&
+					data_Ax!=null &&
+					data_Y!=null &&
+					data_Vs.length>0)
+				return true;
+			return false;
 		}
 		public String getData_SID() {
 			return data_sid;
@@ -162,7 +188,9 @@ public class VEAPMessage implements IfcMessage {
 		@Override
 		public boolean isMsgLegle() {
 			// TODO Auto-generated method stub
-			return true;
+			if(data_verify.length>0)
+				return true;
+			return false;
 		}
 		public byte[] getData_verify() {
 			return data_verify;

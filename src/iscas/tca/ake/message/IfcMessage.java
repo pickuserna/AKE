@@ -3,8 +3,7 @@ package iscas.tca.ake.message;
 import java.io.Serializable;
 
 /**
- * ÃèÊö£º<>
- * ÀàÃû£º<IfcMessage>
+ * ClassName£º<IfcMessage>
  * @author zn
  * @CreateTime 2014-8-16ÉÏÎç11:05:51
  */

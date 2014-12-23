@@ -79,7 +79,7 @@ public class WaitorSession {
 	public String getHttpSessionID(){
 		return this.httpSessionID;
 	}
-	//ake protocol over and notify all the waitors
+	//AKE protocol over and notify all the waiters
 	public void overAndNotify(){
 		synchronized(this){
 			this.isOver = true;

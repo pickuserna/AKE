@@ -327,8 +327,7 @@ public class ServerFrame extends javax.swing.JFrame implements IfcObserver, IfcE
 
 		cbx_proType1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "NAP_YZ", "SKI" }));
 
-		cbx_bit.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "512", "1024", "2048" }));
-		cbx_bit.setSelectedIndex(1);
+		cbx_bit.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1024", "2048" }));
 		cbx_bit.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				cbx_bitActionPerformed(evt);

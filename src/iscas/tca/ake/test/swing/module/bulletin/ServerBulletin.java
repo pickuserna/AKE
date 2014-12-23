@@ -1,6 +1,6 @@
 package iscas.tca.ake.test.swing.module.bulletin;
 
-import iscas.tca.ake.napake.calculate.NAPCalculate;
+import iscas.tca.ake.napake.calculate.NAPAKECalculate;
 import iscas.tca.ake.test.swing.module.Config;
 import iscas.tca.ake.test.swing.module.EnumTags;
 import iscas.tca.ake.test.swing.module.Response;
@@ -239,7 +239,7 @@ public class ServerBulletin implements Runnable, IfcBulletinVEAPServer, IfcBulle
 							}
 							else {
 								bulletinServerSecurity = BulletinNAPServerSecurity.newInstance();
-								bulletinServerSecurity.service(innerSocket, getUsers, g, q, new NAPCalculate());
+								bulletinServerSecurity.service(innerSocket, getUsers, g, q, new NAPAKECalculate());
 							}
 						}
 						}catch(Exception  e){

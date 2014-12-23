@@ -19,7 +19,7 @@ public class UsersManagement {
 	static String ISPASSED = "isPassed";
 	static String ROOT  = "users";
 	//record to file
-	public static void recordUserToFile(String id, String password,String groupID, boolean isPassed, boolean isPlain, String filePath)throws Exception{
+	public static synchronized void recordUserToFile(String id, String password,String groupID, boolean isPassed, boolean isPlain, String filePath)throws Exception{
 		if(!isPlain){
 			//encode the plain text
 			id= plainToCipher(id);
@@ -44,7 +44,16 @@ public class UsersManagement {
 			e.printStackTrace();
 		}
 	}
-	//read users from file
+
+	/**
+	 * TODO:<read users from database, if groupID==Null, then read users of all the groups>
+	 * @param groupID <null -> all the groups>
+	 * @param isPlain <the type of the storage ,either plain or encrypted>
+	 * @param filePath <filepath of the database>
+	 * @return the corresponding users of the giving group or all the groups
+	 * @throws Exception 
+	 */
+	
 	public static User[] readUsersOfGroup(String groupID, boolean isPlain, String filePath)throws Exception{
 		XMLTools xmlTools = new XMLTools(filePath, EnumTags.UsersRootTag.toString());
 		
@@ -60,10 +69,15 @@ public class UsersManagement {
 				password = cipherToPlain(password);
 				readGroupID = cipherToPlain(readGroupID);
 			}
-			if(readGroupID.equals(groupID)){
+			if(groupID!=null){
+				if(readGroupID.equals(groupID)){
 //				users[j++] = new User(id, password);
-				listUser.add(new User(id, password));
+					listUser.add(new User(id, password));
 //				UtilMy.print(users[j]);
+				}
+			}
+			else if(groupID==null){
+				listUser.add(new User(id, password));
 			}
 		}
 		User[] users = new User[listUser.size()];

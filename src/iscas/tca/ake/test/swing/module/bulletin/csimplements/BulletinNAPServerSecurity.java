@@ -1,6 +1,6 @@
 package iscas.tca.ake.test.swing.module.bulletin.csimplements;
 
-import iscas.tca.ake.napake.calculate.IfcNapCalculate;
+import iscas.tca.ake.napake.calculate.IfcNapAKECalculate;
 import iscas.tca.ake.test.swing.module.bulletin.csdata.NAPS2CMsg;
 import iscas.tca.ake.test.swing.module.bulletin.csdata.NAPS2CMsg.ConfigMsg;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPServerSecurity;
@@ -38,7 +38,7 @@ public class BulletinNAPServerSecurity implements IfcBulletinNAPServerSecurity {
 	BigInteger X;
 	IfcGetUsers getUsers;
 	private Map<String, ServerData> serverDataLib = new HashMap<String, ServerData>();
-	private IfcNapCalculate napCalculate;
+	private IfcNapAKECalculate napCalculate;
 	private static BulletinNAPServerSecurity bulletinNAPServerSecurity;
 	//===========================constructors==================================
 	public static BulletinNAPServerSecurity newInstance(){
@@ -75,7 +75,7 @@ public class BulletinNAPServerSecurity implements IfcBulletinNAPServerSecurity {
 		return Assist.modPow(A, randx, q);
 	}
 	@Override
-	public void service(Socket socket, IfcGetUsers getUsers, BigInteger g, BigInteger q, IfcNapCalculate napCalculate) throws Exception {
+	public void service(Socket socket, IfcGetUsers getUsers, BigInteger g, BigInteger q, IfcNapAKECalculate napCalculate) throws Exception {
 		// TODO Auto-generated method stub
 		
 		ServerData sd = null;	

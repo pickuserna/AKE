@@ -80,19 +80,21 @@ public class UtilMy {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		String data = "abc";
-		// MD5
-		System.out.println("MD5 : " + md5(data));
-		// SHA1
-		System.out.println("SHA1 : " + sha1(data));
-		//base64
-		String cipher = base64_En(data);
-		System.out.println("Base64 En: "+cipher);
-		System.out.println("Base64 De: "+new String(base64_De(cipher)));
-		BigInteger q = genQ(1024, 10);
-		System.out.println("Q : " + q);
-		BigInteger g = genG(1024, 10, q);
-		System.out.println("G : " + g.toString());
+//		String data = "abc";
+//		// MD5
+//		System.out.println("MD5 : " + md5(data));
+//		// SHA1
+//		System.out.println("SHA1 : " + sha1(data));
+//		//base64
+//		String cipher = base64_En(data);
+//		System.out.println("Base64 En: "+cipher);
+//		System.out.println("Base64 De: "+new String(base64_De(cipher)));
+//		BigInteger q = genQ(1024, 10);
+//		System.out.println("Q : " + q);
+//		BigInteger g = genG(1024, 10, q);
+//		System.out.println("G : " + g.toString());
+		new UtilMy().
+		testPrint();
 	}
 	
 	//record the settins to config file
@@ -125,18 +127,18 @@ public class UtilMy {
 //	}
 	public static void print(Object... obs){
 		for(Object o:obs){
-			if(o.getClass().isArray()){
-				print( (Object[])o);
-			}
-			else{
+//			if(o.getClass().isArray()){
+//				print(o);
+//			}
+//			else{
 				System.out.println(o);
-			}
+//			}
 		}
 	}
 	@Test
 	public void testPrint(){
 		int[] arr1 = {1,2 , 3};
-		int[][] arr2 = {{4,5},{6,7,8}};
+	//	int[][] arr2 = {{4,5},{6,7,8}};
 		print(arr1);
 	}
 	public static void printnb(Object... obs){

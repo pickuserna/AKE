@@ -1,6 +1,6 @@
 package iscas.tca.ake.test.swing.module.bulletin;
 
-import iscas.tca.ake.napake.calculate.IfcNapCalculate;
+import iscas.tca.ake.napake.calculate.IfcNapAKECalculate;
 import iscas.tca.ake.test.swing.module.bulletin.csimplements.BulletinNAPClientService;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPClient;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPClientService;
@@ -26,7 +26,7 @@ public class ClientBulletin extends IfcBulletinVEAPClient implements Runnable, I
 	//
 	String id;
 	String password;
-	private IfcNapCalculate napCalCulate;
+	private IfcNapAKECalculate napCalCulate;
 	private  BulletinNAPClientService bulletinNAPClient = new BulletinNAPClientService();
 	
 	//get index of the id
@@ -48,7 +48,7 @@ public class ClientBulletin extends IfcBulletinVEAPClient implements Runnable, I
 //	}
 	
 	//the ClientBulletin for security mode
-	public ClientBulletin (String groupID, SocketAddress addr, String id, String password, IfcNapCalculate napCal){
+	public ClientBulletin (String groupID, SocketAddress addr, String id, String password, IfcNapAKECalculate napCal){
 		this.addr = addr;
 		this.isDone = false;
 		this.groupID = groupID;

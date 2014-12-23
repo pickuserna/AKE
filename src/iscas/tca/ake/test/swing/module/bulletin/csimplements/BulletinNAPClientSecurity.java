@@ -1,6 +1,6 @@
 package iscas.tca.ake.test.swing.module.bulletin.csimplements;
 
-import iscas.tca.ake.napake.calculate.IfcNapCalculate;
+import iscas.tca.ake.napake.calculate.IfcNapAKECalculate;
 import iscas.tca.ake.test.swing.module.bulletin.csdata.NAPS2CMsg;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPClient;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcWaitorAndNotifier;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class BulletinNAPClientSecurity implements IfcWaitorAndNotifier,  IfcBulletinNAPClient{
 
 	NAPS2CMsg.ConfigMsg configMsg;
-	IfcNapCalculate napCalculata;
+	IfcNapAKECalculate napCalculata;
 	boolean isDone = false;
 	String id;
 	String password;
@@ -26,7 +26,7 @@ public class BulletinNAPClientSecurity implements IfcWaitorAndNotifier,  IfcBull
 	BigInteger A;
 	//result
 	private int index = -1;
-	public BulletinNAPClientSecurity(NAPS2CMsg.ConfigMsg cfgMsg, String id, String password, IfcNapCalculate napCalculate){
+	public BulletinNAPClientSecurity(NAPS2CMsg.ConfigMsg cfgMsg, String id, String password, IfcNapAKECalculate napCalculate){
 		this.configMsg = cfgMsg;
 		this.id = id;
 		this.password = password;

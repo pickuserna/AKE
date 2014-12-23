@@ -22,7 +22,35 @@ public class NAPMessage implements IfcMessage {
 	public boolean isMsgLegle() {
 		// TODO Auto-generated method stub
 //     switch(this.m_msgType){}
-		if(this.m_msgType!=null)//msgType is not null
+		boolean typeValid;
+		typeValid = true;
+		//ensure the m_msgType matching the m_data's type
+		switch(this.m_msgType){
+		case GroupID:
+			if(!(m_data instanceof GroupIDData))
+				typeValid = false;
+			break;
+		case SAs:
+			if(!(m_data instanceof SAsData))
+				typeValid = false;
+			break;
+		case YAuths:
+			if(!(m_data instanceof YAuthsData))
+				typeValid = false;
+			break;
+		case XstarB:
+			if(!(m_data instanceof XstarBData))
+				typeValid = false;
+			break;
+		case Authc:
+			if(!(m_data instanceof AuthcData))
+				typeValid = false;
+			break;
+			
+		default:return false;
+		}
+		
+		if(typeValid)//msgType is not null
 		{
 			return this.m_data.isMsgLegle();
 		}
@@ -247,7 +275,9 @@ public class NAPMessage implements IfcMessage {
 		@Override
 		public boolean isMsgLegle() {
 			// TODO Auto-generated method stub
-			return true;
+			if(authc.length>0)
+				return true;
+			return false;
 		}
 		@Override
 		public String getMsgType() {

@@ -3,8 +3,8 @@ package iscas.tca.ake.test.swing.module;
 import iscas.tca.ake.IfcAkeProtocol;
 import iscas.tca.ake.IfcInitData;
 import iscas.tca.ake.message.IfcMessage;
-import iscas.tca.ake.napake.InitClientData;
-import iscas.tca.ake.napake.NAPClient;
+import iscas.tca.ake.napake.InitNAPAKEClientData;
+import iscas.tca.ake.napake.NAPAKEClient;
 import iscas.tca.ake.test.swing.controler.ProtocolConfigInitData;
 import iscas.tca.ake.test.swing.module.bulletin.ClientBulletin;
 import iscas.tca.ake.test.swing.module.tools.SendAndRecv;
@@ -21,8 +21,6 @@ import java.net.Socket;
 import java.util.Map;
 
 /**
- * 描述：<> 类名：<MyClient>
- * 
  * @author zn
  * @CreateTime 2014-8-19下午7:27:45
  */
@@ -85,19 +83,19 @@ public class MyClient {
 
 	public void initClient(String type) throws Exception {
 		try {
-			System.out.println("client初始化");
+			System.out.println("client initailization");
 			IfcInitData init = null;
 
 			if (type.equals("NAP")) {
-				this.akeClient = new NAPClient();
-				init = new InitClientData(password, this.groupID, this.name,
+				this.akeClient = new NAPAKEClient();
+				init = new InitNAPAKEClientData(password, this.groupID, this.name,
 						cfgInitArgs.q, cfgInitArgs.g, this.bulletinClient);
 			} else if (type.equals("VEAP")) {
 				this.akeClient = new VEAPClient();
 
 				init = new InitVEAPClientData(VEAPConstants.LengthOfK,
 						VEAPConstants.LengthOfSK, cfgInitArgs.g, cfgInitArgs.q,
-						// 输入登陆参数
+						// login arguments
 						this.name, this.password, this.groupID,
 						this.bulletinClient//client bulletin
 						);
@@ -106,7 +104,7 @@ public class MyClient {
 		} catch (InitializationException ie) {
 			System.out.println("have not initialized, protocolover");
 			try {
-				// 终止当前的线程
+				// terminate the thread current now
 				if (this.socket != null)
 					this.socket.close();
 				Thread.currentThread().stop();
@@ -165,45 +163,19 @@ public class MyClient {
 				SendAndRecv.sendMsg(cMsg, socket);
 			}
 		}
-//		if (cfgInitArgs.proType.equals("NAP")) {
-//			showResult((NAPClient) akeClient);
-//		} else if (cfgInitArgs.proType.equals("VEAP")) {
-//			showIsVerified(this.akeClient, "client");
-//		}
 		this.timeRecord.showResult();
 		this.response.setIdsNum(this.akeClient.getIDNum());
 		this.response.putTimeRecord(this.timeRecord.getResult());
 		this.response.putParameter("isVerified", this.akeClient.isVerified()+"");
 		this.response.putParameter("sk", Assist.bytesToHexString(this.akeClient.getsk()));
 	}
-	/**
-	 * TODO:<显示运行结果>
-	 * 
-	 * @param napClient
-	 */
-//	public void showResult(NAPClient napClient) {
-//		String s = null;
-//		System.out.println("q  :" + napClient.getM_q());
-//		System.out.println("g  :" + napClient.getM_g());
-//		System.out.println("IDs :" + napClient.getM_IDs().length);
-//		if (akeClient.isVerified()) {
-//			s = "passed verify\r\nAuths:"
-//					+ Assist.bytesToHexString(napClient.getM_myAuths())
-//					+ "\r\n";
-//			s = s + "sk:   " + Assist.bytesToHexString(napClient.getM_sk())
-//					+ "\r\n";
-//			System.out.println(s);
-//		} else {
-//			System.out.println("did not passed \nClient Auths："
-//					+ Assist.bytesToHexString(napClient.getM_myAuths()));
-//			System.out.println("Server Auths："
-//					+ Assist.bytesToHexString(napClient.getM_Auths()));
-//			s = "did not passed \r\n";
-//		}
-//	}
 	public static void showIsVerified(IfcAkeProtocol cs, String type) {
 		System.out.println(type + "verify result：" + cs.isVerified() + "\n  SK:"
 				+ Assist.bytesToHexString(cs.getsk()));
 
+	}
+	//return the client of akeProtocol 
+	public IfcAkeProtocol getAkeProtocol(){
+		return this.akeClient;
 	}
 }

@@ -1,6 +1,6 @@
 package iscas.tca.ake.test.swing.module.bulletin.csimplements;
 
-import iscas.tca.ake.napake.calculate.IfcNapCalculate;
+import iscas.tca.ake.napake.calculate.IfcNapAKECalculate;
 import iscas.tca.ake.test.swing.module.EnumTags;
 import iscas.tca.ake.test.swing.module.bulletin.csdata.NAPS2CMsg;
 import iscas.tca.ake.test.swing.module.bulletin.interfaces.IfcBulletinNAPClient;
@@ -17,7 +17,7 @@ public class BulletinNAPClientService implements IfcBulletinNAPClient, IfcBullet
 		throw new UnsupportedOperationException();
 	}
 	@Override
-	public void service(Socket socket, String groupID, String id, String password, IfcNapCalculate napCalculate ) throws Exception {
+	public void service(Socket socket, String groupID, String id, String password, IfcNapAKECalculate napCalculate ) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("BulletinNAPClientService send groupID"+groupID);
 		SendAndRecv.sendMsg(groupID, socket);
