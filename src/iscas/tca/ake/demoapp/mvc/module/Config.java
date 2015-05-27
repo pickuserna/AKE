@@ -7,8 +7,8 @@ import static iscas.tca.ake.demoapp.mvc.module.EnumTags.ProType_Arg;
 import static iscas.tca.ake.demoapp.mvc.module.EnumTags.QTag;
 import static iscas.tca.ake.demoapp.mvc.module.EnumTags.getGQPath;
 import iscas.tca.ake.demoapp.mvc.module.tools.UsersManagement;
-import iscas.tca.ake.demoapp.mvc.module.tools.UtilMy;
 import iscas.tca.ake.demoapp.mvc.module.tools.XMLTools;
+import iscas.tca.ake.util.UtilMy;
 import iscas.tca.ake.veap.IfcGetUsers;
 import iscas.tca.ake.veap.User;
 

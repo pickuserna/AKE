@@ -2,8 +2,8 @@ package iscas.tca.ake.demoapp.mvc.module.tools.test;
 
 import iscas.tca.ake.demoapp.mvc.module.tools.GroupManage;
 import iscas.tca.ake.demoapp.mvc.module.tools.UsersManagement;
-import iscas.tca.ake.demoapp.mvc.module.tools.UtilMy;
 import iscas.tca.ake.demoapp.mvc.module.tools.XMLTools;
+import iscas.tca.ake.util.UtilMy;
 
 import java.math.BigInteger;
 

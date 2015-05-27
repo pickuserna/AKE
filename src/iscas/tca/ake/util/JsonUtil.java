@@ -1,7 +1,5 @@
 package iscas.tca.ake.util;
 
-import iscas.tca.ake.demoapp.mvc.module.tools.UtilMy;
-
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 

@@ -15,11 +15,11 @@ import iscas.tca.ake.demoapp.mvc.module.EnumTags;
 import iscas.tca.ake.demoapp.mvc.module.Response;
 import iscas.tca.ake.demoapp.mvc.module.bulletin.ServerBulletin;
 import iscas.tca.ake.demoapp.mvc.module.tools.UsersManagement;
-import iscas.tca.ake.demoapp.mvc.module.tools.UtilMy;
 import iscas.tca.ake.demoapp.mvc.module.tools.XMLTools;
 import iscas.tca.ake.demoapp.mvc.view.observer.IfcExecutionObserver;
 import iscas.tca.ake.demoapp.mvc.view.observer.IfcObserver;
 import iscas.tca.ake.util.Assist;
+import iscas.tca.ake.util.UtilMy;
 import iscas.tca.ake.veap.calculate.GroupData;
 
 import java.awt.Color;

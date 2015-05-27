@@ -3,7 +3,7 @@ package iscas.tca.ake.demoapp.mvc.module;
 import java.util.HashMap;
 import java.util.Map;
 
-import iscas.tca.ake.demoapp.mvc.module.tools.UtilMy;
+import iscas.tca.ake.util.UtilMy;
 
 import org.junit.Test;
 

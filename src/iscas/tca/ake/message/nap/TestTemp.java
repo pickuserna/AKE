@@ -1,7 +1,7 @@
 package iscas.tca.ake.message.nap;
 
-import iscas.tca.ake.demoapp.mvc.module.tools.UtilMy;
 import iscas.tca.ake.util.JsonUtil;
+import iscas.tca.ake.util.UtilMy;
 
 interface I {
 	public int geta();

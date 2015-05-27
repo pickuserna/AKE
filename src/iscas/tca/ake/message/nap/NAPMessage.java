@@ -1,9 +1,17 @@
 package iscas.tca.ake.message.nap;
 
+import static iscas.tca.ake.message.nap.EnumNAPMsgType.Authc;
+import static iscas.tca.ake.message.nap.EnumNAPMsgType.SAs;
+import static iscas.tca.ake.message.nap.EnumNAPMsgType.XstarB;
+import static iscas.tca.ake.message.nap.EnumNAPMsgType.YAuths;
 import iscas.tca.ake.message.IfcMessage;
 import iscas.tca.ake.util.Assist;
+import iscas.tca.ake.util.JsonUtil;
+import iscas.tca.ake.util.UtilMy;
 
 import java.math.BigInteger;
+
+import org.codehaus.jackson.JsonNode;
 
 /**
  * @author zn
@@ -41,13 +49,17 @@ public class NAPMessage implements IfcMessage {
 
 	IfcMessage m_data;//message entity
     EnumNAPMsgType m_msgType;// the type of message
+    //a dummy constructor
+    public NAPMessage(){
+    	
+    }
 	public NAPMessage(IfcMessage m_data, EnumNAPMsgType m_msgType) {
 		super();
 		this.m_data = m_data;
 		this.m_msgType = m_msgType;
 	}
 	@Override
-	public boolean isMsgLegle() {
+	public boolean areMsgLegle() {
 		// TODO Auto-generated method stub
 //     switch(this.m_msgType){}
 		boolean typeValid;
@@ -80,7 +92,7 @@ public class NAPMessage implements IfcMessage {
 		
 		if(typeValid)//msgType is not null
 		{
-			return this.m_data.isMsgLegle();
+			return this.m_data.areMsgLegle();
 		}
 		return false;
 	}
@@ -105,17 +117,23 @@ public class NAPMessage implements IfcMessage {
 	public static class GroupIDData implements IfcMessage{
 //		String[] m_IDs;
 		String m_groupID;
+		public GroupIDData(){}
 		public GroupIDData(String groupID) {
 			super();
 			this.m_groupID = groupID;
 		}
 		@Override
-		public boolean isMsgLegle() {
+		public boolean areMsgLegle() {
 			// TODO Auto-generated method stub
 			if(m_groupID==null){
 				return false;
 			}
 			return true;
+		}
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return super.toString();
 		}
 		@Override
 		public String sGetMsgType() {
@@ -148,7 +166,7 @@ public class NAPMessage implements IfcMessage {
 			this.m_As = m_As;
 		}
 		@Override
-		public boolean isMsgLegle() {
+		public boolean areMsgLegle() {
 			// TODO Auto-generated method stub
 			if(m_SID==null ||
 					 m_As.length<=0)
@@ -192,6 +210,10 @@ public class NAPMessage implements IfcMessage {
 	}
 	// 3
 	public static class XstarBData implements IfcMessage{
+		public XstarBData() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
 		BigInteger m_Xstar;
 		BigInteger m_B;
 		public XstarBData(BigInteger m_Xstar, BigInteger m_B) {
@@ -201,7 +223,7 @@ public class NAPMessage implements IfcMessage {
 		}
 		
 		@Override
-		public boolean isMsgLegle() {
+		public boolean areMsgLegle() {
 			// TODO Auto-generated method stub
 			if(m_Xstar.compareTo(BigInteger.ZERO)<=0 ||
 					m_B.compareTo(BigInteger.ZERO)<=0){
@@ -242,6 +264,10 @@ public class NAPMessage implements IfcMessage {
 	}
 	//4 
 	public static class YAuthsData  implements IfcMessage{
+		public YAuthsData() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
 		BigInteger m_Y;
 		byte[] m_Auths;
 		
@@ -266,7 +292,7 @@ public class NAPMessage implements IfcMessage {
 		}
 
 		@Override
-		public boolean isMsgLegle() {
+		public boolean areMsgLegle() {
 			// TODO Auto-generated method stub
 			if(m_Y.compareTo(BigInteger.ZERO)<=0 ||
 					m_Auths.length<=0){					
@@ -293,7 +319,12 @@ public class NAPMessage implements IfcMessage {
 	}
 	//5
 	public static class AuthcData implements IfcMessage{
-		byte[] authc;
+	
+		public AuthcData() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
+		byte[] authc; 
 		public AuthcData(byte[] authc){
 			this.authc = authc;
 		}
@@ -301,7 +332,7 @@ public class NAPMessage implements IfcMessage {
 			return this.authc;
 		} 
 		@Override
-		public boolean isMsgLegle() {
+		public boolean areMsgLegle() {
 			// TODO Auto-generated method stub
 			if(authc.length>0)
 				return true;
@@ -331,4 +362,51 @@ public class NAPMessage implements IfcMessage {
 	public void setM_msgType(EnumNAPMsgType m_msgType) {
 		this.m_msgType = m_msgType;
 	}
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return this.sGetMsgType()+"\n"+this.sGetMsgContent(); 
+		
+	}
+	
+	
+	
+	//adding json features
+	private static IfcMessage deserializeM_data(String jsonM_data, EnumNAPMsgType msgType) throws Exception{
+		IfcMessage m_data = null;
+		Class[] dataClasses = {GroupIDData.class, SAsData.class, XstarBData.class, YAuthsData.class, AuthcData.class};
+		EnumNAPMsgType[] types = {EnumNAPMsgType.GroupID, SAs,XstarB, YAuths, Authc};
+		for(int i=0;i<types.length; i++)
+		{
+			if(msgType.equals(types[i])){
+				m_data = JsonUtil.jsonToBean(jsonM_data, dataClasses[i]);
+			}
+		}
+		return m_data;
+		
+	}
+	public static NAPMessage json2NapMsg(String jsonMsg) throws Exception{
+		
+//		JsonUtil.jsonToBean(jsonMsg, beanClass);
+		JsonNode tree = JsonUtil.getMapperInstance().readTree(jsonMsg);
+		String jsonData= tree.get("m_data").toString();
+		String msgType = tree.get("m_msgType").getTextValue();
+		EnumNAPMsgType enumMsgType = UtilMy.getEnumFromString(EnumNAPMsgType.class, msgType);
+		IfcMessage m_data = deserializeM_data(jsonData, enumMsgType);
+		return new NAPMessage(m_data, enumMsgType);
+	}
+	
+	//为了使用Json set 和 get ，需要对msg 的类型进行严格限NKGG6-WBPCC-HXWMY-6DQGJ-CPQVG定
+	public static String NapMsg2Json(NAPMessage msg){
+		String jsonMsg = null;
+		try {
+			jsonMsg = JsonUtil.beanToJson(msg);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			UtilMy.print("Nap2Json Error!!");
+			e.printStackTrace();
+		}
+		return jsonMsg;
+	}
+	
 }

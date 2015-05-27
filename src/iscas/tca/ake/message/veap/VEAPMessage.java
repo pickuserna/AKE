@@ -42,11 +42,16 @@ import static iscas.tca.ake.message.veap.EnumVEAPMsgType.*;
  * @Email: changchangge123@qq.com
  */
 public class VEAPMessage implements IfcMessage {
+	public VEAPMessage() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	IfcMessage m_data;
 	EnumVEAPMsgType m_msgType;
 
 	@Override
-	public boolean isMsgLegle() {
+	public boolean areMsgLegle() {
 		// TODO Auto-generated method stub
 		switch(m_msgType){
 		case UAB:
@@ -64,7 +69,7 @@ public class VEAPMessage implements IfcMessage {
 		default: return false;
 		}
 		
-		return m_data.isMsgLegle();
+		return m_data.areMsgLegle();
 	}
 
 	@Override
@@ -86,6 +91,11 @@ public class VEAPMessage implements IfcMessage {
 
 	// 1
 	public class UABData implements IfcMessage {
+		public UABData() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
+
 		BigInteger data_A;
 		BigInteger data_B;
 		String data_UID;
@@ -118,7 +128,7 @@ public class VEAPMessage implements IfcMessage {
 		}
 
 		@Override
-		public boolean isMsgLegle() {
+		public boolean areMsgLegle() {
 			// TODO Auto-generated method stub
 			if(data_A!=null &&
 					data_B!=null &&
@@ -141,6 +151,10 @@ public class VEAPMessage implements IfcMessage {
 	}
 	// 2
 	public class S2CData implements IfcMessage {
+		public S2CData() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
 		String data_sid;
 		BigInteger data_Ax;
 		BigInteger data_Y;
@@ -173,7 +187,7 @@ public class VEAPMessage implements IfcMessage {
 			this.data_Vs = data_VS;
 		}
 		@Override
-		public boolean isMsgLegle() {
+		public boolean areMsgLegle() {
 			// TODO Auto-generated method stub
 			if(data_sid!=null &&
 					data_Ax!=null &&
@@ -197,6 +211,10 @@ public class VEAPMessage implements IfcMessage {
 	}
 	// 3
 	public class VerifyData implements IfcMessage {
+		public VerifyData() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
 		byte[] data_verify;
 		@Override
 		public String sGetMsgType() {
@@ -214,7 +232,7 @@ public class VEAPMessage implements IfcMessage {
 			this.data_verify = data_verify;
 		}
 		@Override
-		public boolean isMsgLegle() {
+		public boolean areMsgLegle() {
 			// TODO Auto-generated method stub
 			if(data_verify.length>0)
 				return true;

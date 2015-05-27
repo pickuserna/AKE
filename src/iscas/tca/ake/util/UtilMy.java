@@ -1,6 +1,6 @@
-package iscas.tca.ake.demoapp.mvc.module.tools;
+package iscas.tca.ake.util;
 
-import iscas.tca.ake.util.Assist;
+import iscas.tca.ake.demoapp.mvc.module.tools.XMLTools;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -183,5 +183,25 @@ public class UtilMy {
 		xmlTools.writeToFile();
 	}
 	
-	
+	/**
+	 * A common method for all enums since they can't have another base class
+	 * @param <T> Enum type
+	 * @param c enum type. All enums must be all caps.
+	 * @param string case insensitive
+	 * @return corresponding enum, or null
+	 */
+	public static <T extends Enum<T>> T getEnumFromString(Class<T> c, String string)
+	{
+	    if( c != null && string != null )
+	    {
+	        try
+	        {
+	            return Enum.valueOf(c, string.trim());
+	        }
+	        catch(IllegalArgumentException ex)
+	        {
+	        }
+	    }
+	    return null;
+	}
 }

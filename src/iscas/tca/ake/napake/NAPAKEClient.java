@@ -204,7 +204,7 @@ public class NAPAKEClient implements IfcAkeProtocol{
 				NAPMessage mNap = (NAPMessage)m;
 				IfcMessage newMsg = null;
 				//process
-				switch (mNap.sGetMsgType()){
+				switch (mNap.getM_msgType()){
 				case SAs:
 					newMsg = createXstarBMsg();
 					//connect the string
@@ -233,11 +233,11 @@ public class NAPAKEClient implements IfcAkeProtocol{
 	
 	private boolean drawInfo(IfcMessage m)
 	{
-		if(m.isMsgLegle() &&
+		if(m.areMsgLegle() &&
 				isInOrder(m)){
 			NAPMessage mNap = (NAPMessage)m;
 			
-			switch(mNap.sGetMsgType())
+			switch(mNap.getM_msgType())
 			{
 			case SAs:
 				NAPMessage.SAsData data = (NAPMessage.SAsData)mNap.getM_data();

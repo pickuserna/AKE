@@ -211,7 +211,7 @@ public class NAPAKEServer implements IfcAkeProtocol {
 			else{
 				NAPMessage mNap = (NAPMessage)m;			
 				IfcMessage newMsg= null;	
-				switch (mNap.sGetMsgType())
+				switch (mNap.getM_msgType())
 				{
 				case GroupID:
 					newMsg =  createSAsMsg();
@@ -256,12 +256,12 @@ public class NAPAKEServer implements IfcAkeProtocol {
 	private boolean drawInfo(IfcMessage m)
 	{
 	
-		if(m.isMsgLegle() &&
+		if(m.areMsgLegle() &&
 				isInOrder(m)){
 				NAPMessage mNap = (NAPMessage)m;
 				
 				//record in NAPServer
-				switch(mNap.sGetMsgType())
+				switch(mNap.getM_msgType())
 				{
 				case GroupID:
 					this.m_groupID = ((NAPMessage.GroupIDData)mNap.getM_data()).getM_groupID();

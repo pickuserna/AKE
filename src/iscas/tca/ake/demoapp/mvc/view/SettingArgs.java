@@ -7,7 +7,7 @@
 package iscas.tca.ake.demoapp.mvc.view;
 
 import iscas.tca.ake.demoapp.mvc.module.Config;
-import iscas.tca.ake.demoapp.mvc.module.tools.UtilMy;
+import iscas.tca.ake.util.UtilMy;
 
 import java.math.BigInteger;
 

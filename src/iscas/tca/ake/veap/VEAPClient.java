@@ -165,12 +165,12 @@ public class VEAPClient implements IfcAkeProtocol {
 	private boolean drawInfo(IfcMessage m) {
 		// check if the message is legal
 		VEAPMessage vm = (VEAPMessage)m;
-		if(vm.isMsgLegle() &&
-				this.m_proStack.isInOrder(vm.sGetMsgType())){
-			switch(vm.sGetMsgType()){
+		if(vm.areMsgLegle() &&
+				this.m_proStack.isInOrder(vm.getM_msgType())){
+			switch(vm.getM_msgType()){
 			case S2C: 
 				VEAPMessage.S2CData data =(VEAPMessage.S2CData)vm.getM_data();
-				if(data.isMsgLegle()){
+				if(data.areMsgLegle()){
 					this.m_Ax = data.getData_Ax();
 					this.m_sid = data.getData_SID();
 					this.m_VsS = data.getData_VS();
@@ -188,7 +188,7 @@ public class VEAPClient implements IfcAkeProtocol {
 		if (drawInfo(m)) {
 			VEAPMessage vm = (VEAPMessage) m;
 			m_proStack.pop();
-			switch (vm.sGetMsgType()) {
+			switch (vm.getM_msgType()) {
 			case S2C:
 //				try{
 					

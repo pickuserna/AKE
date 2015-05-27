@@ -5,10 +5,10 @@ package iscas.tca.ake.demoapp.mvc.view;
 import iscas.tca.ake.demoapp.mvc.controler.ClientControlor;
 import iscas.tca.ake.demoapp.mvc.module.EnumTags;
 import iscas.tca.ake.demoapp.mvc.module.Response;
-import iscas.tca.ake.demoapp.mvc.module.tools.UtilMy;
 import iscas.tca.ake.demoapp.mvc.view.observer.IfcExecutionObserver;
 import iscas.tca.ake.demoapp.mvc.view.observer.IfcObserver;
 import iscas.tca.ake.util.Assist;
+import iscas.tca.ake.util.UtilMy;
 
 import java.awt.Color;
 import java.util.HashMap;

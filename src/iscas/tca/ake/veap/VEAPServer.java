@@ -136,9 +136,9 @@ public class VEAPServer implements IfcAkeProtocol {
 	private boolean drawInfo(IfcMessage m) {
 		VEAPMessage vm = (VEAPMessage) m;
 		// validate the message
-		if (vm.isMsgLegle() && vm.getM_data().isMsgLegle()) {
+		if (vm.areMsgLegle() && vm.getM_data().areMsgLegle()) {
 
-			switch (vm.sGetMsgType()) {
+			switch (vm.getM_msgType()) {
 			case UAB:
 				VEAPMessage.UABData data = (VEAPMessage.UABData) vm.getM_data();
 				this.m_A = data.getData_A();
@@ -160,9 +160,9 @@ public class VEAPServer implements IfcAkeProtocol {
 	@Override
 	public IfcMessage processMessage(IfcMessage m) throws Exception {
 		VEAPMessage vm = (VEAPMessage) m;
-		if (drawInfo(vm) && m_stack.isInOrder(vm.sGetMsgType())) {
+		if (drawInfo(vm) && m_stack.isInOrder(vm.getM_msgType())) {
 			m_stack.pop();
-			switch (vm.sGetMsgType()) {
+			switch (vm.getM_msgType()) {
 			case UAB:
 				return createS2C();
 			case Verify:

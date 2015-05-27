@@ -41,7 +41,8 @@ public interface IfcMessage extends Serializable{
 	 * @param m
 	 * @return 
 	 */
-	public boolean isMsgLegle();
+	
+	public boolean areMsgLegle();
 	public String sGetMsgType();
 	public String sGetMsgContent();
 }

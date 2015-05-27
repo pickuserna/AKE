@@ -1,7 +1,7 @@
 package iscas.tca.ake.demoapp.mvc.module.tools;
 
-import static iscas.tca.ake.demoapp.mvc.module.tools.UtilMy.print;
-import static iscas.tca.ake.demoapp.mvc.module.tools.UtilMy.printnb;
+import static iscas.tca.ake.util.UtilMy.print;
+import static iscas.tca.ake.util.UtilMy.printnb;
 
 import java.io.File;
 import java.util.Arrays;

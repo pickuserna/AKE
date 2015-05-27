@@ -2,9 +2,9 @@ package iscas.tca.ake.demoapp.mvc.module;
 
 import iscas.tca.ake.demoapp.mvc.controler.ProtocolConfigInitData;
 import iscas.tca.ake.demoapp.mvc.module.tools.FileOperator;
-import iscas.tca.ake.demoapp.mvc.module.tools.UtilMy;
 import iscas.tca.ake.demoapp.mvc.view.observer.IfcObserver;
 import iscas.tca.ake.util.Assist;
+import iscas.tca.ake.util.UtilMy;
 
 import java.io.File;
 import java.io.Serializable;

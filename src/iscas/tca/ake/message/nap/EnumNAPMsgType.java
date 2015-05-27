@@ -1,5 +1,7 @@
 package iscas.tca.ake.message.nap;
 
+import iscas.tca.ake.util.UtilMy;
+
 import org.junit.Test;
 
 /** the enumerable message types for the NAPAKE Protocol
@@ -54,6 +56,13 @@ public enum EnumNAPMsgType {
 	}
 	@Test
 	public static void testEnum(){
+		
 		System.out.println(EnumNAPMsgType.GroupID);
+		EnumNAPMsgType enumnap = UtilMy.getEnumFromString(EnumNAPMsgType.class, "GroupID");
+		String classFullName = enumnap.getClass().getName();
+		UtilMy.print();
+		String name = classFullName.substring(classFullName.lastIndexOf("\\."));
+		UtilMy.print(name);
 	}
+	
 }
