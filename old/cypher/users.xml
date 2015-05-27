@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="gbk" standalone="no"?>
+<users>
+<client>
+<id>dXNlcg==</id>
+<password>dXNlcg==</password>
+<groupID>Z3JvdXBfVQ==</groupID>
+<isPassed>true</isPassed>
+</client>
+<client>
+<id>aGVsbG8=</id>
+<password>aGVsbG8xMjM0</password>
+<groupID>Z3JvdXBfVQ==</groupID>
+<isPassed>true</isPassed>
+</client>
+<client>
+<id>YWRtaW4=</id>
+<password>MTIzNDU2Nzg=</password>
+<groupID>Z3JvdXBfVQ==</groupID>
+<isPassed>true</isPassed>
+</client>
+</users>

@@ -9,6 +9,34 @@ import java.math.BigInteger;
  * @author zn
  * @CreateTime 2014-8-16ÉÏÎç11:06:37
  */
+/*
+ * Copyright (c) 20014-2041 Institute Of Software Chinese Academy Of Sciences
+ * All rights reserved.
+ *
+ * Permission is hereby granted, free  of charge, to any person obtaining
+ * a  copy  of this  software  and  associated  documentation files  (the
+ * "Software"), to  deal in  the Software without  restriction, including
+ * without limitation  the rights to  use, copy, modify,  merge, publish,
+ * distribute,  sublicense, and/or sell  copies of  the Software,  and to
+ * permit persons to whom the Software  is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The  above  copyright  notice  and  this permission  notice  shall  be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE  SOFTWARE IS  PROVIDED  "AS  IS", WITHOUT  WARRANTY  OF ANY  KIND,
+ * EXPRESS OR  IMPLIED, INCLUDING  BUT NOT LIMITED  TO THE  WARRANTIES OF
+ * MERCHANTABILITY,    FITNESS    FOR    A   PARTICULAR    PURPOSE    AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE,  ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @Organization: http://tca.iscas.ac.cn/
+ * @author: Nan Zhou
+ * @Aknowledge: Tutor Liwu Zhang , Alumnus Yan Zhang, Zhigang Gao
+ * @Email: changchangge123@qq.com
+ */
 public class NAPMessage implements IfcMessage {
 
 	IfcMessage m_data;//message entity
@@ -58,15 +86,15 @@ public class NAPMessage implements IfcMessage {
 	}
 	
 	@Override
-	public String getMsgType() {
+	public String sGetMsgType() {
 		// TODO Auto-generated method stub
 		return this.m_msgType.toString();
 	}
 	@Override
-	public String getMsgContent() {
+	public String sGetMsgContent() {
 		// TODO Auto-generated method stub
 		
-		return this.m_data.getMsgContent();
+		return this.m_data.sGetMsgContent();
 	}
 	//construct the NAPMessage with the data and type, the unique entrance
 	public static NAPMessage getNAPMessage(IfcMessage data,EnumNAPMsgType type)
@@ -90,13 +118,13 @@ public class NAPMessage implements IfcMessage {
 			return true;
 		}
 		@Override
-		public String getMsgType() {
+		public String sGetMsgType() {
 			// TODO Auto-generated method stub
 			throw new UnsupportedOperationException();
 		}
 
 		@Override
-		public String getMsgContent() {
+		public String sGetMsgContent() {
 			// TODO Auto-generated method stub
 			return Assist.kvFormat("groupID", m_groupID);
 		}
@@ -130,12 +158,12 @@ public class NAPMessage implements IfcMessage {
 			return true;
 		}
 		@Override
-		public String getMsgType() {
+		public String sGetMsgType() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 		@Override
-		public String getMsgContent() {
+		public String sGetMsgContent() {
 			// TODO Auto-generated method stub
 			StringBuilder sb = new StringBuilder();
 			String as = Assist.arrayFormatToString("As-", "\r\n", m_As);
@@ -182,12 +210,12 @@ public class NAPMessage implements IfcMessage {
 			return true;
 		}
 		@Override
-		public String getMsgType() {
+		public String sGetMsgType() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 		@Override
-		public String getMsgContent() {
+		public String sGetMsgContent() {
 			// TODO Auto-generated method stub
 			String xStart = "X' := "+m_Xstar.toString();
 			String b = "B := "+m_B.toString();
@@ -218,13 +246,13 @@ public class NAPMessage implements IfcMessage {
 		byte[] m_Auths;
 		
 		@Override
-		public String getMsgType() {
+		public String sGetMsgType() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
-		public String getMsgContent() {
+		public String sGetMsgContent() {
 			// TODO Auto-generated method stub
 			String auths = Assist.kvFormat("Auths", Assist.bytesToHexString(m_Auths));
 			String y = Assist.kvFormat("Y", m_Y.toString());
@@ -280,12 +308,12 @@ public class NAPMessage implements IfcMessage {
 			return false;
 		}
 		@Override
-		public String getMsgType() {
+		public String sGetMsgType() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 		@Override
-		public String getMsgContent() {
+		public String sGetMsgContent() {
 			// TODO Auto-generated method stub
 			return Assist.kvFormat("Authc", Assist.bytesToHexString(authc));//"authc = "+ Assist.bytesToHexString(authc)+"\r\n";
 		}

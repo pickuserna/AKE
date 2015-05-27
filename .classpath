@@ -11,11 +11,18 @@
 	<classpathentry kind="lib" path="F:/开发工具/poi-bin-3.10.1-20140818/poi-3.10.1/poi-ooxml-schemas-3.10.1-20140818.jar"/>
 	<classpathentry kind="lib" path="F:/开发工具/poi-bin-3.10.1-20140818/poi-3.10.1/poi-scratchpad-3.10.1-20140818.jar"/>
 	<classpathentry kind="lib" path="F:/开发工具/commons-lang3-3.3.2-bin/commons-lang3-3.3.2/commons-lang3-3.3.2.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="F:/开发工具/beansbinding-1.2.1.jar"/>
 	<classpathentry kind="lib" path="F:/开发工具/poi-bin-3.10.1-20140818/poi-3.10.1/poi-3.10.1-20140818.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/F:/开发工具/poi-src-3.11-beta2-20140822/poi-3.11-beta2/docs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/swing-layout-1.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/AbsoluteLayout.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="F:/开发工具/jackson-all-1.9.11.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://jackson.codehaus.org/1.9.9/javadoc/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>

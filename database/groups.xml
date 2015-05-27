@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<groups>
+<group>
+<groupID>chinese</groupID>
+<password>12345678</password>
+</group>
+<group>
+<groupID>america</groupID>
+<password>12312312</password>
+</group>
+<group>
+<groupID>group_U</groupID>
+<password>group_U</password>
+</group>
+<group>
+<groupID>zhongguo</groupID>
+<password>1234578</password>
+</group>
+</groups>

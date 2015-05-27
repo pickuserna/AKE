@@ -13,6 +13,34 @@ import static iscas.tca.ake.message.veap.EnumVEAPMsgType.*;
  * @author zn
  * @CreateTime 2014-9-4ÉÏÎç10:17:35
  */
+/*
+ * Copyright (c) 20014-2041 Institute Of Software Chinese Academy Of Sciences
+ * All rights reserved.
+ *
+ * Permission is hereby granted, free  of charge, to any person obtaining
+ * a  copy  of this  software  and  associated  documentation files  (the
+ * "Software"), to  deal in  the Software without  restriction, including
+ * without limitation  the rights to  use, copy, modify,  merge, publish,
+ * distribute,  sublicense, and/or sell  copies of  the Software,  and to
+ * permit persons to whom the Software  is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The  above  copyright  notice  and  this permission  notice  shall  be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE  SOFTWARE IS  PROVIDED  "AS  IS", WITHOUT  WARRANTY  OF ANY  KIND,
+ * EXPRESS OR  IMPLIED, INCLUDING  BUT NOT LIMITED  TO THE  WARRANTIES OF
+ * MERCHANTABILITY,    FITNESS    FOR    A   PARTICULAR    PURPOSE    AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE,  ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @Organization: http://tca.iscas.ac.cn/
+ * @author: Nan Zhou
+ * @Aknowledge: Tutor Liwu Zhang , Alumnus Yan Zhang, Zhigang Gao
+ * @Email: changchangge123@qq.com
+ */
 public class VEAPMessage implements IfcMessage {
 	IfcMessage m_data;
 	EnumVEAPMsgType m_msgType;
@@ -40,15 +68,15 @@ public class VEAPMessage implements IfcMessage {
 	}
 
 	@Override
-	public String getMsgType() {
+	public String sGetMsgType() {
 		// TODO Auto-generated method stub
 		return this.m_msgType.toString();
 	}
 
 	@Override
-	public String getMsgContent() {
+	public String sGetMsgContent() {
 		// TODO Auto-generated method stub
-		return this.m_data.getMsgContent();
+		return this.m_data.sGetMsgContent();
 	}
 
 	public void setVEAPMsg(EnumVEAPMsgType msgType, IfcMessage data) {
@@ -63,13 +91,13 @@ public class VEAPMessage implements IfcMessage {
 		String data_UID;
 
 		@Override
-		public String getMsgType() {
+		public String sGetMsgType() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
-		public String getMsgContent() {
+		public String sGetMsgContent() {
 			// TODO Auto-generated method stub
 			String a = Assist.kvFormat("A", data_A.toString());
 			String b = Assist.kvFormat("B", data_B.toString());
@@ -120,12 +148,12 @@ public class VEAPMessage implements IfcMessage {
 		byte[] data_Vs;
 
 		@Override
-		public String getMsgType() {
+		public String sGetMsgType() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 		@Override
-		public String getMsgContent() {
+		public String sGetMsgContent() {
 			// TODO Auto-generated method stub
 			String sid = Assist.kvFormat("sid", data_sid);
 			String Ax = Assist.kvFormat("A^x", data_Ax.toString());
@@ -171,12 +199,12 @@ public class VEAPMessage implements IfcMessage {
 	public class VerifyData implements IfcMessage {
 		byte[] data_verify;
 		@Override
-		public String getMsgType() {
+		public String sGetMsgType() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 		@Override
-		public String getMsgContent() {
+		public String sGetMsgContent() {
 			// TODO Auto-generated method stub
 			String verify = Assist.kvFormat("verify", Assist.bytesToHexString(data_verify));
 			return verify;
